@@ -44,11 +44,11 @@ export const TASTE_PRESET_LABELS: Record<string, string> = {
 export function renderRationale(r: Rationale): string {
   switch (r.templateId) {
     case 'strength.target':
-      return `目標濃度(TDS) ${r.params.tds}%・抽出収率(EY) ${r.params.ey}% を狙ってレシピを組み立てました。`;
+      return '濃さの好みに合わせて、粉と湯の量を決めました。';
     case 'temperature.byRoastProcess': {
       const roast = ROAST_LEVEL_LABELS[r.params.roastLevel as RoastLevel] ?? r.params.roastLevel;
       const process = PROCESS_LABELS[r.params.process as Process] ?? r.params.process;
-      return `${roast}×${process}のため、湯温を ${r.params.tempC}°C に設定しました。`;
+      return `${roast}の${process}なので、湯温を${r.params.tempC}°Cにしました。`;
     }
     case 'temperature.tasteAdjust': {
       const bitterness = Number(r.params.bitterness ?? 0);
@@ -59,15 +59,15 @@ export function renderRationale(r: Rationale): string {
       return '味の好みに合わせて湯温を微調整しています。';
     }
     case 'pours.fourSixSummary':
-      return '序盤と終盤の注湯配分で、酸味と甘さのバランスを調整しています（4:6メソッドの考え方）。';
+      return 'お湯を注ぐタイミングを調整して、酸味と甘さのバランスを整えています。';
     case 'switchMode.percolation':
-      return 'クリア感を重視した好みのため、弁を開けたまま透過主体で抽出します。';
+      return 'クリアな味わいが好みなので、弁を開けたままお湯を通しています。';
     case 'switchMode.immersion':
-      return 'ボディを重視した好みのため、弁を閉じて浸漬主体で抽出します。';
+      return 'しっかりしたコクが好みなので、弁を閉じてお湯に浸しています。';
     case 'switchMode.hybrid':
-      return 'バランス重視の好みのため、前半は透過・後半は温度を下げて浸漬するハイブリッド方式にしました。';
+      return 'バランスの良い味わいが好みなので、前半はお湯を通し、後半は浸して仕上げます。';
     case 'iced.dilutionCompensation':
-      return '仕上がりの一部を氷に置き換えるため、濃いめ・細かめ・熱めに調整し、希釈後にちょうど良くなるようにしています。';
+      return '氷で薄まる分を見込んで、濃いめ・細かめ・熱めに調整しています。';
     default:
       return '';
   }
