@@ -18,7 +18,8 @@ export function computeIcedWaterSplit(waterG: number): IcedWaterSplit {
 }
 
 export function applyIcedTdsAdjustment(targetTds: number): number {
-  return targetTds + 0.35;
+  // 浮動小数点誤差の混入を防ぐため小数点2桁に丸める（例: 1.41 + 0.35 は 1.7599999999999998 になりうる）
+  return Math.round((targetTds + 0.35) * 100) / 100;
 }
 
 export function applyIcedGrindAdjustment(micron: number): number {
