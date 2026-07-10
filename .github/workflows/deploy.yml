@@ -1,0 +1,64 @@
+name: Deploy (production)
+
+# main への push = 本番デプロイ（docs/04 §2.1, docs/13 §1）。
+# 実行には以下の Repository Secrets が必要（リポジトリ設定で追加）:
+#   CLOUDFLARE_API_TOKEN   - Workers/D1 への最小権限デプロイトークン（docs/12 §6）
+#   CLOUDFLARE_ACCOUNT_ID  - Cloudflare アカウントID
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: '22'
+
+jobs:
+  deploy:
+    name: Build and deploy to Cloudflare Workers
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint / Typecheck / Test
+        run: |
+          pnpm lint
+          pnpm typecheck
+          pnpm test
+
+      # packages/db 導入後（ロードマップ M2）にマイグレーション適用ステップをここへ追加:
+      #   pnpm --filter web exec wrangler d1 migrations apply DB --remote
+
+      - name: Build (OpenNext Cloudflare)
+        working-directory: apps/web
+        run: pnpm exec opennextjs-cloudflare build
+
+      - name: Deploy to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: apps/web
+          command: deploy
+
+      - name: Smoke test
+        run: |
+          sleep 5
+          curl -sf https://coffee-recipe-lab.workers.dev/ > /dev/null \
+            || echo "::warning::Smoke test failed — verify deployment manually"

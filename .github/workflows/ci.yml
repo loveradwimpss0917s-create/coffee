@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '22'
+
+jobs:
+  ci:
+    name: Lint / Typecheck / Test / Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint (Biome)
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Test
+        run: pnpm test
+
+      - name: Build
+        run: pnpm build
+
+      - name: Check Worker bundle size
+        working-directory: apps/web
+        run: |
+          pnpm exec opennextjs-cloudflare build
+          # `wrangler deploy --dry-run` performs the real bundling (minify/tree-shake)
+          # that determines the deployed size, unlike measuring .open-next/worker.js directly
+          # (docs/13 §4 budget: <3MB warn, <10MB Cloudflare hard limit).
+          pnpm exec wrangler deploy --dry-run --env "" --outdir=/tmp/wrangler-dryrun 2>&1 | tee /tmp/dryrun-output.txt
+          gzip_kib=$(grep -oP 'gzip: \K[0-9.]+(?= KiB)' /tmp/dryrun-output.txt | tail -1)
+          size_mb=$(echo "scale=2; $gzip_kib / 1024" | bc)
+          echo "Worker bundle (gzip): ${size_mb} MB"
+          echo "worker_bundle_gzip_mb=${size_mb}" >> "$GITHUB_STEP_SUMMARY"
+          if (( $(echo "$size_mb > 10" | bc -l) )); then
+            echo "::error::Worker bundle exceeds Cloudflare's 10MB limit (${size_mb}MB)"
+            exit 1
+          elif (( $(echo "$size_mb > 3" | bc -l) )); then
+            echo "::warning::Worker bundle is larger than the 3MB budget (${size_mb}MB, docs/13 §4)"
+          fi
