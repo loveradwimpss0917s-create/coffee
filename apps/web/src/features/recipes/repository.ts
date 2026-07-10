@@ -1,24 +1,11 @@
-import { createId } from '@/lib/id';
-import { type SavedRecipe, savedRecipeSchema } from '@/lib/schemas';
-import { createLocalStore } from '@/lib/storage';
-
-const store = createLocalStore<SavedRecipe>('coffee-lab:recipes', savedRecipeSchema, 1);
+import type { SavedRecipe } from '@/lib/schemas';
 
 export type CreateSavedRecipeInput = Omit<SavedRecipe, 'id' | 'createdAt'>;
 
-export const recipesRepository = {
-  list(): SavedRecipe[] {
-    return store.list().sort((a, b) => b.createdAt - a.createdAt);
-  },
-  get(id: string): SavedRecipe | undefined {
-    return store.list().find((r) => r.id === id);
-  },
-  create(input: CreateSavedRecipeInput): SavedRecipe {
-    const recipe: SavedRecipe = { ...input, id: createId('rcp'), createdAt: Date.now() };
-    store.save([...store.list(), recipe]);
-    return recipe;
-  },
-  remove(id: string): void {
-    store.save(store.list().filter((r) => r.id !== id));
-  },
-};
+/** ゲスト(localStorage)/ログイン(API)で共通のインターフェース(docs/09 §4)。 */
+export interface RecipesRepository {
+  list(): Promise<SavedRecipe[]>;
+  get(id: string): Promise<SavedRecipe | undefined>;
+  create(input: CreateSavedRecipeInput): Promise<SavedRecipe>;
+  remove(id: string): Promise<void>;
+}

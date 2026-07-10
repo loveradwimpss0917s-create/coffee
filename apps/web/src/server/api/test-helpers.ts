@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { Db } from '@coffee-lab/db';
@@ -8,20 +8,25 @@ import { drizzle } from 'drizzle-orm/better-sqlite3';
 import { Hono } from 'hono';
 import type { AppEnv } from './context';
 
-const migrationPath = path.resolve(
+const migrationsDir = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
-  '../../../../../packages/db/migrations/0000_material_cannonball.sql',
+  '../../../../../packages/db/migrations',
 );
 
 /**
  * D1 と better-sqlite3 は同じ drizzle-orm/sqlite-core クエリビルダを使うため、
- * テストでは軽量な better-sqlite3 のインメモリDBを本番と同一マイグレーションSQLで初期化して使う。
- * 本番コードは必ず drizzle-orm/d1 経由（packages/db/src/index.ts、docs/02）。
+ * テストでは軽量な better-sqlite3 のインメモリDBを本番と同一マイグレーションSQL群（全ファイル、実行順）で
+ * 初期化して使う。本番コードは必ず drizzle-orm/d1 経由（packages/db/src/index.ts、docs/02）。
  */
 export function createTestDb(): Db {
   const sqlite = new Database(':memory:');
   sqlite.pragma('foreign_keys = ON');
-  sqlite.exec(readFileSync(migrationPath, 'utf-8'));
+  const migrationFiles = readdirSync(migrationsDir)
+    .filter((name) => name.endsWith('.sql'))
+    .sort();
+  for (const file of migrationFiles) {
+    sqlite.exec(readFileSync(path.join(migrationsDir, file), 'utf-8'));
+  }
   return drizzle(sqlite, { schema }) as unknown as Db;
 }
 

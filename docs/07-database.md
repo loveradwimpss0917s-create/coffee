@@ -113,6 +113,14 @@ MVP/β では単一グラインダーの補正値のみ `user_settings.grinder_c
 | actual_time_sec | INTEGER | 実測総抽出時間（目標との乖離分析用） |
 | notes | TEXT | |
 
+### 3.7 sync_imports（ゲスト取込の冪等性、実装済み2-3）
+
+| カラム | 型 | 説明 |
+|---|---|---|
+| import_id | TEXT PK | クライアント生成。同一IDの再送は取込済みとしてスキップ |
+| user_id | TEXT FK CASCADE | |
+| created_at | INTEGER NOT NULL | |
+
 ## 4. マイグレーション運用
 
 1. スキーマ変更 → `pnpm db:generate`（SQL 生成、`packages/db/migrations/` にコミット）
@@ -124,7 +132,9 @@ MVP/β では単一グラインダーの補正値のみ `user_settings.grinder_c
 ## 5. ゲストデータとの同期
 
 - ゲスト: 同スキーマ相当のデータを localStorage（Zodで版管理された envelope）に保存
-- サインアップ/イン時: `POST /api/v1/sync/import` にゲストデータを一括送信 → サーバーで ID 再発行して取り込み → ローカルは同期済みフラグ
+- サインアップ/イン時: `POST /api/v1/sync/import` にゲストデータを一括送信 → サーバーで ID 再発行して取り込み
+  （recipes は POST /recipes と同様 output をサーバーで再生成）→ 成功後ローカルの該当データを消去
+  （`features/auth/sync.ts`、実装済み2-3。呼び出しは認証画面 UI 側、2-4）
 - コンフリクトは「サーバー優先・ローカルは追記」（同一IDが存在しないため実質単純追記）
 
 ## 6. インデックス方針

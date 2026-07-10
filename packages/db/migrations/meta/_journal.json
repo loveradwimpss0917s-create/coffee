@@ -8,6 +8,13 @@
       "when": 1783666090284,
       "tag": "0000_material_cannonball",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1783670086581,
+      "tag": "0001_square_red_wolf",
+      "breakpoints": true
     }
   ]
 }

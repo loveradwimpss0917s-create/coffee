@@ -13,8 +13,13 @@ export const beans = sqliteTable(
     roaster: text('roaster'),
     origin: text('origin'),
     variety: text('variety'),
-    process: text('process').notNull(),
-    roastLevel: text('roast_level').notNull(),
+    // 値は packages/engine の processSchema/roastLevelSchema と一致させる（型推論のみ、DB上はTEXT）
+    process: text('process', {
+      enum: ['washed', 'natural', 'honey', 'anaerobic', 'decaf', 'other'],
+    }).notNull(),
+    roastLevel: text('roast_level', {
+      enum: ['light', 'medium-light', 'medium', 'medium-dark', 'dark'],
+    }).notNull(),
     roastDate: integer('roast_date', { mode: 'timestamp_ms' }),
     notes: text('notes'),
     photoKey: text('photo_key'),
