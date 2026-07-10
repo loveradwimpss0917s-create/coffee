@@ -1,0 +1,35 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# builds
+.next/
+.open-next/
+out/
+dist/
+*.tsbuildinfo
+
+# cloudflare
+.wrangler/
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+
+# testing
+coverage/
+playwright-report/
+test-results/
+
+# env / secrets
+.env
+.env.*
+!.env.example
+
+# misc
+.DS_Store
+*.log
+.turbo/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
