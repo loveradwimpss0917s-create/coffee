@@ -1,0 +1,24 @@
+{
+  "name": "coffee-recipe-lab",
+  "private": true,
+  "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm -r build",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "test:e2e": "pnpm --filter web test:e2e",
+    "db:generate": "pnpm --filter @coffee-lab/db generate",
+    "db:migrate:local": "pnpm --filter web exec wrangler d1 migrations apply DB --local",
+    "db:migrate:prod": "pnpm --filter web exec wrangler d1 migrations apply DB --remote"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.3",
+    "typescript": "^5.7.3"
+  }
+}

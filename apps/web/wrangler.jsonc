@@ -1,0 +1,20 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "coffee-recipe-lab",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-06-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "observability": {
+    "enabled": true
+  },
+  // D1 / KV / R2 バインディングはロードマップ M2（packages/db 導入）で追加する（docs/03 §5, docs/13）。
+  "env": {
+    "preview": {
+      "name": "coffee-recipe-lab-preview"
+    }
+  }
+}

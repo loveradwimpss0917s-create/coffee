@@ -6,9 +6,7 @@
 coffee/
 ├── .github/
 │   ├── workflows/
-│   │   ├── ci.yml                 # lint / typecheck / test / build（全PR）
-│   │   ├── deploy.yml             # main → production デプロイ
-│   │   └── preview.yml            # PR → プレビューデプロイ
+│   │   └── ci.yml                 # lint / typecheck / test / build（全PR、デプロイはCloudflare Workers Builds担当）
 │   ├── ISSUE_TEMPLATE/
 │   │   ├── feature.md
 │   │   └── bug.md
