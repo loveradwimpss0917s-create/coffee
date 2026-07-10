@@ -35,17 +35,22 @@ erDiagram
 
 ### 3.2 user_settings
 
+apps/web の `UserSettings`（`lib/schemas.ts`）と1:1対応させ、ApiRepository でのマッピングを単純に保つ（実装済み、docs/09 §4）。
+
 | カラム | 型 | 説明 |
 |---|---|---|
 | user_id | TEXT PK, FK→users CASCADE | |
-| default_dripper_id | TEXT | 例 `"hario-v60"`（engine data の ID） |
+| owned_dripper_ids | TEXT(JSON) NOT NULL DEFAULT '[]' | 所有ドリッパーIDの配列（engine data の ID） |
 | default_grinder_id | TEXT | 例 `"delonghi-kg521"` |
-| default_taste_profile | TEXT(JSON) | TasteProfile（-2..+2 ×5軸） |
-| default_dose_g | REAL | 既定粉量 |
-| units | TEXT | `"metric"` 固定（将来 imperial） |
-| theme | TEXT | `"system" / "light" / "dark"` |
+| grinder_calibration_offset | REAL NOT NULL DEFAULT 0 | 目盛補正値（docs/11 §4）。単一グラインダー分のみ MVP で保持 |
+| default_taste_profile | TEXT(JSON) NOT NULL | TasteProfile（-2..+2 ×5軸） |
+| theme | TEXT NOT NULL DEFAULT 'system' | `"system" / "light" / "dark"` |
+| onboarded | INTEGER NOT NULL DEFAULT false | オンボーディング完了フラグ |
 
-### 3.3 user_grinders（所有グラインダー + キャリブレーション）
+### 3.3 user_grinders（複数グラインダーの個別キャリブレーション、v1.0）
+
+MVP/β では単一グラインダーの補正値のみ `user_settings.grinder_calibration_offset` に保持する。
+複数グラインダーを所有するユーザー向けの個別キャリブレーション管理（テーブル分離）は v1.0 で追加する（docs/11 §5, docs/15）。
 
 | カラム | 型 | 説明 |
 |---|---|---|
