@@ -77,15 +77,19 @@ export default function BrewFeedbackPage() {
       </div>
 
       <div className="flex flex-col gap-2">
-        <Label htmlFor="tds">TDS（任意・%）</Label>
+        <Label htmlFor="tds">濃度計の実測値（任意）</Label>
         <Input
           id="tds"
           type="number"
           inputMode="decimal"
           step="0.01"
+          placeholder="例: 1.35"
           value={tds}
           onChange={(e) => setTds(e.target.value)}
         />
+        <p className="text-caption text-muted-foreground">
+          濃度計（TDSメーター）をお持ちの方だけ入力してください。分からなければ空欄のままでOKです。
+        </p>
       </div>
 
       <div className="flex flex-col gap-2">
