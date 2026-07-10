@@ -95,6 +95,227 @@ exports[`golden: AeroPress（加圧） > 中煎り・バランス 1`] = `
 }
 `;
 
+exports[`golden: April Brewer > 浅煎り・バランス 1`] = `
+{
+  "doseG": 17,
+  "dripperId": "april",
+  "engineVersion": "0.1.0",
+  "grind": {
+    "generalLabel": "中細挽き（約680μm）",
+    "micron": 680,
+  },
+  "input": {
+    "bean": {
+      "process": "washed",
+      "roastLevel": "light",
+    },
+    "equipment": {
+      "dripperId": "april",
+    },
+    "serveStyle": "hot",
+    "strength": 0,
+    "targetVolumeMl": 250,
+    "taste": {
+      "acidity": 0,
+      "bitterness": 0,
+      "body": 0,
+      "clarity": 0,
+      "sweetness": 0,
+    },
+  },
+  "ratio": 16.8,
+  "rationale": [
+    {
+      "paramKey": "strength",
+      "params": {
+        "ey": 20,
+        "tds": 1.32,
+      },
+      "sourceRefs": [
+        "sca-brewing-control-chart",
+      ],
+      "templateId": "strength.target",
+    },
+    {
+      "paramKey": "temperature",
+      "params": {
+        "process": "washed",
+        "roastLevel": "light",
+        "tempC": 95,
+      },
+      "sourceRefs": [],
+      "templateId": "temperature.byRoastProcess",
+    },
+    {
+      "paramKey": "pours",
+      "params": {
+        "acidity": 0,
+        "sweetness": 0,
+      },
+      "sourceRefs": [
+        "kasuya-4-6-method",
+      ],
+      "templateId": "pours.fourSixSummary",
+    },
+  ],
+  "steps": [
+    {
+      "atSec": 0,
+      "durationSec": 40,
+      "kind": "bloom",
+      "waterG": 46.8,
+    },
+    {
+      "atSec": 40,
+      "kind": "pour",
+      "note": "circular",
+      "toWaterG": 80.4,
+    },
+    {
+      "atSec": 85,
+      "kind": "pour",
+      "note": "circular",
+      "toWaterG": 114,
+    },
+    {
+      "atSec": 130,
+      "kind": "pour",
+      "note": "center",
+      "toWaterG": 199.5,
+    },
+    {
+      "atSec": 175,
+      "kind": "pour",
+      "note": "center",
+      "toWaterG": 285,
+    },
+    {
+      "atSec": 220,
+      "expectedEndSec": 391,
+      "kind": "drawdown",
+    },
+  ],
+  "targetEy": 20,
+  "targetTds": 1.32,
+  "tempC": 95,
+  "totalTimeSec": 391,
+  "warnings": [],
+  "waterG": 285,
+}
+`;
+
+exports[`golden: CAFEC フラワー > 浅煎り・明るく華やかな好み 1`] = `
+{
+  "doseG": 18,
+  "dripperId": "cafec-flower",
+  "engineVersion": "0.1.0",
+  "grind": {
+    "generalLabel": "中挽き（約755μm）",
+    "micron": 755,
+  },
+  "input": {
+    "bean": {
+      "process": "washed",
+      "roastLevel": "light",
+    },
+    "equipment": {
+      "dripperId": "cafec-flower",
+    },
+    "serveStyle": "hot",
+    "strength": 0,
+    "targetVolumeMl": 250,
+    "taste": {
+      "acidity": 2,
+      "bitterness": -1,
+      "body": -1,
+      "clarity": 2,
+      "sweetness": 1,
+    },
+  },
+  "ratio": 15.8,
+  "rationale": [
+    {
+      "paramKey": "strength",
+      "params": {
+        "ey": 18.2,
+        "tds": 1.32,
+      },
+      "sourceRefs": [
+        "sca-brewing-control-chart",
+      ],
+      "templateId": "strength.target",
+    },
+    {
+      "paramKey": "temperature",
+      "params": {
+        "process": "washed",
+        "roastLevel": "light",
+        "tempC": 92.5,
+      },
+      "sourceRefs": [],
+      "templateId": "temperature.byRoastProcess",
+    },
+    {
+      "paramKey": "temperature",
+      "params": {
+        "bitterness": -1,
+        "clarity": 2,
+      },
+      "sourceRefs": [],
+      "templateId": "temperature.tasteAdjust",
+    },
+    {
+      "paramKey": "pours",
+      "params": {
+        "acidity": 2,
+        "sweetness": 1,
+      },
+      "sourceRefs": [
+        "kasuya-4-6-method",
+      ],
+      "templateId": "pours.fourSixSummary",
+    },
+  ],
+  "steps": [
+    {
+      "atSec": 0,
+      "durationSec": 40,
+      "kind": "bloom",
+      "waterG": 49.5,
+    },
+    {
+      "atSec": 40,
+      "kind": "pour",
+      "note": "circular",
+      "toWaterG": 128.3,
+    },
+    {
+      "atSec": 85,
+      "kind": "pour",
+      "note": "center",
+      "toWaterG": 206.7,
+    },
+    {
+      "atSec": 130,
+      "kind": "pour",
+      "note": "center",
+      "toWaterG": 285,
+    },
+    {
+      "atSec": 175,
+      "expectedEndSec": 346,
+      "kind": "drawdown",
+    },
+  ],
+  "targetEy": 18.2,
+  "targetTds": 1.32,
+  "tempC": 92.5,
+  "totalTimeSec": 346,
+  "warnings": [],
+  "waterG": 285,
+}
+`;
+
 exports[`golden: Clever Dripper（浸漬） > 中煎り・バランス 1`] = `
 {
   "doseG": 17,
@@ -210,6 +431,110 @@ exports[`golden: Clever Dripper（浸漬） > 中煎り・バランス 1`] = `
   "totalTimeSec": 281,
   "warnings": [],
   "waterG": 285,
+}
+`;
+
+exports[`golden: French Press（全浸漬） > 中煎り・コク深い好み 1`] = `
+{
+  "doseG": 17,
+  "dripperId": "french-press",
+  "engineVersion": "0.1.0",
+  "grind": {
+    "generalLabel": "中挽き（約740μm）",
+    "micron": 740,
+  },
+  "input": {
+    "bean": {
+      "process": "washed",
+      "roastLevel": "medium",
+    },
+    "equipment": {
+      "dripperId": "french-press",
+    },
+    "serveStyle": "hot",
+    "strength": 0,
+    "targetVolumeMl": 250,
+    "taste": {
+      "acidity": -1,
+      "bitterness": 1,
+      "body": 2,
+      "clarity": -1,
+      "sweetness": 1,
+    },
+  },
+  "ratio": 17.1,
+  "rationale": [
+    {
+      "paramKey": "strength",
+      "params": {
+        "ey": 21.6,
+        "tds": 1.32,
+      },
+      "sourceRefs": [
+        "sca-brewing-control-chart",
+      ],
+      "templateId": "strength.target",
+    },
+    {
+      "paramKey": "temperature",
+      "params": {
+        "process": "washed",
+        "roastLevel": "medium",
+        "tempC": 90,
+      },
+      "sourceRefs": [],
+      "templateId": "temperature.byRoastProcess",
+    },
+    {
+      "paramKey": "temperature",
+      "params": {
+        "bitterness": 1,
+        "clarity": -1,
+      },
+      "sourceRefs": [],
+      "templateId": "temperature.tasteAdjust",
+    },
+    {
+      "paramKey": "pours",
+      "params": {
+        "acidity": -1,
+        "sweetness": 1,
+      },
+      "sourceRefs": [
+        "kasuya-4-6-method",
+      ],
+      "templateId": "pours.fourSixSummary",
+    },
+  ],
+  "steps": [
+    {
+      "atSec": 0,
+      "durationSec": 40,
+      "kind": "bloom",
+      "waterG": 46.8,
+    },
+    {
+      "atSec": 40,
+      "kind": "pour",
+      "toWaterG": 290,
+    },
+    {
+      "atSec": 45,
+      "kind": "stir",
+      "method": "spoon",
+    },
+    {
+      "atSec": 230,
+      "durationSec": 25,
+      "kind": "press",
+    },
+  ],
+  "targetEy": 21.6,
+  "targetTds": 1.32,
+  "tempC": 90,
+  "totalTimeSec": 230,
+  "warnings": [],
+  "waterG": 290,
 }
 `;
 
@@ -702,6 +1027,115 @@ exports[`golden: Iced > 浅煎り・Iced・250ml 1`] = `
 }
 `;
 
+exports[`golden: KONO 名門 > 中煎り・バランス 1`] = `
+{
+  "doseG": 18,
+  "dripperId": "kono",
+  "engineVersion": "0.1.0",
+  "grind": {
+    "generalLabel": "中細挽き（約600μm）",
+    "micron": 600,
+  },
+  "input": {
+    "bean": {
+      "process": "washed",
+      "roastLevel": "medium",
+    },
+    "equipment": {
+      "dripperId": "kono",
+    },
+    "serveStyle": "hot",
+    "strength": 0,
+    "targetVolumeMl": 250,
+    "taste": {
+      "acidity": 0,
+      "bitterness": 0,
+      "body": 0,
+      "clarity": 0,
+      "sweetness": 0,
+    },
+  },
+  "ratio": 15.8,
+  "rationale": [
+    {
+      "paramKey": "strength",
+      "params": {
+        "ey": 20,
+        "tds": 1.32,
+      },
+      "sourceRefs": [
+        "sca-brewing-control-chart",
+      ],
+      "templateId": "strength.target",
+    },
+    {
+      "paramKey": "temperature",
+      "params": {
+        "process": "washed",
+        "roastLevel": "medium",
+        "tempC": 89,
+      },
+      "sourceRefs": [],
+      "templateId": "temperature.byRoastProcess",
+    },
+    {
+      "paramKey": "pours",
+      "params": {
+        "acidity": 0,
+        "sweetness": 0,
+      },
+      "sourceRefs": [
+        "kasuya-4-6-method",
+      ],
+      "templateId": "pours.fourSixSummary",
+    },
+  ],
+  "steps": [
+    {
+      "atSec": 0,
+      "durationSec": 40,
+      "kind": "bloom",
+      "waterG": 49.5,
+    },
+    {
+      "atSec": 40,
+      "kind": "pour",
+      "note": "circular",
+      "toWaterG": 81.8,
+    },
+    {
+      "atSec": 100,
+      "kind": "pour",
+      "note": "circular",
+      "toWaterG": 114.1,
+    },
+    {
+      "atSec": 160,
+      "kind": "pour",
+      "note": "center",
+      "toWaterG": 199.6,
+    },
+    {
+      "atSec": 220,
+      "kind": "pour",
+      "note": "center",
+      "toWaterG": 285,
+    },
+    {
+      "atSec": 280,
+      "expectedEndSec": 508,
+      "kind": "drawdown",
+    },
+  ],
+  "targetEy": 20,
+  "targetTds": 1.32,
+  "tempC": 89,
+  "totalTimeSec": 508,
+  "warnings": [],
+  "waterG": 285,
+}
+`;
+
 exports[`golden: Kalita Wave > 中煎り・honey・バランス 1`] = `
 {
   "doseG": 17,
@@ -806,6 +1240,224 @@ exports[`golden: Kalita Wave > 中煎り・honey・バランス 1`] = `
   "targetTds": 1.32,
   "tempC": 89.5,
   "totalTimeSec": 425,
+  "warnings": [],
+  "waterG": 285,
+}
+`;
+
+exports[`golden: ORIGAMI > 中煎り・バランス 1`] = `
+{
+  "doseG": 17,
+  "dripperId": "origami",
+  "engineVersion": "0.1.0",
+  "grind": {
+    "generalLabel": "中細挽き（約640μm）",
+    "micron": 640,
+  },
+  "input": {
+    "bean": {
+      "process": "washed",
+      "roastLevel": "medium",
+    },
+    "equipment": {
+      "dripperId": "origami",
+    },
+    "serveStyle": "hot",
+    "strength": 0,
+    "targetVolumeMl": 250,
+    "taste": {
+      "acidity": 0,
+      "bitterness": 0,
+      "body": 0,
+      "clarity": 0,
+      "sweetness": 0,
+    },
+  },
+  "ratio": 16.8,
+  "rationale": [
+    {
+      "paramKey": "strength",
+      "params": {
+        "ey": 20,
+        "tds": 1.32,
+      },
+      "sourceRefs": [
+        "sca-brewing-control-chart",
+      ],
+      "templateId": "strength.target",
+    },
+    {
+      "paramKey": "temperature",
+      "params": {
+        "process": "washed",
+        "roastLevel": "medium",
+        "tempC": 90,
+      },
+      "sourceRefs": [],
+      "templateId": "temperature.byRoastProcess",
+    },
+    {
+      "paramKey": "pours",
+      "params": {
+        "acidity": 0,
+        "sweetness": 0,
+      },
+      "sourceRefs": [
+        "kasuya-4-6-method",
+      ],
+      "templateId": "pours.fourSixSummary",
+    },
+  ],
+  "steps": [
+    {
+      "atSec": 0,
+      "durationSec": 40,
+      "kind": "bloom",
+      "waterG": 46.8,
+    },
+    {
+      "atSec": 40,
+      "kind": "pour",
+      "note": "circular",
+      "toWaterG": 80.4,
+    },
+    {
+      "atSec": 85,
+      "kind": "pour",
+      "note": "circular",
+      "toWaterG": 114,
+    },
+    {
+      "atSec": 130,
+      "kind": "pour",
+      "note": "center",
+      "toWaterG": 199.5,
+    },
+    {
+      "atSec": 175,
+      "kind": "pour",
+      "note": "center",
+      "toWaterG": 285,
+    },
+    {
+      "atSec": 220,
+      "expectedEndSec": 402,
+      "kind": "drawdown",
+    },
+  ],
+  "targetEy": 20,
+  "targetTds": 1.32,
+  "tempC": 90,
+  "totalTimeSec": 402,
+  "warnings": [],
+  "waterG": 285,
+}
+`;
+
+exports[`golden: Orea Brewer > 中煎り・バランス 1`] = `
+{
+  "doseG": 17,
+  "dripperId": "orea",
+  "engineVersion": "0.1.0",
+  "grind": {
+    "generalLabel": "中細挽き（約600μm）",
+    "micron": 600,
+  },
+  "input": {
+    "bean": {
+      "process": "washed",
+      "roastLevel": "medium",
+    },
+    "equipment": {
+      "dripperId": "orea",
+    },
+    "serveStyle": "hot",
+    "strength": 0,
+    "targetVolumeMl": 250,
+    "taste": {
+      "acidity": 0,
+      "bitterness": 0,
+      "body": 0,
+      "clarity": 0,
+      "sweetness": 0,
+    },
+  },
+  "ratio": 16.8,
+  "rationale": [
+    {
+      "paramKey": "strength",
+      "params": {
+        "ey": 20,
+        "tds": 1.32,
+      },
+      "sourceRefs": [
+        "sca-brewing-control-chart",
+      ],
+      "templateId": "strength.target",
+    },
+    {
+      "paramKey": "temperature",
+      "params": {
+        "process": "washed",
+        "roastLevel": "medium",
+        "tempC": 90,
+      },
+      "sourceRefs": [],
+      "templateId": "temperature.byRoastProcess",
+    },
+    {
+      "paramKey": "pours",
+      "params": {
+        "acidity": 0,
+        "sweetness": 0,
+      },
+      "sourceRefs": [
+        "kasuya-4-6-method",
+      ],
+      "templateId": "pours.fourSixSummary",
+    },
+  ],
+  "steps": [
+    {
+      "atSec": 0,
+      "durationSec": 40,
+      "kind": "bloom",
+      "waterG": 46.8,
+    },
+    {
+      "atSec": 40,
+      "kind": "pour",
+      "note": "circular",
+      "toWaterG": 80.4,
+    },
+    {
+      "atSec": 75,
+      "kind": "pour",
+      "note": "circular",
+      "toWaterG": 114,
+    },
+    {
+      "atSec": 110,
+      "kind": "pour",
+      "note": "center",
+      "toWaterG": 199.5,
+    },
+    {
+      "atSec": 145,
+      "kind": "pour",
+      "note": "center",
+      "toWaterG": 285,
+    },
+    {
+      "atSec": 180,
+      "expectedEndSec": 328,
+      "kind": "drawdown",
+    },
+  ],
+  "targetEy": 20,
+  "targetTds": 1.32,
+  "tempC": 90,
+  "totalTimeSec": 328,
   "warnings": [],
   "waterG": 285,
 }
@@ -1150,6 +1802,230 @@ exports[`golden: V60 > 深煎り・ナチュラル・コク深い好み 1`] = `
 }
 `;
 
+exports[`golden: グラインダー併記 > 1zpresso-jx-pro 指定時に目盛が併記される 1`] = `
+{
+  "doseG": 17,
+  "dripperId": "hario-v60",
+  "engineVersion": "0.1.0",
+  "grind": {
+    "confidence": "community",
+    "generalLabel": "中細挽き（約620μm）",
+    "micron": 620,
+    "setting": "4周 + 6クリック",
+  },
+  "input": {
+    "bean": {
+      "process": "washed",
+      "roastLevel": "medium",
+    },
+    "equipment": {
+      "dripperId": "hario-v60",
+      "grinderId": "1zpresso-jx-pro",
+    },
+    "serveStyle": "hot",
+    "strength": 0,
+    "targetVolumeMl": 250,
+    "taste": {
+      "acidity": 0,
+      "bitterness": 0,
+      "body": 0,
+      "clarity": 0,
+      "sweetness": 0,
+    },
+  },
+  "ratio": 16.8,
+  "rationale": [
+    {
+      "paramKey": "strength",
+      "params": {
+        "ey": 20,
+        "tds": 1.32,
+      },
+      "sourceRefs": [
+        "sca-brewing-control-chart",
+      ],
+      "templateId": "strength.target",
+    },
+    {
+      "paramKey": "temperature",
+      "params": {
+        "process": "washed",
+        "roastLevel": "medium",
+        "tempC": 90,
+      },
+      "sourceRefs": [],
+      "templateId": "temperature.byRoastProcess",
+    },
+    {
+      "paramKey": "pours",
+      "params": {
+        "acidity": 0,
+        "sweetness": 0,
+      },
+      "sourceRefs": [
+        "kasuya-4-6-method",
+      ],
+      "templateId": "pours.fourSixSummary",
+    },
+  ],
+  "steps": [
+    {
+      "atSec": 0,
+      "durationSec": 40,
+      "kind": "bloom",
+      "waterG": 46.8,
+    },
+    {
+      "atSec": 40,
+      "kind": "pour",
+      "note": "circular",
+      "toWaterG": 80.4,
+    },
+    {
+      "atSec": 75,
+      "kind": "pour",
+      "note": "circular",
+      "toWaterG": 114,
+    },
+    {
+      "atSec": 110,
+      "kind": "pour",
+      "note": "center",
+      "toWaterG": 199.5,
+    },
+    {
+      "atSec": 145,
+      "kind": "pour",
+      "note": "center",
+      "toWaterG": 285,
+    },
+    {
+      "atSec": 180,
+      "expectedEndSec": 351,
+      "kind": "drawdown",
+    },
+  ],
+  "targetEy": 20,
+  "targetTds": 1.32,
+  "tempC": 90,
+  "totalTimeSec": 351,
+  "warnings": [],
+  "waterG": 285,
+}
+`;
+
+exports[`golden: グラインダー併記 > 1zpresso-zp6 指定時に目盛が併記される 1`] = `
+{
+  "doseG": 17,
+  "dripperId": "hario-v60",
+  "engineVersion": "0.1.0",
+  "grind": {
+    "confidence": "community",
+    "generalLabel": "中細挽き（約620μm）",
+    "micron": 620,
+    "setting": "2周 + 3クリック",
+  },
+  "input": {
+    "bean": {
+      "process": "washed",
+      "roastLevel": "medium",
+    },
+    "equipment": {
+      "dripperId": "hario-v60",
+      "grinderId": "1zpresso-zp6",
+    },
+    "serveStyle": "hot",
+    "strength": 0,
+    "targetVolumeMl": 250,
+    "taste": {
+      "acidity": 0,
+      "bitterness": 0,
+      "body": 0,
+      "clarity": 0,
+      "sweetness": 0,
+    },
+  },
+  "ratio": 16.8,
+  "rationale": [
+    {
+      "paramKey": "strength",
+      "params": {
+        "ey": 20,
+        "tds": 1.32,
+      },
+      "sourceRefs": [
+        "sca-brewing-control-chart",
+      ],
+      "templateId": "strength.target",
+    },
+    {
+      "paramKey": "temperature",
+      "params": {
+        "process": "washed",
+        "roastLevel": "medium",
+        "tempC": 90,
+      },
+      "sourceRefs": [],
+      "templateId": "temperature.byRoastProcess",
+    },
+    {
+      "paramKey": "pours",
+      "params": {
+        "acidity": 0,
+        "sweetness": 0,
+      },
+      "sourceRefs": [
+        "kasuya-4-6-method",
+      ],
+      "templateId": "pours.fourSixSummary",
+    },
+  ],
+  "steps": [
+    {
+      "atSec": 0,
+      "durationSec": 40,
+      "kind": "bloom",
+      "waterG": 46.8,
+    },
+    {
+      "atSec": 40,
+      "kind": "pour",
+      "note": "circular",
+      "toWaterG": 80.4,
+    },
+    {
+      "atSec": 75,
+      "kind": "pour",
+      "note": "circular",
+      "toWaterG": 114,
+    },
+    {
+      "atSec": 110,
+      "kind": "pour",
+      "note": "center",
+      "toWaterG": 199.5,
+    },
+    {
+      "atSec": 145,
+      "kind": "pour",
+      "note": "center",
+      "toWaterG": 285,
+    },
+    {
+      "atSec": 180,
+      "expectedEndSec": 351,
+      "kind": "drawdown",
+    },
+  ],
+  "targetEy": 20,
+  "targetTds": 1.32,
+  "tempC": 90,
+  "totalTimeSec": 351,
+  "warnings": [],
+  "waterG": 285,
+}
+`;
+
 exports[`golden: グラインダー併記 > Comandante C40 指定時に目盛が併記される 1`] = `
 {
   "doseG": 17,
@@ -1281,6 +2157,678 @@ exports[`golden: グラインダー併記 > De'Longhi KG521J-M 指定時は conf
     "equipment": {
       "dripperId": "hario-v60",
       "grinderId": "delonghi-kg521",
+    },
+    "serveStyle": "hot",
+    "strength": 0,
+    "targetVolumeMl": 250,
+    "taste": {
+      "acidity": 0,
+      "bitterness": 0,
+      "body": 0,
+      "clarity": 0,
+      "sweetness": 0,
+    },
+  },
+  "ratio": 16.8,
+  "rationale": [
+    {
+      "paramKey": "strength",
+      "params": {
+        "ey": 20,
+        "tds": 1.32,
+      },
+      "sourceRefs": [
+        "sca-brewing-control-chart",
+      ],
+      "templateId": "strength.target",
+    },
+    {
+      "paramKey": "temperature",
+      "params": {
+        "process": "washed",
+        "roastLevel": "medium",
+        "tempC": 90,
+      },
+      "sourceRefs": [],
+      "templateId": "temperature.byRoastProcess",
+    },
+    {
+      "paramKey": "pours",
+      "params": {
+        "acidity": 0,
+        "sweetness": 0,
+      },
+      "sourceRefs": [
+        "kasuya-4-6-method",
+      ],
+      "templateId": "pours.fourSixSummary",
+    },
+  ],
+  "steps": [
+    {
+      "atSec": 0,
+      "durationSec": 40,
+      "kind": "bloom",
+      "waterG": 46.8,
+    },
+    {
+      "atSec": 40,
+      "kind": "pour",
+      "note": "circular",
+      "toWaterG": 80.4,
+    },
+    {
+      "atSec": 75,
+      "kind": "pour",
+      "note": "circular",
+      "toWaterG": 114,
+    },
+    {
+      "atSec": 110,
+      "kind": "pour",
+      "note": "center",
+      "toWaterG": 199.5,
+    },
+    {
+      "atSec": 145,
+      "kind": "pour",
+      "note": "center",
+      "toWaterG": 285,
+    },
+    {
+      "atSec": 180,
+      "expectedEndSec": 351,
+      "kind": "drawdown",
+    },
+  ],
+  "targetEy": 20,
+  "targetTds": 1.32,
+  "tempC": 90,
+  "totalTimeSec": 351,
+  "warnings": [],
+  "waterG": 285,
+}
+`;
+
+exports[`golden: グラインダー併記 > baratza-encore 指定時に目盛が併記される 1`] = `
+{
+  "doseG": 17,
+  "dripperId": "hario-v60",
+  "engineVersion": "0.1.0",
+  "grind": {
+    "confidence": "community",
+    "generalLabel": "中細挽き（約620μm）",
+    "micron": 620,
+    "setting": "目盛 23",
+  },
+  "input": {
+    "bean": {
+      "process": "washed",
+      "roastLevel": "medium",
+    },
+    "equipment": {
+      "dripperId": "hario-v60",
+      "grinderId": "baratza-encore",
+    },
+    "serveStyle": "hot",
+    "strength": 0,
+    "targetVolumeMl": 250,
+    "taste": {
+      "acidity": 0,
+      "bitterness": 0,
+      "body": 0,
+      "clarity": 0,
+      "sweetness": 0,
+    },
+  },
+  "ratio": 16.8,
+  "rationale": [
+    {
+      "paramKey": "strength",
+      "params": {
+        "ey": 20,
+        "tds": 1.32,
+      },
+      "sourceRefs": [
+        "sca-brewing-control-chart",
+      ],
+      "templateId": "strength.target",
+    },
+    {
+      "paramKey": "temperature",
+      "params": {
+        "process": "washed",
+        "roastLevel": "medium",
+        "tempC": 90,
+      },
+      "sourceRefs": [],
+      "templateId": "temperature.byRoastProcess",
+    },
+    {
+      "paramKey": "pours",
+      "params": {
+        "acidity": 0,
+        "sweetness": 0,
+      },
+      "sourceRefs": [
+        "kasuya-4-6-method",
+      ],
+      "templateId": "pours.fourSixSummary",
+    },
+  ],
+  "steps": [
+    {
+      "atSec": 0,
+      "durationSec": 40,
+      "kind": "bloom",
+      "waterG": 46.8,
+    },
+    {
+      "atSec": 40,
+      "kind": "pour",
+      "note": "circular",
+      "toWaterG": 80.4,
+    },
+    {
+      "atSec": 75,
+      "kind": "pour",
+      "note": "circular",
+      "toWaterG": 114,
+    },
+    {
+      "atSec": 110,
+      "kind": "pour",
+      "note": "center",
+      "toWaterG": 199.5,
+    },
+    {
+      "atSec": 145,
+      "kind": "pour",
+      "note": "center",
+      "toWaterG": 285,
+    },
+    {
+      "atSec": 180,
+      "expectedEndSec": 351,
+      "kind": "drawdown",
+    },
+  ],
+  "targetEy": 20,
+  "targetTds": 1.32,
+  "tempC": 90,
+  "totalTimeSec": 351,
+  "warnings": [],
+  "waterG": 285,
+}
+`;
+
+exports[`golden: グラインダー併記 > df64 指定時に目盛が併記される 1`] = `
+{
+  "doseG": 17,
+  "dripperId": "hario-v60",
+  "engineVersion": "0.1.0",
+  "grind": {
+    "confidence": "community",
+    "generalLabel": "中細挽き（約620μm）",
+    "micron": 620,
+    "setting": "目盛 58",
+  },
+  "input": {
+    "bean": {
+      "process": "washed",
+      "roastLevel": "medium",
+    },
+    "equipment": {
+      "dripperId": "hario-v60",
+      "grinderId": "df64",
+    },
+    "serveStyle": "hot",
+    "strength": 0,
+    "targetVolumeMl": 250,
+    "taste": {
+      "acidity": 0,
+      "bitterness": 0,
+      "body": 0,
+      "clarity": 0,
+      "sweetness": 0,
+    },
+  },
+  "ratio": 16.8,
+  "rationale": [
+    {
+      "paramKey": "strength",
+      "params": {
+        "ey": 20,
+        "tds": 1.32,
+      },
+      "sourceRefs": [
+        "sca-brewing-control-chart",
+      ],
+      "templateId": "strength.target",
+    },
+    {
+      "paramKey": "temperature",
+      "params": {
+        "process": "washed",
+        "roastLevel": "medium",
+        "tempC": 90,
+      },
+      "sourceRefs": [],
+      "templateId": "temperature.byRoastProcess",
+    },
+    {
+      "paramKey": "pours",
+      "params": {
+        "acidity": 0,
+        "sweetness": 0,
+      },
+      "sourceRefs": [
+        "kasuya-4-6-method",
+      ],
+      "templateId": "pours.fourSixSummary",
+    },
+  ],
+  "steps": [
+    {
+      "atSec": 0,
+      "durationSec": 40,
+      "kind": "bloom",
+      "waterG": 46.8,
+    },
+    {
+      "atSec": 40,
+      "kind": "pour",
+      "note": "circular",
+      "toWaterG": 80.4,
+    },
+    {
+      "atSec": 75,
+      "kind": "pour",
+      "note": "circular",
+      "toWaterG": 114,
+    },
+    {
+      "atSec": 110,
+      "kind": "pour",
+      "note": "center",
+      "toWaterG": 199.5,
+    },
+    {
+      "atSec": 145,
+      "kind": "pour",
+      "note": "center",
+      "toWaterG": 285,
+    },
+    {
+      "atSec": 180,
+      "expectedEndSec": 351,
+      "kind": "drawdown",
+    },
+  ],
+  "targetEy": 20,
+  "targetTds": 1.32,
+  "tempC": 90,
+  "totalTimeSec": 351,
+  "warnings": [],
+  "waterG": 285,
+}
+`;
+
+exports[`golden: グラインダー併記 > fellow-ode2 指定時に目盛が併記される 1`] = `
+{
+  "doseG": 17,
+  "dripperId": "hario-v60",
+  "engineVersion": "0.1.0",
+  "grind": {
+    "confidence": "community",
+    "generalLabel": "中細挽き（約620μm）",
+    "micron": 620,
+    "setting": "目盛 6",
+  },
+  "input": {
+    "bean": {
+      "process": "washed",
+      "roastLevel": "medium",
+    },
+    "equipment": {
+      "dripperId": "hario-v60",
+      "grinderId": "fellow-ode2",
+    },
+    "serveStyle": "hot",
+    "strength": 0,
+    "targetVolumeMl": 250,
+    "taste": {
+      "acidity": 0,
+      "bitterness": 0,
+      "body": 0,
+      "clarity": 0,
+      "sweetness": 0,
+    },
+  },
+  "ratio": 16.8,
+  "rationale": [
+    {
+      "paramKey": "strength",
+      "params": {
+        "ey": 20,
+        "tds": 1.32,
+      },
+      "sourceRefs": [
+        "sca-brewing-control-chart",
+      ],
+      "templateId": "strength.target",
+    },
+    {
+      "paramKey": "temperature",
+      "params": {
+        "process": "washed",
+        "roastLevel": "medium",
+        "tempC": 90,
+      },
+      "sourceRefs": [],
+      "templateId": "temperature.byRoastProcess",
+    },
+    {
+      "paramKey": "pours",
+      "params": {
+        "acidity": 0,
+        "sweetness": 0,
+      },
+      "sourceRefs": [
+        "kasuya-4-6-method",
+      ],
+      "templateId": "pours.fourSixSummary",
+    },
+  ],
+  "steps": [
+    {
+      "atSec": 0,
+      "durationSec": 40,
+      "kind": "bloom",
+      "waterG": 46.8,
+    },
+    {
+      "atSec": 40,
+      "kind": "pour",
+      "note": "circular",
+      "toWaterG": 80.4,
+    },
+    {
+      "atSec": 75,
+      "kind": "pour",
+      "note": "circular",
+      "toWaterG": 114,
+    },
+    {
+      "atSec": 110,
+      "kind": "pour",
+      "note": "center",
+      "toWaterG": 199.5,
+    },
+    {
+      "atSec": 145,
+      "kind": "pour",
+      "note": "center",
+      "toWaterG": 285,
+    },
+    {
+      "atSec": 180,
+      "expectedEndSec": 351,
+      "kind": "drawdown",
+    },
+  ],
+  "targetEy": 20,
+  "targetTds": 1.32,
+  "tempC": 90,
+  "totalTimeSec": 351,
+  "warnings": [],
+  "waterG": 285,
+}
+`;
+
+exports[`golden: グラインダー併記 > mahlkonig-ek43 指定時に目盛が併記される 1`] = `
+{
+  "doseG": 17,
+  "dripperId": "hario-v60",
+  "engineVersion": "0.1.0",
+  "grind": {
+    "confidence": "community",
+    "generalLabel": "中細挽き（約620μm）",
+    "micron": 620,
+    "setting": "目盛 9.5",
+  },
+  "input": {
+    "bean": {
+      "process": "washed",
+      "roastLevel": "medium",
+    },
+    "equipment": {
+      "dripperId": "hario-v60",
+      "grinderId": "mahlkonig-ek43",
+    },
+    "serveStyle": "hot",
+    "strength": 0,
+    "targetVolumeMl": 250,
+    "taste": {
+      "acidity": 0,
+      "bitterness": 0,
+      "body": 0,
+      "clarity": 0,
+      "sweetness": 0,
+    },
+  },
+  "ratio": 16.8,
+  "rationale": [
+    {
+      "paramKey": "strength",
+      "params": {
+        "ey": 20,
+        "tds": 1.32,
+      },
+      "sourceRefs": [
+        "sca-brewing-control-chart",
+      ],
+      "templateId": "strength.target",
+    },
+    {
+      "paramKey": "temperature",
+      "params": {
+        "process": "washed",
+        "roastLevel": "medium",
+        "tempC": 90,
+      },
+      "sourceRefs": [],
+      "templateId": "temperature.byRoastProcess",
+    },
+    {
+      "paramKey": "pours",
+      "params": {
+        "acidity": 0,
+        "sweetness": 0,
+      },
+      "sourceRefs": [
+        "kasuya-4-6-method",
+      ],
+      "templateId": "pours.fourSixSummary",
+    },
+  ],
+  "steps": [
+    {
+      "atSec": 0,
+      "durationSec": 40,
+      "kind": "bloom",
+      "waterG": 46.8,
+    },
+    {
+      "atSec": 40,
+      "kind": "pour",
+      "note": "circular",
+      "toWaterG": 80.4,
+    },
+    {
+      "atSec": 75,
+      "kind": "pour",
+      "note": "circular",
+      "toWaterG": 114,
+    },
+    {
+      "atSec": 110,
+      "kind": "pour",
+      "note": "center",
+      "toWaterG": 199.5,
+    },
+    {
+      "atSec": 145,
+      "kind": "pour",
+      "note": "center",
+      "toWaterG": 285,
+    },
+    {
+      "atSec": 180,
+      "expectedEndSec": 351,
+      "kind": "drawdown",
+    },
+  ],
+  "targetEy": 20,
+  "targetTds": 1.32,
+  "tempC": 90,
+  "totalTimeSec": 351,
+  "warnings": [],
+  "waterG": 285,
+}
+`;
+
+exports[`golden: グラインダー併記 > niche-zero 指定時に目盛が併記される 1`] = `
+{
+  "doseG": 17,
+  "dripperId": "hario-v60",
+  "engineVersion": "0.1.0",
+  "grind": {
+    "confidence": "community",
+    "generalLabel": "中細挽き（約620μm）",
+    "micron": 620,
+    "setting": "目盛 47",
+  },
+  "input": {
+    "bean": {
+      "process": "washed",
+      "roastLevel": "medium",
+    },
+    "equipment": {
+      "dripperId": "hario-v60",
+      "grinderId": "niche-zero",
+    },
+    "serveStyle": "hot",
+    "strength": 0,
+    "targetVolumeMl": 250,
+    "taste": {
+      "acidity": 0,
+      "bitterness": 0,
+      "body": 0,
+      "clarity": 0,
+      "sweetness": 0,
+    },
+  },
+  "ratio": 16.8,
+  "rationale": [
+    {
+      "paramKey": "strength",
+      "params": {
+        "ey": 20,
+        "tds": 1.32,
+      },
+      "sourceRefs": [
+        "sca-brewing-control-chart",
+      ],
+      "templateId": "strength.target",
+    },
+    {
+      "paramKey": "temperature",
+      "params": {
+        "process": "washed",
+        "roastLevel": "medium",
+        "tempC": 90,
+      },
+      "sourceRefs": [],
+      "templateId": "temperature.byRoastProcess",
+    },
+    {
+      "paramKey": "pours",
+      "params": {
+        "acidity": 0,
+        "sweetness": 0,
+      },
+      "sourceRefs": [
+        "kasuya-4-6-method",
+      ],
+      "templateId": "pours.fourSixSummary",
+    },
+  ],
+  "steps": [
+    {
+      "atSec": 0,
+      "durationSec": 40,
+      "kind": "bloom",
+      "waterG": 46.8,
+    },
+    {
+      "atSec": 40,
+      "kind": "pour",
+      "note": "circular",
+      "toWaterG": 80.4,
+    },
+    {
+      "atSec": 75,
+      "kind": "pour",
+      "note": "circular",
+      "toWaterG": 114,
+    },
+    {
+      "atSec": 110,
+      "kind": "pour",
+      "note": "center",
+      "toWaterG": 199.5,
+    },
+    {
+      "atSec": 145,
+      "kind": "pour",
+      "note": "center",
+      "toWaterG": 285,
+    },
+    {
+      "atSec": 180,
+      "expectedEndSec": 351,
+      "kind": "drawdown",
+    },
+  ],
+  "targetEy": 20,
+  "targetTds": 1.32,
+  "tempC": 90,
+  "totalTimeSec": 351,
+  "warnings": [],
+  "waterG": 285,
+}
+`;
+
+exports[`golden: グラインダー併記 > wilfa-svart 指定時に目盛が併記される 1`] = `
+{
+  "doseG": 17,
+  "dripperId": "hario-v60",
+  "engineVersion": "0.1.0",
+  "grind": {
+    "confidence": "estimated",
+    "generalLabel": "中細挽き（約620μm）",
+    "micron": 620,
+    "setting": "目盛 9",
+  },
+  "input": {
+    "bean": {
+      "process": "washed",
+      "roastLevel": "medium",
+    },
+    "equipment": {
+      "dripperId": "hario-v60",
+      "grinderId": "wilfa-svart",
     },
     "serveStyle": "hot",
     "strength": 0,

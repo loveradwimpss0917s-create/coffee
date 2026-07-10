@@ -104,6 +104,60 @@ describe('golden: AeroPress（加圧）', () => {
   });
 });
 
+describe('golden: ORIGAMI', () => {
+  it('中煎り・バランス', () => {
+    const input = makeInput({ equipment: { dripperId: 'origami' } });
+    expect(generateRecipe(input)).toMatchSnapshot();
+  });
+});
+
+describe('golden: CAFEC フラワー', () => {
+  it('浅煎り・明るく華やかな好み', () => {
+    const input = makeInput({
+      bean: { roastLevel: 'light', process: 'washed' },
+      equipment: { dripperId: 'cafec-flower' },
+      taste: TASTE_PRESETS.brightFloral,
+    });
+    expect(generateRecipe(input)).toMatchSnapshot();
+  });
+});
+
+describe('golden: KONO 名門', () => {
+  it('中煎り・バランス', () => {
+    const input = makeInput({ equipment: { dripperId: 'kono' } });
+    expect(generateRecipe(input)).toMatchSnapshot();
+  });
+});
+
+describe('golden: April Brewer', () => {
+  it('浅煎り・バランス', () => {
+    const input = makeInput({
+      bean: { roastLevel: 'light', process: 'washed' },
+      equipment: { dripperId: 'april' },
+    });
+    expect(generateRecipe(input)).toMatchSnapshot();
+  });
+});
+
+describe('golden: Orea Brewer', () => {
+  it('中煎り・バランス', () => {
+    const input = makeInput({ equipment: { dripperId: 'orea' } });
+    expect(generateRecipe(input)).toMatchSnapshot();
+  });
+});
+
+describe('golden: French Press（全浸漬）', () => {
+  it('中煎り・コク深い好み', () => {
+    const input = makeInput({
+      equipment: { dripperId: 'french-press' },
+      taste: TASTE_PRESETS.richDeep,
+    });
+    const recipe = generateRecipe(input);
+    expect(recipe.steps.some((s) => s.kind === 'press')).toBe(true);
+    expect(recipe).toMatchSnapshot();
+  });
+});
+
 describe('golden: Iced', () => {
   it('浅煎り・Iced・250ml', () => {
     const input = makeInput({
@@ -131,6 +185,22 @@ describe('golden: グラインダー併記', () => {
     });
     const recipe = generateRecipe(input);
     expect(recipe.grind.confidence).toBe('estimated');
+    expect(recipe).toMatchSnapshot();
+  });
+
+  it.each([
+    '1zpresso-jx-pro',
+    '1zpresso-zp6',
+    'baratza-encore',
+    'fellow-ode2',
+    'wilfa-svart',
+    'niche-zero',
+    'df64',
+    'mahlkonig-ek43',
+  ])('%s 指定時に目盛が併記される', (grinderId) => {
+    const input = makeInput({ equipment: { dripperId: 'hario-v60', grinderId } });
+    const recipe = generateRecipe(input);
+    expect(recipe.grind.setting).toBeDefined();
     expect(recipe).toMatchSnapshot();
   });
 });

@@ -23,9 +23,15 @@ const processArb = fc.constantFrom(
 const dripperIdArb = fc.constantFrom(
   'hario-v60',
   'hario-switch',
+  'origami',
+  'cafec-flower',
   'kalita-wave',
+  'kono',
+  'april',
+  'orea',
   'clever',
   'aeropress',
+  'french-press',
 );
 
 const tasteAxisArb = fc.integer({ min: -2, max: 2 });
