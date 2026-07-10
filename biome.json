@@ -48,7 +48,8 @@
     "rules": {
       "preset": "recommended",
       "suspicious": {
-        "noExplicitAny": "error"
+        "noExplicitAny": "error",
+        "noArrayIndexKey": "off"
       },
       "correctness": {
         "noUnusedImports": "error",

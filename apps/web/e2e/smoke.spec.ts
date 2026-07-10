@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 
-test('ホームが表示される', async ({ page }) => {
+test('初回訪問はオンボーディングへ誘導される', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Coffee Recipe Lab' })).toBeVisible();
+  await expect(page).toHaveURL(/\/onboarding$/);
+  await expect(page.getByRole('heading', { name: 'はじめに、器具を教えてください' })).toBeVisible();
 });
