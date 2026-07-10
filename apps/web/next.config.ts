@@ -3,7 +3,7 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  transpilePackages: ['@coffee-lab/engine'],
+  transpilePackages: ['@coffee-lab/engine', '@coffee-lab/db'],
 };
 
 export default nextConfig;

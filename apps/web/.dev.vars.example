@@ -1,0 +1,3 @@
+# ローカル開発用のシークレット。`.dev.vars` にコピーして値を入れる（.dev.vars はコミットしない、docs/12 §6）。
+# 生成例: openssl rand -base64 32
+BETTER_AUTH_SECRET=

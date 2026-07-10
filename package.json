@@ -20,5 +20,10 @@
   "devDependencies": {
     "@biomejs/biome": "^2.5.3",
     "typescript": "^5.7.3"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3"
+    ]
   }
 }

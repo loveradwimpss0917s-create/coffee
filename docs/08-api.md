@@ -38,36 +38,36 @@
 ## 3. エンドポイント一覧
 
 ### 認証（Better Auth が自動提供: `/api/auth/*`）
-sign-in/up（email+password, Google, Apple）, session, sign-out, anonymous。個別設計不要。
+MVP/β では email+password と匿名昇格のみ実装（2-1）。Google/Apple ログインは v1.0 で追加する（docs/15）。
 
-### Beans
+### Beans（実装済み、2-2）
 | Method | Path | 説明 |
 |---|---|---|
 | GET | `/beans?cursor&archived` | 自分の豆一覧 |
 | POST | `/beans` | 作成 |
 | GET/PATCH/DELETE | `/beans/:id` | 詳細・更新・削除 |
 
-### Recipes
+### Recipes（実装済み、2-2。共有関連は未実装）
 | Method | Path | 説明 |
 |---|---|---|
 | GET | `/recipes?cursor&dripperId` | 保存レシピ一覧 |
-| POST | `/recipes` | 保存（input/output/engineVersion を受領。**サーバーで output を再生成して一致検証** — 改竄防止） |
-| GET/PATCH/DELETE | `/recipes/:id` | 詳細（title, visibility のみ PATCH 可） |
-| POST | `/recipes/generate` | サーバー側生成（body: BrewInput → Recipe）。未認証可・レートリミット強め |
-| GET | `/r/:shareId` | 公開レシピ取得（v1.0、未認証可） |
+| POST | `/recipes` | 保存（input/output を受領。**サーバーで input から output を再生成し、常にサーバー生成分を保存** — 改竄防止） |
+| GET/PATCH/DELETE | `/recipes/:id` | 詳細（title のみ PATCH 可。visibility の変更は共有機能と合わせて v1.0） |
+| POST | `/recipes/generate` | サーバー側生成（body: BrewInput → Recipe）。未認証可。レートリミットは 2-8 で追加 |
+| GET | `/r/:shareId` | 公開レシピ取得（v1.0、未実装。DB の visibility/share_id カラムは先行追加済み） |
 
-### Brews
+### Brews（実装済み、2-2）
 | Method | Path | 説明 |
 |---|---|---|
 | GET | `/brews?cursor&beanId` | 抽出ログ一覧 |
 | POST | `/brews` | 抽出記録 + フィードバック保存 |
-| GET/PATCH/DELETE | `/brews/:id` | 詳細（rating/tasteFeedback/notes/tds が PATCH 可） |
+| GET/PATCH/DELETE | `/brews/:id` | 詳細（rating/tasteFeedback/notes/tds/actualTimeSec が PATCH 可） |
 
-### Settings / Gear
+### Settings（実装済み、2-2）／ Gear（v1.0）
 | Method | Path | 説明 |
 |---|---|---|
-| GET/PUT | `/settings` | user_settings 全体 |
-| GET/POST/PATCH/DELETE | `/gear/grinders(/:id)` | user_grinders CRUD（キャリブレーション含む） |
+| GET/PUT | `/settings` | user_settings 全体（グラインダー1台分のキャリブレーションを含む、docs/07 §3.2） |
+| GET/POST/PATCH/DELETE | `/gear/grinders(/:id)` | user_grinders CRUD。複数グラインダー個別キャリブレーションは v1.0（docs/07 §3.3, docs/15） |
 
 ### Sync（ゲスト→アカウント移行）
 | Method | Path | 説明 |

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <title>Coffee Recipe Lab</title>
+  <rect width="512" height="512" fill="#1A1713"/>
+  <path d="M148 178 L364 178 L300 330 L212 330 Z" fill="#DC9242"/>
+  <path d="M180 214 L332 214 L322 238 L190 238 Z" fill="#1A1713" opacity="0.22"/>
+  <path d="M204 270 L308 270 L299 292 L213 292 Z" fill="#1A1713" opacity="0.22"/>
+  <path d="M256 344
+           C 282 374, 296 392, 296 410
+           A 40 40 0 1 1 216 410
+           C 216 392, 230 374, 256 344 Z" fill="#DC9242"/>
+</svg>

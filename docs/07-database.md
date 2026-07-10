@@ -35,17 +35,22 @@ erDiagram
 
 ### 3.2 user_settings
 
+apps/web の `UserSettings`（`lib/schemas.ts`）と1:1対応させ、ApiRepository でのマッピングを単純に保つ（実装済み、docs/09 §4）。
+
 | カラム | 型 | 説明 |
 |---|---|---|
 | user_id | TEXT PK, FK→users CASCADE | |
-| default_dripper_id | TEXT | 例 `"hario-v60"`（engine data の ID） |
+| owned_dripper_ids | TEXT(JSON) NOT NULL DEFAULT '[]' | 所有ドリッパーIDの配列（engine data の ID） |
 | default_grinder_id | TEXT | 例 `"delonghi-kg521"` |
-| default_taste_profile | TEXT(JSON) | TasteProfile（-2..+2 ×5軸） |
-| default_dose_g | REAL | 既定粉量 |
-| units | TEXT | `"metric"` 固定（将来 imperial） |
-| theme | TEXT | `"system" / "light" / "dark"` |
+| grinder_calibration_offset | REAL NOT NULL DEFAULT 0 | 目盛補正値（docs/11 §4）。単一グラインダー分のみ MVP で保持 |
+| default_taste_profile | TEXT(JSON) NOT NULL | TasteProfile（-2..+2 ×5軸） |
+| theme | TEXT NOT NULL DEFAULT 'system' | `"system" / "light" / "dark"` |
+| onboarded | INTEGER NOT NULL DEFAULT false | オンボーディング完了フラグ |
 
-### 3.3 user_grinders（所有グラインダー + キャリブレーション）
+### 3.3 user_grinders（複数グラインダーの個別キャリブレーション、v1.0）
+
+MVP/β では単一グラインダーの補正値のみ `user_settings.grinder_calibration_offset` に保持する。
+複数グラインダーを所有するユーザー向けの個別キャリブレーション管理（テーブル分離）は v1.0 で追加する（docs/11 §5, docs/15）。
 
 | カラム | 型 | 説明 |
 |---|---|---|
@@ -108,6 +113,14 @@ erDiagram
 | actual_time_sec | INTEGER | 実測総抽出時間（目標との乖離分析用） |
 | notes | TEXT | |
 
+### 3.7 sync_imports（ゲスト取込の冪等性、実装済み2-3）
+
+| カラム | 型 | 説明 |
+|---|---|---|
+| import_id | TEXT PK | クライアント生成。同一IDの再送は取込済みとしてスキップ |
+| user_id | TEXT FK CASCADE | |
+| created_at | INTEGER NOT NULL | |
+
 ## 4. マイグレーション運用
 
 1. スキーマ変更 → `pnpm db:generate`（SQL 生成、`packages/db/migrations/` にコミット）
@@ -119,7 +132,9 @@ erDiagram
 ## 5. ゲストデータとの同期
 
 - ゲスト: 同スキーマ相当のデータを localStorage（Zodで版管理された envelope）に保存
-- サインアップ/イン時: `POST /api/v1/sync/import` にゲストデータを一括送信 → サーバーで ID 再発行して取り込み → ローカルは同期済みフラグ
+- サインアップ/イン時: `POST /api/v1/sync/import` にゲストデータを一括送信 → サーバーで ID 再発行して取り込み
+  （recipes は POST /recipes と同様 output をサーバーで再生成）→ 成功後ローカルの該当データを消去
+  （`features/auth/sync.ts`、実装済み2-3。呼び出しは認証画面 UI 側、2-4）
 - コンフリクトは「サーバー優先・ローカルは追記」（同一IDが存在しないため実質単純追記）
 
 ## 6. インデックス方針
