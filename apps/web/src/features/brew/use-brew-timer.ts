@@ -1,16 +1,27 @@
 'use client';
 
-import type { Recipe } from '@coffee-lab/engine';
+import type { Recipe, RecipeStep } from '@coffee-lab/engine';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export type TimerStatus = 'idle' | 'running' | 'paused' | 'done';
+
+/**
+ * 実時間の経過を伴わない「即時アクション」ステップ（弁の開閉・攪拌・湯温切替）。
+ * これらは atSec 上は幅を持たないため、ユーザーがボタンを押すまでの反応時間を
+ * 経過時間としてカウントすると以降のステップ全体が後ろにズレる。
+ * 該当ステップの間は自動的にクロックを止める（docs/09 §2.2 の一時停止と同じ仕組みを流用）。
+ */
+function isInstantStep(kind: RecipeStep['kind']): boolean {
+  return kind === 'valve' || kind === 'stir' || kind === 'temperatureChange';
+}
 
 type BrewTimerState = {
   recipe: Recipe | null;
   startedAt: number | null;
   pausedAt: number | null;
   pausedDurationMs: number;
+  stepFrozenAt: number | null;
   finishedAt: number | null;
   currentStepIndex: number;
   status: TimerStatus;
@@ -33,6 +44,7 @@ export const useBrewTimerStore = create<BrewTimerState>()(
       startedAt: null,
       pausedAt: null,
       pausedDurationMs: 0,
+      stepFrozenAt: null,
       finishedAt: null,
       currentStepIndex: 0,
       status: 'idle',
@@ -42,18 +54,26 @@ export const useBrewTimerStore = create<BrewTimerState>()(
           startedAt: Date.now(),
           pausedAt: null,
           pausedDurationMs: 0,
+          stepFrozenAt: recipe.steps[0] && isInstantStep(recipe.steps[0].kind) ? Date.now() : null,
           finishedAt: null,
           currentStepIndex: 0,
           status: 'running',
         }),
       completeStep: () =>
         set((state) => {
+          if (!state.recipe) return state;
+          const now = Date.now();
+          const pausedDurationMs =
+            state.pausedDurationMs + (state.stepFrozenAt !== null ? now - state.stepFrozenAt : 0);
           const nextIndex = state.currentStepIndex + 1;
-          const isLast = !state.recipe || nextIndex >= state.recipe.steps.length;
+          const nextStep = state.recipe.steps[nextIndex];
+          const isLast = nextIndex >= state.recipe.steps.length;
           return {
             currentStepIndex: nextIndex,
+            pausedDurationMs,
+            stepFrozenAt: !isLast && nextStep && isInstantStep(nextStep.kind) ? now : null,
             status: isLast ? 'done' : state.status,
-            finishedAt: isLast ? Date.now() : state.finishedAt,
+            finishedAt: isLast ? now : state.finishedAt,
           };
         }),
       pause: () =>
@@ -76,6 +96,7 @@ export const useBrewTimerStore = create<BrewTimerState>()(
           startedAt: null,
           pausedAt: null,
           pausedDurationMs: 0,
+          stepFrozenAt: null,
           finishedAt: null,
           currentStepIndex: 0,
           status: 'idle',
@@ -90,6 +111,7 @@ export function getElapsedSec(state: BrewTimerState, now: number): number {
   const effectiveNow = state.status === 'done' && state.finishedAt ? state.finishedAt : now;
   const pauseOffset =
     state.pausedDurationMs +
-    (state.status === 'paused' && state.pausedAt ? effectiveNow - state.pausedAt : 0);
+    (state.status === 'paused' && state.pausedAt ? effectiveNow - state.pausedAt : 0) +
+    (state.stepFrozenAt !== null ? effectiveNow - state.stepFrozenAt : 0);
   return Math.max(0, (effectiveNow - state.startedAt - pauseOffset) / 1000);
 }

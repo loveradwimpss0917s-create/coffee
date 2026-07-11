@@ -75,9 +75,14 @@ export default function BrewTimerPage() {
       />
 
       {nextRow && (
-        <p className="text-center text-callout text-muted-foreground">
-          次: {formatTime(nextRow.atSec)} に {nextRow.label}
-        </p>
+        <div className="flex items-center justify-center gap-2 rounded-md border border-border bg-surface px-4 py-3">
+          <span className="text-callout text-muted-foreground">次は</span>
+          <nextRow.icon size={16} aria-hidden="true" />
+          <span className="font-medium text-callout">{nextRow.label}</span>
+          <span className="font-numeric text-caption text-muted-foreground">
+            （{formatTime(nextRow.atSec)}〜）
+          </span>
+        </div>
       )}
 
       <div className="flex items-center gap-1.5" aria-hidden="true">
