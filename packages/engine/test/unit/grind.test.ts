@@ -55,6 +55,18 @@ describe('convertMicronToSetting', () => {
     );
   });
 
+  it('KG521J-M は目盛1が最も細かく、目盛18が最も粗い（オーナー実機で確認済み）', () => {
+    const fine = Number(convertMicronToSetting(1, delonghiKg521).replace('目盛 ', ''));
+    const coarse = Number(convertMicronToSetting(100000, delonghiKg521).replace('目盛 ', ''));
+    expect(fine).toBeLessThan(coarse);
+    expect(fine).toBe(
+      delonghiKg521.adjustment.type === 'numbered' ? delonghiKg521.adjustment.minSetting : 1,
+    );
+    expect(coarse).toBe(
+      delonghiKg521.adjustment.type === 'numbered' ? delonghiKg521.adjustment.maxSetting : 18,
+    );
+  });
+
   it('rotations 式（1Zpresso）は "N周 + Mクリック" 形式', () => {
     expect(convertMicronToSetting(620, zpressoKUltra)).toMatch(/クリック$/);
   });

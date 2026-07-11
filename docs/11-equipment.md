@@ -72,7 +72,7 @@ setting = (targetMicron - zeroOffsetMicron) / micronPerStep + calibrationOffset
 
 | id | name | 方式 | μm/step | 信頼度 |
 |---|---|---|---|---|
-| `delonghi-kg521` | **De'Longhi デディカ KG521J-M** | numbered (18目盛?要確認) | 推定 ~55 | estimated |
+| `delonghi-kg521` | **De'Longhi デディカ KG521J-M** | numbered 1–18（1=最細, 18=最粗、オーナー実機で確認済み） | 推定 ~55 | estimated |
 | `comandante-c40` | Comandante C40 MK4 | clicks | ~30 | community |
 | `1zpresso-jx-pro` | 1Zpresso JX-Pro | rotations | 12.5/click | community |
 | `1zpresso-k-ultra` | 1Zpresso K-Ultra | rotations | ~22/click(外部ダイヤル) | community |
@@ -87,9 +87,10 @@ setting = (targetMicron - zeroOffsetMicron) / micronPerStep + calibrationOffset
 | `mahlkonig-ek43` | Mahlkönig EK43 | numbered 0–16(dial) | ~55 | community |
 | `generic` | その他（一般表記のみ） | — | — | — |
 
-- **KG521J-M 対応（オーナーの現用機）**: コーン式・一体型。公表 μm データが存在しないため、
-  初期値は「目盛中央=中挽き」の仮定で置き、**オーナー実測でキャリブレーション**して `measured` に昇格させる
-  （実装後の最初の検証タスク。ロードマップ M2 に組込み）
+- **KG521J-M 対応（オーナーの現用機）**: コーン式・一体型。目盛は1〜18の18段階で
+  1が最も細かく18が最も粗い（オーナー実機で確認済み）。目盛とμmの対応（micronPerStep等）は
+  公表データが無いため引き続き「目盛中央=中挽き」の仮定で置き、**オーナー実測でキャリブレーション**して
+  `measured` に昇格させる（実装後の最初の検証タスク。ロードマップ M2 に組込み）
 - `generic` 選択時は目盛表示を省略し一般表記+μm のみ表示（どのグラインダーでも使える逃げ道）
 
 ## 5. ユーザーキャリブレーション（docs/06 S10, docs/07 user_grinders）
