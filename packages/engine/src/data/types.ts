@@ -6,7 +6,7 @@ import type { TasteProfile } from '../schemas/taste';
  * 器具マスタの型。外部入力ではなくコード内データ（docs/11 §1）のため
  * Zod ではなく TS 型で定義する（template 関数を持つため）。
  */
-export type BrewType = 'percolation' | 'immersion' | 'hybrid' | 'pressure';
+export type BrewType = 'percolation' | 'immersion' | 'hybrid' | 'pressure' | 'coldDrip';
 export type Geometry = 'cone' | 'flat' | 'basket' | 'cylinder';
 export type FlowClass = 'fast' | 'medium' | 'slow';
 export type DripperFeature = 'valve' | 'press' | 'inverted-capable';

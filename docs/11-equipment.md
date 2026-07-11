@@ -9,7 +9,7 @@
 const dripperSpecSchema = z.object({
   id: z.string(),                    // 'hario-v60'
   name: z.string(),                  // 'HARIO V60'
-  brewType: z.enum(['percolation', 'immersion', 'hybrid', 'pressure']),
+  brewType: z.enum(['percolation', 'immersion', 'hybrid', 'pressure', 'coldDrip']),
   geometry: z.enum(['cone', 'flat', 'basket', 'cylinder']),
   sizes: z.array(z.object({ id: z.string(), maxDoseG: z.number() })), // 01/02 等
   baseGrindMicron: z.number(),       // 基準粒度（250ml時）
@@ -39,6 +39,15 @@ const dripperSpecSchema = z.object({
 | `clever` | Clever Dripper | **immersion**/cone | 780μm | — | 閉→steep→載せて開放。`features:['valve']` |
 | `aeropress` | AeroPress | **pressure**/cylinder | 500μm | — | 正/逆位置、press ステップ。`features:['press','inverted-capable']` |
 | `french-press` | French Press | immersion/cylinder | 850μm | — | 4:00 steep 基準、プランジ弱く（微粉攪拌回避） |
+| `iwaki-mizudashi` | iwaki ウォータードリップサーバー K-8644-CL | **coldDrip**/cylinder | 1250μm | slow | 点滴式水出し。滴下速度は目分量前提で指定しない（オーナー実機） |
+| `hario-mizudashi` | HARIO 水出しコーヒーサーバー（点滴式） | **coldDrip**/cylinder | 1250μm | slow | iwaki と同じ点滴式。共通の `buildColdDripSteps` を使用 |
+
+### coldDrip（点滴式水出し）の特殊性
+
+- 加熱しない前提のため、湯温モデル（docs/10 §5-(4)）を使わず `tempC` は固定値 `COLD_DRIP_TEMP_C`（4°C、冷蔵庫運用前提）にする（`generate.ts` で `dripper.brewType === 'coldDrip'` を分岐）。
+- 滴下スピード（1秒あたりの滴数）はバルブの目分量でしかユーザー側で制御できないため、`buildSteps` は「全量を一度に投入 → 目安の総時間(8〜14時間)だけ待つ」という最小構成にする（`pour` + `wait` の既存ステップ種のみで表現でき、スキーマ変更は不要）。
+- `serveStyle: 'iced'` は「加熱した後に氷で薄める」ための仕組みのため、coldDrip では常に無視し、代わりに `warnings` でその旨を伝える。
+- 粒度は 1100μm を超える非常に粗い挽き目になるため、`micronToGeneralLabel`（docs/11 §3の一般表記閾値）に `粗挽き(1100–1300μm)` / `極粗挽き(>1300μm)` の区分を追加している。
 
 各ファイルには `template` 関数（docs/10 §5-(6) のステップ生成）と、根拠となる公式/著名レシピの出典コメントを含める。
 
@@ -65,7 +74,7 @@ const grinderSpecSchema = z.object({
 setting = (targetMicron - zeroOffsetMicron) / micronPerStep + calibrationOffset
 → stepSize に丸め、レンジ clamp。逆変換も提供
 出力: { general: '中細挽き（約620μm）', setting: '24 クリック' | '目盛 8', confidence }
-一般表記の閾値: extra-fine <300 / fine 300–500 / medium-fine 500–700 / medium 700–900 / medium-coarse 900–1100 / coarse >1100 (μm)
+一般表記の閾値: extra-fine <300 / fine 300–500 / medium-fine 500–700 / medium 700–900 / medium-coarse 900–1100 / coarse 1100–1300 / extra-coarse >1300 (μm)
 ```
 
 ## 4. 初期対応グラインダー 12 種（値は community データ由来の初期値・要実測検証）

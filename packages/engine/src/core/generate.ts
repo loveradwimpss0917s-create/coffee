@@ -12,7 +12,7 @@ import {
 import { buildRationale } from './explain';
 import { computeRatio, computeTargetEy, computeTargetTds } from './extraction';
 import { buildGrindResult, computeTargetGrindMicron } from './grind';
-import { computeTemperatureC } from './temperature';
+import { COLD_DRIP_TEMP_C, computeTemperatureC } from './temperature';
 
 /**
  * レシピ生成のメインパイプライン（docs/10 §5）。
@@ -21,7 +21,6 @@ import { computeTemperatureC } from './temperature';
  */
 export function generateRecipe(input: BrewInput, _options: GenerateOptions = {}): Recipe {
   const warnings: string[] = [];
-  const isIced = input.serveStyle === 'iced';
 
   // (1) resolve
   const dripperLookup = getDripper(input.equipment.dripperId);
@@ -30,6 +29,12 @@ export function generateRecipe(input: BrewInput, _options: GenerateOptions = {})
     warnings.push(
       `未登録のドリッパーID「${input.equipment.dripperId}」のため HARIO V60 の設定で生成しました。`,
     );
+  }
+
+  const isColdDrip = dripper.brewType === 'coldDrip';
+  const isIced = input.serveStyle === 'iced' && !isColdDrip;
+  if (input.serveStyle === 'iced' && isColdDrip) {
+    warnings.push('水出しはもともと冷たいため、アイスの設定は反映されません。');
   }
 
   const grinder = input.equipment.grinderId ? getGrinder(input.equipment.grinderId) : undefined;
@@ -59,13 +64,15 @@ export function generateRecipe(input: BrewInput, _options: GenerateOptions = {})
   }
 
   // (4) temperature
-  let tempC = computeTemperatureC(
-    input.bean.roastLevel,
-    input.bean.process,
-    input.taste,
-    dripper.tempOffsetC,
-    input.bean.daysOffRoast,
-  );
+  let tempC = isColdDrip
+    ? COLD_DRIP_TEMP_C
+    : computeTemperatureC(
+        input.bean.roastLevel,
+        input.bean.process,
+        input.taste,
+        dripper.tempOffsetC,
+        input.bean.daysOffRoast,
+      );
   if (isIced) tempC = applyIcedTempAdjustment(tempC);
 
   // (5) grind

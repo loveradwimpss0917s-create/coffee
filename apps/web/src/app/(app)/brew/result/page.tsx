@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { GrindDisplay } from '@/components/brew/grind-display';
-import { PourTimeline } from '@/components/brew/pour-timeline';
+import { formatTime, PourTimeline } from '@/components/brew/pour-timeline';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { useBrewTimerStore } from '@/features/brew/use-brew-timer';
@@ -39,8 +39,7 @@ export default function BrewResultPage() {
     );
   }
 
-  const totalMin = Math.floor(recipe.totalTimeSec / 60);
-  const totalSec = Math.round(recipe.totalTimeSec % 60);
+  const isColdDrip = dripper?.brewType === 'coldDrip';
 
   function handleSave() {
     if (!recipe || !brewInput) return;
@@ -98,8 +97,8 @@ export default function BrewResultPage() {
           <div className="grid grid-cols-2 gap-4">
             <Stat label="粉量 / 湯量" value={`${recipe.doseG}g / ${recipe.waterG}g`} />
             <Stat label="比率" value={`1 : ${recipe.ratio}`} />
-            <Stat label="湯温" value={`${recipe.tempC}°C`} />
-            <Stat label="総時間" value={`約${totalMin}:${String(totalSec).padStart(2, '0')}`} />
+            <Stat label={isColdDrip ? '水温' : '湯温'} value={`${recipe.tempC}°C`} />
+            <Stat label="総時間" value={`約${formatTime(recipe.totalTimeSec)}`} />
           </div>
           <GrindDisplay grind={recipe.grind} />
         </CardContent>

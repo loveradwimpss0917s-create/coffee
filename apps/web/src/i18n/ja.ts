@@ -68,6 +68,8 @@ export function renderRationale(r: Rationale): string {
       return 'バランスの良い味わいが好みなので、前半はお湯を通し、後半は浸して仕上げます。';
     case 'iced.dilutionCompensation':
       return '氷で薄まる分を見込んで、濃いめ・細かめ・熱めに調整しています。';
+    case 'coldDrip.summary':
+      return '水出しは加熱せずゆっくり抽出するため、粗めの挽き目にしています。滴下の速さは目安なので、厳密に合わせなくて大丈夫です。';
     default:
       return '';
   }

@@ -4,8 +4,10 @@ import { april } from './april';
 import { cafecFlower } from './cafec-flower';
 import { clever } from './clever';
 import { frenchPress } from './french-press';
+import { harioMizudashi } from './hario-mizudashi';
 import { harioSwitch } from './hario-switch';
 import { harioV60 } from './hario-v60';
+import { iwakiMizudashi } from './iwaki-mizudashi';
 import { kalitaWave } from './kalita-wave';
 import { kono } from './kono';
 import { orea } from './orea';
@@ -26,6 +28,8 @@ export const DRIPPERS: readonly DripperSpec[] = [
   clever,
   aeropress,
   frenchPress,
+  iwakiMizudashi,
+  harioMizudashi,
 ];
 
 const DRIPPER_BY_ID = new Map(DRIPPERS.map((d) => [d.id, d]));
@@ -40,8 +44,10 @@ export {
   cafecFlower,
   clever,
   frenchPress,
+  harioMizudashi,
   harioSwitch,
   harioV60,
+  iwakiMizudashi,
   kalitaWave,
   kono,
   orea,

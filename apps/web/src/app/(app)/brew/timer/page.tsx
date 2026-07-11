@@ -17,7 +17,8 @@ export default function BrewTimerPage() {
   const { recipe, currentStepIndex, status, completeStep, pause, resume, abort } = state;
   const now = useNow();
 
-  useWakeLock(status === 'running');
+  // 水出し等の数時間がかりの抽出では画面をつけっぱなしにする意味がないため対象外にする
+  useWakeLock(status === 'running' && !!recipe && recipe.totalTimeSec < 1800);
 
   useEffect(() => {
     if (!recipe) router.replace('/brew/result');

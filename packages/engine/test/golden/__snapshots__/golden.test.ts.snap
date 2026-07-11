@@ -1802,6 +1802,150 @@ exports[`golden: V60 > 深煎り・ナチュラル・コク深い好み 1`] = `
 }
 `;
 
+exports[`golden: coldDrip（点滴式水出し） > hario-mizudashi・アイス指定は無視されwarningが出る 1`] = `
+{
+  "doseG": 24,
+  "dripperId": "hario-mizudashi",
+  "engineVersion": "0.1.0",
+  "grind": {
+    "generalLabel": "粗挽き（約1250μm）",
+    "micron": 1250,
+  },
+  "input": {
+    "bean": {
+      "process": "washed",
+      "roastLevel": "medium",
+    },
+    "equipment": {
+      "dripperId": "hario-mizudashi",
+    },
+    "serveStyle": "iced",
+    "strength": 0,
+    "targetVolumeMl": 250,
+    "taste": {
+      "acidity": 0,
+      "bitterness": 0,
+      "body": 0,
+      "clarity": 0,
+      "sweetness": 0,
+    },
+  },
+  "ratio": 11.9,
+  "rationale": [
+    {
+      "paramKey": "strength",
+      "params": {
+        "ey": 20,
+        "tds": 1.32,
+      },
+      "sourceRefs": [
+        "sca-brewing-control-chart",
+      ],
+      "templateId": "strength.target",
+    },
+    {
+      "paramKey": "general",
+      "params": {},
+      "sourceRefs": [
+        "kyoto-style-cold-drip",
+      ],
+      "templateId": "coldDrip.summary",
+    },
+  ],
+  "steps": [
+    {
+      "atSec": 0,
+      "kind": "pour",
+      "toWaterG": 285,
+    },
+    {
+      "atSec": 0,
+      "kind": "wait",
+      "untilSec": 36000,
+    },
+  ],
+  "targetEy": 20,
+  "targetTds": 1.32,
+  "tempC": 4,
+  "totalTimeSec": 36000,
+  "warnings": [
+    "水出しはもともと冷たいため、アイスの設定は反映されません。",
+  ],
+  "waterG": 285,
+}
+`;
+
+exports[`golden: coldDrip（点滴式水出し） > iwaki-mizudashi・バランス 1`] = `
+{
+  "doseG": 24,
+  "dripperId": "iwaki-mizudashi",
+  "engineVersion": "0.1.0",
+  "grind": {
+    "generalLabel": "粗挽き（約1250μm）",
+    "micron": 1250,
+  },
+  "input": {
+    "bean": {
+      "process": "washed",
+      "roastLevel": "medium",
+    },
+    "equipment": {
+      "dripperId": "iwaki-mizudashi",
+    },
+    "serveStyle": "hot",
+    "strength": 0,
+    "targetVolumeMl": 250,
+    "taste": {
+      "acidity": 0,
+      "bitterness": 0,
+      "body": 0,
+      "clarity": 0,
+      "sweetness": 0,
+    },
+  },
+  "ratio": 11.9,
+  "rationale": [
+    {
+      "paramKey": "strength",
+      "params": {
+        "ey": 20,
+        "tds": 1.32,
+      },
+      "sourceRefs": [
+        "sca-brewing-control-chart",
+      ],
+      "templateId": "strength.target",
+    },
+    {
+      "paramKey": "general",
+      "params": {},
+      "sourceRefs": [
+        "kyoto-style-cold-drip",
+      ],
+      "templateId": "coldDrip.summary",
+    },
+  ],
+  "steps": [
+    {
+      "atSec": 0,
+      "kind": "pour",
+      "toWaterG": 285,
+    },
+    {
+      "atSec": 0,
+      "kind": "wait",
+      "untilSec": 36000,
+    },
+  ],
+  "targetEy": 20,
+  "targetTds": 1.32,
+  "tempC": 4,
+  "totalTimeSec": 36000,
+  "warnings": [],
+  "waterG": 285,
+}
+`;
+
 exports[`golden: グラインダー併記 > 1zpresso-jx-pro 指定時に目盛が併記される 1`] = `
 {
   "doseG": 17,

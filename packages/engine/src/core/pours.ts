@@ -188,6 +188,33 @@ export function buildPressSteps(params: BuildStepsParams, tuning: PressTuning): 
   return steps;
 }
 
+export type ColdDripTuning = {
+  /** 抽出時間の下限・上限（時間） */
+  minHours: number;
+  maxHours: number;
+};
+
+/**
+ * 点滴式水出し（iwaki/HARIO の水出しタワー）用テンプレート。
+ * 滴下スピードはバルブの目分量で決まりユーザー側で精密に制御できないため
+ * （スピード指定はせず）、上部リザーバーに全量を入れて目安の総時間だけ待つ
+ * という単純な構造にする。
+ */
+export function buildColdDripSteps(params: BuildStepsParams, tuning: ColdDripTuning): RecipeStep[] {
+  const { waterG, strength, taste } = params;
+  const hours = clamp(
+    10 + strength * 1 + taste.body * 0.5 - taste.clarity * 0.5,
+    tuning.minHours,
+    tuning.maxHours,
+  );
+  const dripSec = Math.round(hours * 3600);
+
+  return [
+    { kind: 'pour', atSec: 0, toWaterG: waterG },
+    { kind: 'wait', atSec: 0, untilSec: dripSec },
+  ];
+}
+
 export function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
 }

@@ -1,12 +1,9 @@
 import type { Recipe, RecipeStep } from '@coffee-lab/engine';
 import type { LucideIcon } from 'lucide-react';
 import { Droplet, Flame, Lock, Timer, Unlock, Waves } from 'lucide-react';
+import { formatTime } from './format-time';
 
-export function formatTime(sec: number): string {
-  const m = Math.floor(sec / 60);
-  const s = Math.round(sec % 60);
-  return `${m}:${String(s).padStart(2, '0')}`;
-}
+export { formatTime } from './format-time';
 
 export type TimelineRow = { icon: LucideIcon; label: string; detail: string; atSec: number };
 
