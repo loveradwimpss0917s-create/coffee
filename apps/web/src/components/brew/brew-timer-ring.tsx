@@ -1,13 +1,9 @@
+import { formatTime } from './pour-timeline';
+
 const SIZE = 260;
 const STROKE = 10;
 const RADIUS = (SIZE - STROKE) / 2;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
-
-function formatTime(sec: number): string {
-  const m = Math.floor(sec / 60);
-  const s = Math.floor(sec % 60);
-  return `${m}:${String(s).padStart(2, '0')}`;
-}
 
 /**
  * 抽出タイマーの進行リング。時間の正確な表現のため spring ではなく linear（docs/05 §2.4）。
