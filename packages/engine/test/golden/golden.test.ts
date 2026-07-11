@@ -205,6 +205,29 @@ describe('golden: グラインダー併記', () => {
   });
 });
 
+describe('golden: coldDrip（点滴式水出し）', () => {
+  it('iwaki-mizudashi・バランス', () => {
+    const input = makeInput({
+      equipment: { dripperId: 'iwaki-mizudashi' },
+    });
+    const recipe = generateRecipe(input);
+    expect(recipe.tempC).toBe(4);
+    expect(recipe.steps.map((s) => s.kind)).toEqual(['pour', 'wait']);
+    expect(recipe).toMatchSnapshot();
+  });
+
+  it('hario-mizudashi・アイス指定は無視されwarningが出る', () => {
+    const input = makeInput({
+      equipment: { dripperId: 'hario-mizudashi' },
+      serveStyle: 'iced',
+    });
+    const recipe = generateRecipe(input);
+    expect(recipe.tempC).toBe(4);
+    expect(recipe.warnings.some((w) => w.includes('アイス'))).toBe(true);
+    expect(recipe).toMatchSnapshot();
+  });
+});
+
 describe('golden: 極端値・大量抽出', () => {
   it('1000ml・強い好み全部盛り', () => {
     const input = makeInput({

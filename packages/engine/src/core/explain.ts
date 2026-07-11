@@ -25,6 +25,16 @@ export function buildRationale(params: {
     sourceRefs: ['sca-brewing-control-chart'],
   });
 
+  if (dripper.brewType === 'coldDrip') {
+    rationale.push({
+      paramKey: 'general',
+      templateId: 'coldDrip.summary',
+      params: {},
+      sourceRefs: ['kyoto-style-cold-drip'],
+    });
+    return rationale;
+  }
+
   rationale.push({
     paramKey: 'temperature',
     templateId: 'temperature.byRoastProcess',

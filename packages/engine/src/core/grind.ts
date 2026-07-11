@@ -28,7 +28,8 @@ const GENERAL_LABEL_THRESHOLDS: Array<{ maxMicron: number; label: string }> = [
   { maxMicron: 700, label: '中細挽き' },
   { maxMicron: 900, label: '中挽き' },
   { maxMicron: 1100, label: '中粗挽き' },
-  { maxMicron: Number.POSITIVE_INFINITY, label: '粗挽き' },
+  { maxMicron: 1300, label: '粗挽き' },
+  { maxMicron: Number.POSITIVE_INFINITY, label: '極粗挽き' },
 ];
 
 export function micronToGeneralLabel(micron: number): string {

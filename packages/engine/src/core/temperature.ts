@@ -23,6 +23,12 @@ const PROCESS_OFFSET: Partial<Record<Process, number>> = {
 
 const LIGHT_ROASTS: RoastLevel[] = ['light', 'medium-light'];
 
+/**
+ * 点滴式水出し（coldDrip）の水温。加熱しないため焙煎度等での補正は行わず、
+ * 食品衛生の観点から冷蔵庫内（4°C程度）での運用を前提とする固定値とする。
+ */
+export const COLD_DRIP_TEMP_C = 4;
+
 export function computeTemperatureC(
   roastLevel: RoastLevel,
   process: Process,

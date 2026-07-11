@@ -181,6 +181,7 @@ expectedEndSec = dripper.baseDrawdown + f(粒度, 湯量)
 
 浸漬型（Clever / French Press）: `steepTimeSec = base + body*30 - clarity*20`、攪拌有無を taste から決定。
 ハイブリッド（**HARIO Switch 360**）: §6 参照。
+coldDrip（点滴式水出し。iwaki/HARIO の水出しタワー）: §6.1 参照。
 
 ### (8) explain — 根拠生成
 
@@ -200,6 +201,26 @@ Switch は「弁の開閉」で透過と浸漬を切り替えられるため、*
 | clarity ≧ body + 1 | **透過主体**（常時開） | V60 テンプレート + 弁 open 固定 |
 | body ≧ clarity + 1 | **浸漬主体** | 閉で注湯 → steep → 開放 drawdown |
 | それ以外（バランス） | **ハイブリッド（Kasuya 2025 型）** | 開で蒸らし+序盤透過（高温）→ 閉じて低温追い湯で浸漬 → 開放 |
+
+## 6.1 coldDrip（点滴式水出し）の特別対応
+
+iwaki ウォータードリップサーバー K-8644-CL / HARIO 水出しコーヒーサーバー（点滴式）のような
+点滴式タワーは、上部リザーバーからの滴下速度をユーザーがバルブの目分量でしか調整できない
+（正確な「1秒に1滴」のような制御はできない）。そのため他のドリッパーのような複数投・
+温度変化ステップは持たず、次の最小構成にする（`buildColdDripSteps`, docs/11）:
+
+```
+steps = [
+  { kind: 'pour', atSec: 0, toWaterG: waterG },   // 上部リザーバーに全量を投入
+  { kind: 'wait', atSec: 0, untilSec: dripSec },   // 目安時間(8〜14時間)だけ待つ
+]
+dripHours = clamp(10 + strength*1 + body*0.5 - clarity*0.5, 8, 14)
+tempC     = COLD_DRIP_TEMP_C (固定 4°C。加熱しないため docs/10 §5-(4) の湯温モデルは使わない)
+isIced    = 常に false（すでに冷たいため「アイス」設定は無視し warnings で伝える）
+```
+
+根拠(Rationale)も温度/投数系のテンプレートは使わず、専用の `coldDrip.summary` 1本にまとめる
+（explain.ts で `dripper.brewType === 'coldDrip'` を分岐）。
 
 ハイブリッドの生成パラメータ（20g/300g 基準をスケール）:
 ```
