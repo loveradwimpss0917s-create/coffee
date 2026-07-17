@@ -1,7 +1,7 @@
 'use client';
 
 import { DRIPPERS } from '@coffee-lab/engine';
-import { Coffee } from 'lucide-react';
+import { Coffee, Martini } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -63,6 +63,19 @@ export default function HomePage() {
           </Button>
         </CardContent>
       </Card>
+
+      <Link
+        href="/arrange"
+        className="flex items-center gap-3 rounded-md border border-border bg-surface px-4 py-3 transition-colors duration-(--duration-fast) hover:bg-surface-raised"
+      >
+        <Martini aria-hidden="true" size={20} className="text-primary" />
+        <div className="flex flex-col">
+          <span className="font-medium text-callout">アレンジレシピ</span>
+          <span className="text-caption text-muted-foreground">
+            AeroPressで作る、オレンジコーヒーなどのアレンジ
+          </span>
+        </div>
+      </Link>
 
       {latest && latestDripper && (
         <div className="flex flex-col gap-2">

@@ -19,6 +19,7 @@
 | S13 | `/auth/sign-in`, `/auth/sign-up` | 認証 | — | β |
 | S14 | `/onboarding` | 初回オンボーディング（器具登録） | — | MVP |
 | S15 | `/r/[shareId]` | 公開レシピ共有ページ | 不要 | v1.0 |
+| S16 | `/arrange` | アレンジレシピ一覧（AeroPress） | 任意 | β |
 
 *「任意」= ゲストは localStorage、ログイン時は D1 同期（docs/09 §4）。
 
