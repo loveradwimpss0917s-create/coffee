@@ -14,6 +14,7 @@ export default function SavedRecipesPage() {
   const router = useRouter();
   const { data: recipes, isLoading } = useSavedRecipes();
   const loadFrom = useBrewWizardStore((s) => s.loadFrom);
+  const resetWizard = useBrewWizardStore((s) => s.reset);
 
   function handleOpen(recipe: NonNullable<typeof recipes>[number]) {
     loadFrom({
@@ -41,7 +42,7 @@ export default function SavedRecipesPage() {
           description="生成したレシピを保存すると、ここから再利用できます。"
           action={
             <Button asChild>
-              <Link href="/brew">
+              <Link href="/brew" onClick={resetWizard}>
                 <Coffee size={16} aria-hidden="true" />
                 淹れる
               </Link>

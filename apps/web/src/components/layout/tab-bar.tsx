@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useBrewWizardStore } from '@/features/brew/use-brew-wizard';
 import { cn } from '@/lib/cn';
 import { NAV_ITEMS } from './nav-items';
 
@@ -16,6 +17,7 @@ function isActive(pathname: string, href: string): boolean {
  */
 export function TabBar() {
   const pathname = usePathname();
+  const resetWizard = useBrewWizardStore((s) => s.reset);
 
   return (
     <nav
@@ -31,6 +33,9 @@ export function TabBar() {
               <Link
                 href={href}
                 aria-current={active ? 'page' : undefined}
+                onClick={() => {
+                  if (href === '/brew') resetWizard();
+                }}
                 className={cn(
                   'flex min-h-11 flex-col items-center justify-center gap-0.5 py-2 text-micro transition-colors duration-(--duration-fast)',
                   active ? 'text-primary' : 'text-muted-foreground',
