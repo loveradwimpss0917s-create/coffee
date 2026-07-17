@@ -24,6 +24,7 @@ export default function HomePage() {
   const { data: settings } = useSettings();
   const { data: brews } = useBrews();
   const loadFrom = useBrewWizardStore((s) => s.loadFrom);
+  const resetWizard = useBrewWizardStore((s) => s.reset);
 
   useEffect(() => {
     if (settings && !settings.onboarded) router.replace('/onboarding');
@@ -56,7 +57,7 @@ export default function HomePage() {
         </CardHeader>
         <CardContent>
           <Button asChild size="lg" className="w-full">
-            <Link href="/brew">
+            <Link href="/brew" onClick={resetWizard}>
               <Coffee aria-hidden="true" size={18} />
               淹れる
             </Link>

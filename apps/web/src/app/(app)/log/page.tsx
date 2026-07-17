@@ -6,10 +6,12 @@ import { BrewListItem } from '@/components/log/brew-list-item';
 import { EmptyState } from '@/components/shared/empty-state';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useBrewWizardStore } from '@/features/brew/use-brew-wizard';
 import { useBrews } from '@/features/log/queries';
 
 export default function LogPage() {
   const { data: brews, isLoading } = useBrews();
+  const resetWizard = useBrewWizardStore((s) => s.reset);
 
   return (
     <div className="mx-auto flex max-w-md flex-col gap-4 px-5 py-8">
@@ -29,7 +31,7 @@ export default function LogPage() {
           description="最初の一杯を淹れてみましょう。"
           action={
             <Button asChild>
-              <Link href="/brew">
+              <Link href="/brew" onClick={resetWizard}>
                 <Coffee size={16} aria-hidden="true" />
                 淹れる
               </Link>
