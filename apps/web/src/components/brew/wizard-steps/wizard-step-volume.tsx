@@ -21,7 +21,7 @@ export function WizardStepVolume({
         </div>
         <Slider
           id="volume"
-          min={100}
+          min={30}
           max={1000}
           step={10}
           value={[input.targetVolumeMl]}

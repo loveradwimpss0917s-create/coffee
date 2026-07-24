@@ -1,5 +1,94 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`golden: AeroPress エスプレッソ風（少量濃縮） > 60ml・中煎り・バランス 1`] = `
+{
+  "doseG": 21.5,
+  "dripperId": "aeropress-espresso",
+  "engineVersion": "0.1.0",
+  "grind": {
+    "generalLabel": "極細挽き（約274μm）",
+    "micron": 274,
+  },
+  "input": {
+    "bean": {
+      "process": "washed",
+      "roastLevel": "medium",
+    },
+    "equipment": {
+      "dripperId": "aeropress-espresso",
+    },
+    "serveStyle": "hot",
+    "strength": 0,
+    "targetVolumeMl": 60,
+    "taste": {
+      "acidity": 0,
+      "bitterness": 0,
+      "body": 0,
+      "clarity": 0,
+      "sweetness": 0,
+    },
+  },
+  "ratio": 3,
+  "rationale": [
+    {
+      "paramKey": "strength",
+      "params": {
+        "ey": 20,
+        "tds": 1.32,
+      },
+      "sourceRefs": [
+        "sca-brewing-control-chart",
+      ],
+      "templateId": "strength.target",
+    },
+    {
+      "paramKey": "temperature",
+      "params": {
+        "process": "washed",
+        "roastLevel": "medium",
+        "tempC": 90,
+      },
+      "sourceRefs": [],
+      "templateId": "temperature.byRoastProcess",
+    },
+    {
+      "paramKey": "pours",
+      "params": {
+        "acidity": 0,
+        "sweetness": 0,
+      },
+      "sourceRefs": [
+        "kasuya-4-6-method",
+      ],
+      "templateId": "pours.fourSixSummary",
+    },
+  ],
+  "steps": [
+    {
+      "atSec": 0,
+      "kind": "pour",
+      "toWaterG": 65,
+    },
+    {
+      "atSec": 5,
+      "kind": "stir",
+      "method": "spoon",
+    },
+    {
+      "atSec": 55,
+      "durationSec": 20,
+      "kind": "press",
+    },
+  ],
+  "targetEy": 20,
+  "targetTds": 1.32,
+  "tempC": 90,
+  "totalTimeSec": 55,
+  "warnings": [],
+  "waterG": 65,
+}
+`;
+
 exports[`golden: AeroPress（加圧） > 中煎り・バランス 1`] = `
 {
   "doseG": 17,

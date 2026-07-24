@@ -38,9 +38,20 @@ const dripperSpecSchema = z.object({
 | `orea` | Orea Brewer | percolation/flat | 690μm | fast | フラット高速系 |
 | `clever` | Clever Dripper | **immersion**/cone | 780μm | — | 閉→steep→載せて開放。`features:['valve']` |
 | `aeropress` | AeroPress | **pressure**/cylinder | 500μm | — | 正/逆位置、press ステップ。`features:['press','inverted-capable']` |
+| `aeropress-espresso` | AeroPress（エスプレッソ風） | **pressure**/cylinder | 350μm | fast | 少量(40〜90ml)濃縮ショット。蒸らし無し、`ratioRange:[2,3]`。§2.1 参照 |
 | `french-press` | French Press | immersion/cylinder | 850μm | — | 4:00 steep 基準、プランジ弱く（微粉攪拌回避） |
 | `iwaki-mizudashi` | iwaki ウォータードリップサーバー K-8644-CL | **coldDrip**/cylinder | 1250μm | slow | 点滴式水出し。滴下速度は目分量前提で指定しない（オーナー実機） |
 | `hario-mizudashi` | HARIO 水出しコーヒーサーバー（点滴式） | **coldDrip**/cylinder | 1250μm | slow | iwaki と同じ点滴式。共通の `buildColdDripSteps` を使用 |
+
+### 2.1 aeropress-espresso（AeroPress エスプレッソ風）の特殊性
+
+- 通常の `aeropress`（ドリップ寄り・`buildPressSteps`）とは別の器具として登録する。同じ物理的な器具でも
+  「淹れ方」が別物（少量・細挽き・高比率）なので、taste ベクトルではなく**器具選択そのものを分ける**（docs/06 S02 ウィザードの器具一覧に両方が並ぶ）。
+- `ratioRange:[2,3]` という極端に低い値により、`computeRatio()` の比率レンジ補正（docs/10 §5-(3)）が
+  自動的に doseG を押し上げる。TDS/EY の目標値自体はドリップ用の一般式のままで問題ない
+  （coldDrip と異なり湯温モデルの分岐は不要）。
+- 少量ショット(40〜90ml)に対応するため `brewInputSchema.targetVolumeMl` の下限を100mlから30mlに緩和した（後方互換、既存の挙動に影響なし）。
+- `buildEspressoSteps`（`core/pours.ts`）は蒸らしステップを持たず、全量を一度に注いでから短時間浸漬 → プレスする。
 
 ### coldDrip（点滴式水出し）の特殊性
 

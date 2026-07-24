@@ -188,6 +188,33 @@ export function buildPressSteps(params: BuildStepsParams, tuning: PressTuning): 
   return steps;
 }
 
+export type EspressoTuning = {
+  steepBaseSec: number;
+  pressDurationSec: number;
+};
+
+/**
+ * 加圧型・エスプレッソ風（AeroPress の少量濃縮ショット）の共通テンプレート。
+ * 蒸らしは行わず、少量の湯を一度に注いで短時間浸漬してから力強くプレスする。
+ */
+export function buildEspressoSteps(params: BuildStepsParams, tuning: EspressoTuning): RecipeStep[] {
+  const { waterG, taste } = params;
+  const steps: RecipeStep[] = [];
+
+  steps.push({ kind: 'pour', atSec: 0, toWaterG: waterG });
+  steps.push({ kind: 'stir', atSec: 5, method: 'spoon' });
+
+  const steepSec = clamp(
+    Math.round(tuning.steepBaseSec + taste.body * 10 - taste.clarity * 8),
+    20,
+    75,
+  );
+  const pressAtSec = 15 + steepSec;
+  steps.push({ kind: 'press', atSec: pressAtSec, durationSec: tuning.pressDurationSec });
+
+  return steps;
+}
+
 export type ColdDripTuning = {
   /** 抽出時間の下限・上限（時間） */
   minHours: number;
