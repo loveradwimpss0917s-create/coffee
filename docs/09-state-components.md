@@ -40,14 +40,17 @@ type BrewTimerState = {
   recipe: Recipe | null;
   startedAt: number | null;        // epoch ms（経過時間は now - startedAt で導出）
   currentStepIndex: number;
-  status: 'idle' | 'running' | 'paused' | 'done';
-  start: (recipe: Recipe) => void;
+  status: 'idle' | 'ready' | 'running' | 'paused' | 'done';
+  prepare: (recipe: Recipe) => void; // レシピを読み込み status:'ready' にする。クロックはまだ動かさない
+  begin: () => void;                 // タイマー画面の「スタート」押下で status:'running' にしクロックを開始
   completeStep: () => void;        // 手動進行（将来: BLE スケールが自動発火）
   pause / resume / abort: () => void;
 };
 ```
 - `setInterval` で経過秒を state に書かない（毎秒 re-render を全体に波及させない）。
   表示コンポーネントだけが `useSyncExternalStore` + rAF で時刻を購読
+- レシピ表示画面(S03)の「抽出をはじめる」は `prepare()` のみ呼び、タイマー画面(S04)へ遷移した直後はまだ `ready` 状態。
+  全体の注湯スケジュールを見せた上で、ユーザーが「スタート」を押した瞬間に `begin()` でクロックが動き出す
 - persist（localStorage）: アプリ復帰時に進行中の抽出を復元。startedAt 基準なのでバックグラウンドでも狂わない
 - 通知・振動・音は store 外の `TimerEffects` コンポーネントが status/step を購読して発火
 

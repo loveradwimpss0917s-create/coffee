@@ -13,7 +13,7 @@ import { ARRANGE_RECIPES, arrangeRecipeToRecipe } from '@/lib/arrange-recipes';
 
 export default function ArrangeRecipesPage() {
   const router = useRouter();
-  const startTimer = useBrewTimerStore((s) => s.start);
+  const prepareTimer = useBrewTimerStore((s) => s.prepare);
 
   const items = useMemo(
     () => ARRANGE_RECIPES.map((arrange) => ({ arrange, recipe: arrangeRecipeToRecipe(arrange) })),
@@ -21,7 +21,7 @@ export default function ArrangeRecipesPage() {
   );
 
   function handleStart(recipe: ReturnType<typeof arrangeRecipeToRecipe>) {
-    startTimer(recipe);
+    prepareTimer(recipe);
     router.push('/brew/timer');
   }
 
