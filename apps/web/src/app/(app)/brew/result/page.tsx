@@ -17,7 +17,7 @@ import { renderRationale, SERVE_STYLE_LABELS } from '@/i18n/ja';
 export default function BrewResultPage() {
   const router = useRouter();
   const wizardInput = useBrewWizardStore((s) => s.input);
-  const startTimer = useBrewTimerStore((s) => s.start);
+  const prepareTimer = useBrewTimerStore((s) => s.prepare);
   const createSavedRecipe = useCreateSavedRecipe();
   const [showRationale, setShowRationale] = useState(false);
 
@@ -56,7 +56,7 @@ export default function BrewResultPage() {
 
   function handleStartBrewing() {
     if (!recipe) return;
-    startTimer(recipe);
+    prepareTimer(recipe);
     router.push('/brew/timer');
   }
 

@@ -35,10 +35,27 @@ describe('useBrewTimerStore', () => {
     vi.useRealTimers();
   });
 
+  it('prepare() だけではクロックが動かず、begin() を押すまでスタート待ちのまま', () => {
+    useBrewTimerStore.getState().prepare(recipe);
+
+    const readyState = useBrewTimerStore.getState();
+    expect(readyState.status).toBe('ready');
+    expect(readyState.startedAt).toBeNull();
+
+    vi.advanceTimersByTime(60_000);
+    expect(getElapsedSec(useBrewTimerStore.getState(), Date.now())).toBe(0);
+
+    useBrewTimerStore.getState().begin();
+    const runningState = useBrewTimerStore.getState();
+    expect(runningState.status).toBe('running');
+    expect(runningState.startedAt).not.toBeNull();
+  });
+
   it('valve等の即時アクションステップで足踏みした時間は経過時間に含めない', () => {
     expect(recipe.steps[0]?.kind).toBe('valve');
 
-    useBrewTimerStore.getState().start(recipe);
+    useBrewTimerStore.getState().prepare(recipe);
+    useBrewTimerStore.getState().begin();
     // 最初のステップ(valve)で10秒フリーズしたまま足踏み
     vi.advanceTimersByTime(10_000);
 
@@ -57,7 +74,8 @@ describe('useBrewTimerStore', () => {
   });
 
   it('手動の一時停止と即時アクションのフリーズは両方経過時間から除外される', () => {
-    useBrewTimerStore.getState().start(recipe);
+    useBrewTimerStore.getState().prepare(recipe);
+    useBrewTimerStore.getState().begin();
     useBrewTimerStore.getState().completeStep(); // valveステップを抜けてbloomへ
 
     vi.advanceTimersByTime(3_000);

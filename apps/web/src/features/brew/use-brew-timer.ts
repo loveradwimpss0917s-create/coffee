@@ -4,7 +4,7 @@ import type { Recipe, RecipeStep } from '@coffee-lab/engine';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-export type TimerStatus = 'idle' | 'running' | 'paused' | 'done';
+export type TimerStatus = 'idle' | 'ready' | 'running' | 'paused' | 'done';
 
 /**
  * 実時間の経過を伴わない「即時アクション」ステップ（弁の開閉・攪拌・湯温切替）。
@@ -25,7 +25,10 @@ type BrewTimerState = {
   finishedAt: number | null;
   currentStepIndex: number;
   status: TimerStatus;
-  start: (recipe: Recipe) => void;
+  /** レシピを読み込んでスタート待ち状態にする。クロックはまだ動かさない（docs/06 S04）。 */
+  prepare: (recipe: Recipe) => void;
+  /** スタートボタン押下時にクロックを動かし始める。 */
+  begin: () => void;
   completeStep: () => void;
   pause: () => void;
   resume: () => void;
@@ -48,16 +51,26 @@ export const useBrewTimerStore = create<BrewTimerState>()(
       finishedAt: null,
       currentStepIndex: 0,
       status: 'idle',
-      start: (recipe) =>
+      prepare: (recipe) =>
         set({
           recipe,
-          startedAt: Date.now(),
+          startedAt: null,
           pausedAt: null,
           pausedDurationMs: 0,
-          stepFrozenAt: recipe.steps[0] && isInstantStep(recipe.steps[0].kind) ? Date.now() : null,
+          stepFrozenAt: null,
           finishedAt: null,
           currentStepIndex: 0,
-          status: 'running',
+          status: 'ready',
+        }),
+      begin: () =>
+        set((state) => {
+          if (state.status !== 'ready' || !state.recipe) return state;
+          const firstStep = state.recipe.steps[0];
+          return {
+            startedAt: Date.now(),
+            stepFrozenAt: firstStep && isInstantStep(firstStep.kind) ? Date.now() : null,
+            status: 'running',
+          };
         }),
       completeStep: () =>
         set((state) => {
