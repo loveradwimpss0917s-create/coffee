@@ -41,7 +41,8 @@ export const brewInputSchema = z.object({
   taste: tasteProfileSchema,
   /** 濃度(TDS)の好み。味5軸とは独立（docs/10 §4.2） */
   strength: z.number().min(-2).max(2).default(0),
-  targetVolumeMl: z.number().min(100).max(1000).default(250),
+  /** 30ml台〜: AeroPress エスプレッソ風(docs/11)等、少量の濃縮ショットにも対応 */
+  targetVolumeMl: z.number().min(30).max(1000).default(250),
   serveStyle: serveStyleSchema.default('hot'),
   waterHardnessPpm: z.number().min(0).max(500).optional(),
 });

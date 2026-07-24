@@ -104,6 +104,20 @@ describe('golden: AeroPress（加圧）', () => {
   });
 });
 
+describe('golden: AeroPress エスプレッソ風（少量濃縮）', () => {
+  it('60ml・中煎り・バランス', () => {
+    const input = makeInput({
+      equipment: { dripperId: 'aeropress-espresso' },
+      targetVolumeMl: 60,
+    });
+    const recipe = generateRecipe(input);
+    expect(recipe.steps.map((s) => s.kind)).toEqual(['pour', 'stir', 'press']);
+    expect(recipe.ratio).toBeLessThanOrEqual(3);
+    expect(recipe.grind.micron).toBeLessThan(500);
+    expect(recipe).toMatchSnapshot();
+  });
+});
+
 describe('golden: ORIGAMI', () => {
   it('中煎り・バランス', () => {
     const input = makeInput({ equipment: { dripperId: 'origami' } });

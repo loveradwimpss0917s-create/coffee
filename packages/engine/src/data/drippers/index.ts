@@ -1,5 +1,6 @@
 import type { DripperSpec } from '../types';
 import { aeropress } from './aeropress';
+import { aeropressEspresso } from './aeropress-espresso';
 import { april } from './april';
 import { cafecFlower } from './cafec-flower';
 import { clever } from './clever';
@@ -27,6 +28,7 @@ export const DRIPPERS: readonly DripperSpec[] = [
   orea,
   clever,
   aeropress,
+  aeropressEspresso,
   frenchPress,
   iwakiMizudashi,
   harioMizudashi,
@@ -40,6 +42,7 @@ export function getDripper(id: string): DripperSpec | undefined {
 
 export {
   aeropress,
+  aeropressEspresso,
   april,
   cafecFlower,
   clever,
