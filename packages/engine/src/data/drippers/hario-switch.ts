@@ -4,6 +4,7 @@ import {
   clamp,
   computeBloomDurationSec,
   computeBloomWaterG,
+  computePourDurationSec,
   round1,
 } from '../../core/pours';
 import type { RecipeStep } from '../../schemas/recipe';
@@ -26,7 +27,9 @@ function buildHybridSteps(params: BuildStepsParams): RecipeStep[] {
   const firstPhaseTargetG = round1(waterG * 0.4);
 
   const closeAtSec = bloomDurationSec + 55;
-  const secondPourAtSec = closeAtSec + 5;
+  // 弁を閉じてからの追い湯(残り60%)を注ぎ切る目安時間。5秒固定だと大きい湯量で非現実的になるため量に応じて確保する
+  const secondPourDurationSec = computePourDurationSec(waterG - firstPhaseTargetG);
+  const secondPourAtSec = closeAtSec + secondPourDurationSec;
   const steepSec = Math.round(40 * (waterG / 300));
   const steepEndSec = secondPourAtSec + 5 + steepSec;
 

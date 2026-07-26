@@ -123,12 +123,18 @@ export const ARRANGE_RECIPES: readonly ArrangeRecipe[] = [
   },
 ];
 
+/** 一括注湯を注ぎ切る目安秒数（6g/秒ペース、8〜60秒にclamp。packages/engine の同種の式に合わせる） */
+function computePourDurationSec(amountG: number): number {
+  return Math.min(60, Math.max(8, Math.round(amountG / 6)));
+}
+
 function buildArrangeSteps(base: ArrangeRecipe['baseRecipe']): {
   steps: RecipeStep[];
   totalTimeSec: number;
 } {
   const pourAtSec = base.bloomDurationSec;
-  const stirAtSec = pourAtSec + 5;
+  // 蒸らし後の残り湯量を注ぎ切るのにかかる目安時間（5秒固定だと非現実的なため）
+  const stirAtSec = pourAtSec + computePourDurationSec(base.waterG - base.bloomWaterG);
   const pressAtSec = stirAtSec + 10 + base.steepSec;
   const totalTimeSec = pressAtSec + base.pressDurationSec;
 

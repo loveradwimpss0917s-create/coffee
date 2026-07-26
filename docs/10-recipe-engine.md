@@ -180,6 +180,12 @@ expectedEndSec = dripper.baseDrawdown + f(粒度, 湯量)
 ```
 
 浸漬型（Clever / French Press）: `steepTimeSec = base + body*30 - clarity*20`、攪拌有無を taste から決定。
+
+一括注湯（浸漬型・加圧型で、複数投に分けず一度に全量へ到達させる pour）は、次の pour/stir/press
+までの間隔を固定秒数にせず、注ぐ量に応じて確保する（`computePourDurationSec`, `core/pours.ts`）:
+`clamp(round(注ぐ量g / 6), 8, 60)` 秒。透過型のように複数投に分ける場合は
+`POUR_INTERVAL_SEC`（flowClassごとの固定値）を使うため対象外。
+
 ハイブリッド（**HARIO Switch 360**）: §6 参照。
 coldDrip（点滴式水出し。iwaki/HARIO の水出しタワー）: §6.1 参照。
 AeroPress エスプレッソ風（少量濃縮ショット）: §6.2 参照。
