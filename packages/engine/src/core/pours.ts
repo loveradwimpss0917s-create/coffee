@@ -105,6 +105,15 @@ export function buildPercolationSteps(
   return steps;
 }
 
+/**
+ * 一括注湯（浸漬型・加圧型で使う、複数投に分けない大きな注湯）を注ぎ切るまでの目安秒数。
+ * 量が多いほど長くする（経験則: 目安 6g/秒の一定ペース、8〜60秒にclamp）。
+ * 分割注湯する透過型（buildPercolationSteps）は POUR_INTERVAL_SEC で別途扱う。
+ */
+export function computePourDurationSec(amountG: number): number {
+  return clamp(Math.round(amountG / 6), 8, 60);
+}
+
 export type ImmersionTuning = {
   /** 基準浸漬秒数（250ml時） */
   steepBaseSec: number;
@@ -122,31 +131,35 @@ export function buildImmersionSteps(
   const { doseG, waterG, taste, daysOffRoast } = params;
   const steps: RecipeStep[] = [];
 
+  const bloomWaterG = computeBloomWaterG(doseG, daysOffRoast);
+  const bloomDurationSec = computeBloomDurationSec(daysOffRoast);
+
   if (tuning.hasValve) {
     steps.push({ kind: 'valve', atSec: 0, state: 'closed' });
   }
   steps.push({
     kind: 'bloom',
     atSec: 0,
-    waterG: computeBloomWaterG(doseG, daysOffRoast),
-    durationSec: computeBloomDurationSec(daysOffRoast),
+    waterG: bloomWaterG,
+    durationSec: bloomDurationSec,
   });
-  steps.push({ kind: 'pour', atSec: computeBloomDurationSec(daysOffRoast), toWaterG: waterG });
-  steps.push({
-    kind: 'stir',
-    atSec: computeBloomDurationSec(daysOffRoast) + 5,
-    method: 'spoon',
-  });
+  steps.push({ kind: 'pour', atSec: bloomDurationSec, toWaterG: waterG });
+
+  // 蒸らし後の残り湯量を注ぎ切るのにかかる目安時間。5秒固定だと大きい湯量で非現実的になるため量に応じて確保する
+  const pourDurationSec = computePourDurationSec(waterG - bloomWaterG);
+  const stirAtSec = bloomDurationSec + pourDurationSec;
+  steps.push({ kind: 'stir', atSec: stirAtSec, method: 'spoon' });
 
   const steepSec = clamp(
     Math.round(tuning.steepBaseSec * (waterG / 250) + taste.body * 30 - taste.clarity * 20),
     60,
     360,
   );
-  const steepEndSec = computeBloomDurationSec(daysOffRoast) + 10 + steepSec;
+  const steepStartSec = stirAtSec + 5;
+  const steepEndSec = steepStartSec + steepSec;
   steps.push({
     kind: 'wait',
-    atSec: computeBloomDurationSec(daysOffRoast) + 10,
+    atSec: steepStartSec,
     untilSec: steepEndSec,
   });
 
@@ -167,22 +180,27 @@ export function buildPressSteps(params: BuildStepsParams, tuning: PressTuning): 
   const { doseG, waterG, taste, daysOffRoast } = params;
   const steps: RecipeStep[] = [];
   const bloomDurationSec = computeBloomDurationSec(daysOffRoast);
+  const bloomWaterG = computeBloomWaterG(doseG, daysOffRoast);
 
   steps.push({
     kind: 'bloom',
     atSec: 0,
-    waterG: computeBloomWaterG(doseG, daysOffRoast),
+    waterG: bloomWaterG,
     durationSec: bloomDurationSec,
   });
   steps.push({ kind: 'pour', atSec: bloomDurationSec, toWaterG: waterG });
-  steps.push({ kind: 'stir', atSec: bloomDurationSec + 5, method: 'spoon' });
+
+  // 蒸らし後の残り湯量を注ぎ切るのにかかる目安時間（5秒固定だと大きい湯量で非現実的になるため）
+  const pourDurationSec = computePourDurationSec(waterG - bloomWaterG);
+  const stirAtSec = bloomDurationSec + pourDurationSec;
+  steps.push({ kind: 'stir', atSec: stirAtSec, method: 'spoon' });
 
   const steepSec = clamp(
     Math.round(tuning.steepBaseSec + taste.body * 15 - taste.clarity * 10),
     30,
     180,
   );
-  const pressAtSec = bloomDurationSec + 10 + steepSec;
+  const pressAtSec = stirAtSec + 5 + steepSec;
   steps.push({ kind: 'press', atSec: pressAtSec, durationSec: 25 });
 
   return steps;
@@ -202,14 +220,18 @@ export function buildEspressoSteps(params: BuildStepsParams, tuning: EspressoTun
   const steps: RecipeStep[] = [];
 
   steps.push({ kind: 'pour', atSec: 0, toWaterG: waterG });
-  steps.push({ kind: 'stir', atSec: 5, method: 'spoon' });
+
+  // 少量とはいえ0秒で注ぎ切るのは非現実的なため、量に応じた目安時間を確保する
+  const pourDurationSec = computePourDurationSec(waterG);
+  const stirAtSec = pourDurationSec;
+  steps.push({ kind: 'stir', atSec: stirAtSec, method: 'spoon' });
 
   const steepSec = clamp(
     Math.round(tuning.steepBaseSec + taste.body * 10 - taste.clarity * 8),
     20,
     75,
   );
-  const pressAtSec = 15 + steepSec;
+  const pressAtSec = stirAtSec + 10 + steepSec;
   steps.push({ kind: 'press', atSec: pressAtSec, durationSec: tuning.pressDurationSec });
 
   return steps;
