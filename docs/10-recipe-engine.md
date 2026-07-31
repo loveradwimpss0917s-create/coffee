@@ -268,6 +268,11 @@ structure: 投数を1減らし早めに落とし切る（酸化と過冷却を�
 warnings: サーバーに氷を先に入れる指示ステップを挿入
 ```
 
+透過型（V60等）は数分かけて氷の上に少しずつ落ちるため自然と混ざり冷えるが、
+浸漬型・加圧型（Clever/French Press/AeroPress/HARIO Switch の浸漬・ハイブリッド）は
+プレス/開放の瞬間にまとめて氷へ触れるだけで混ざりが不十分になりやすい。
+そのため `dripper.brewType !== 'percolation'` の場合は「よくかき混ぜてから飲む」warning を追加する。
+
 ## 8. フィードバックループ（β: adjustFromFeedback）
 
 抽出後の「感じた5軸」(felt) と「目標5軸」(target) の差分から、次回の同条件生成に補正をかける:

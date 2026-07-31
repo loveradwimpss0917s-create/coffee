@@ -61,6 +61,13 @@ export function generateRecipe(input: BrewInput, _options: GenerateOptions = {})
     const split = computeIcedWaterSplit(totalWaterG);
     brewWaterG = split.brewWaterG;
     warnings.push(`サーバーにあらかじめ氷 ${split.iceG}g を入れてください。`);
+    // 透過型は数分かけて氷の上に少しずつ落ちるため自然と混ざるが、
+    // 浸漬/加圧型は最後にまとめて氷に触れるだけで混ざりが不十分になりやすい
+    if (dripper.brewType !== 'percolation') {
+      warnings.push(
+        '抽出後、氷とよくかき混ぜてから飲んでください。混ざりが足りないとぬるく感じます。',
+      );
+    }
   }
 
   // (4) temperature
@@ -126,6 +133,7 @@ function computeTotalTimeSec(steps: Recipe['steps']): number {
   for (const step of steps) {
     if (step.kind === 'drawdown') max = Math.max(max, step.expectedEndSec);
     else if (step.kind === 'wait') max = Math.max(max, step.untilSec);
+    else if (step.kind === 'press') max = Math.max(max, step.atSec + step.durationSec);
     else max = Math.max(max, step.atSec);
   }
   return max;

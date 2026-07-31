@@ -83,7 +83,7 @@ exports[`golden: AeroPress エスプレッソ風（少量濃縮） > 60ml・中�
   "targetEy": 20,
   "targetTds": 1.32,
   "tempC": 90,
-  "totalTimeSec": 61,
+  "totalTimeSec": 81,
   "warnings": [],
   "waterG": 65,
 }
@@ -178,7 +178,7 @@ exports[`golden: AeroPress（加圧） > 中煎り・バランス 1`] = `
   "targetEy": 20,
   "targetTds": 1.32,
   "tempC": 88,
-  "totalTimeSec": 172,
+  "totalTimeSec": 197,
   "warnings": [],
   "waterG": 270,
 }
@@ -621,7 +621,7 @@ exports[`golden: French Press（全浸漬） > 中煎り・コク深い好み 1`
   "targetEy": 21.6,
   "targetTds": 1.32,
   "tempC": 90,
-  "totalTimeSec": 266,
+  "totalTimeSec": 291,
   "warnings": [],
   "waterG": 290,
 }
@@ -1008,6 +1008,110 @@ exports[`golden: HARIO Switch 360（3モード） > ボディ優位 -> 浸漬主
   "totalTimeSec": 392,
   "warnings": [],
   "waterG": 280,
+}
+`;
+
+exports[`golden: Iced > AeroPress・Iced・250ml（浸漬/加圧型は氷が混ざりにくいためwarningを追加） 1`] = `
+{
+  "doseG": 21,
+  "dripperId": "aeropress",
+  "engineVersion": "0.1.0",
+  "grind": {
+    "generalLabel": "細挽き（約460μm）",
+    "micron": 460,
+  },
+  "input": {
+    "bean": {
+      "process": "washed",
+      "roastLevel": "medium",
+    },
+    "equipment": {
+      "dripperId": "aeropress",
+    },
+    "serveStyle": "iced",
+    "strength": 0,
+    "targetVolumeMl": 250,
+    "taste": {
+      "acidity": 0,
+      "bitterness": 0,
+      "body": 0,
+      "clarity": 0,
+      "sweetness": 0,
+    },
+  },
+  "ratio": 13.1,
+  "rationale": [
+    {
+      "paramKey": "strength",
+      "params": {
+        "ey": 20,
+        "tds": 1.67,
+      },
+      "sourceRefs": [
+        "sca-brewing-control-chart",
+      ],
+      "templateId": "strength.target",
+    },
+    {
+      "paramKey": "temperature",
+      "params": {
+        "process": "washed",
+        "roastLevel": "medium",
+        "tempC": 89,
+      },
+      "sourceRefs": [],
+      "templateId": "temperature.byRoastProcess",
+    },
+    {
+      "paramKey": "pours",
+      "params": {
+        "acidity": 0,
+        "sweetness": 0,
+      },
+      "sourceRefs": [
+        "kasuya-4-6-method",
+      ],
+      "templateId": "pours.fourSixSummary",
+    },
+    {
+      "paramKey": "iced",
+      "params": {},
+      "sourceRefs": [],
+      "templateId": "iced.dilutionCompensation",
+    },
+  ],
+  "steps": [
+    {
+      "atSec": 0,
+      "durationSec": 40,
+      "kind": "bloom",
+      "waterG": 57.8,
+    },
+    {
+      "atSec": 40,
+      "kind": "pour",
+      "toWaterG": 179,
+    },
+    {
+      "atSec": 60,
+      "kind": "stir",
+      "method": "spoon",
+    },
+    {
+      "atSec": 155,
+      "durationSec": 25,
+      "kind": "press",
+    },
+  ],
+  "targetEy": 20,
+  "targetTds": 1.67,
+  "tempC": 89,
+  "totalTimeSec": 180,
+  "warnings": [
+    "サーバーにあらかじめ氷 96g を入れてください。",
+    "抽出後、氷とよくかき混ぜてから飲んでください。混ざりが足りないとぬるく感じます。",
+  ],
+  "waterG": 275,
 }
 `;
 

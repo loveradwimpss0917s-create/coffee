@@ -179,7 +179,19 @@ describe('golden: Iced', () => {
       equipment: { dripperId: 'hario-v60' },
       serveStyle: 'iced',
     });
-    expect(generateRecipe(input)).toMatchSnapshot();
+    const recipe = generateRecipe(input);
+    expect(recipe.warnings.some((w) => w.includes('かき混ぜ'))).toBe(false);
+    expect(recipe).toMatchSnapshot();
+  });
+
+  it('AeroPress・Iced・250ml（浸漬/加圧型は氷が混ざりにくいためwarningを追加）', () => {
+    const input = makeInput({
+      equipment: { dripperId: 'aeropress' },
+      serveStyle: 'iced',
+    });
+    const recipe = generateRecipe(input);
+    expect(recipe.warnings.some((w) => w.includes('かき混ぜ'))).toBe(true);
+    expect(recipe).toMatchSnapshot();
   });
 });
 
