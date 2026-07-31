@@ -283,16 +283,45 @@ structure: 投数を1減らし早めに落とし切る（酸化と過冷却を�
 warnings: サーバーに氷を先に入れる指示ステップを挿入
 ```
 
-## 8. フィードバックループ（β: adjustFromFeedback）
+透過型（V60等）は数分かけて氷の上に少しずつ落ちるため自然と混ざり冷えるが、
+浸漬型・加圧型（Clever/French Press/AeroPress/HARIO Switch の浸漬・ハイブリッド）は
+プレス/開放の瞬間にまとめて氷へ触れるだけで混ざりが不十分になりやすい。
 
-抽出後の「感じた5軸」(felt) と「目標5軸」(target) の差分から、次回の同条件生成に補正をかける:
+この判定は `dripper.brewType` の静的な値ではなく、(6) structure で実際に生成された
+`steps` を見て行う（`generate.ts` の (7) validate 相当のタイミング）。HARIO Switch の
+ように同じ器具でも taste ベクトルにより実際のモード（透過主体/浸漬主体/ハイブリッド）が
+変わる器具があり、`brewType: 'hybrid'` という静的な値だけでは「今回のレシピが実際に
+弁を閉じて浸漬するか」を判定できないため:
+```
+hasImmersionContact = steps に (kind:'valve' かつ state:'closed') または kind:'press' が含まれる
+```
+`hasImmersionContact` が true の場合のみ「よくかき混ぜてから飲む」warning を追加する。
+
+## 8. フィードバックループ（実装済み: `adjustFromFeedback`, `core/feedback.ts`）
+
+抽出後の「感じた5軸」(felt) と「目標5軸」(target = そのとき実際に使った input.taste) の差分から、
+次回の同ドリッパーでの生成に補正をかける:
 
 ```
 error = felt - target（軸ごと）
-補正例: 苦味 error +2 → 次回 temp -1.5°C & ey -0.5% / 酸味 error +2（酸っぱすぎ）→ ey +0.5% & grind -20μm
-直近 n=3 件の指数加重平均。補正は「入力への差分」(BrewInputPatch) として返し、生成パイプライン自体は不変
-補正上限: 各パラメータの ±1 ステップ/回（発散防止）
+直近 n=3 件の指数加重平均（重み 0.5/0.3/0.2、先頭が最新）
+|平均error| < 0.75 なら補正しない（ノイズ・単発のブレを無視）
+補正: error>0（感じた量が狙いより多かった）→ 次回の同軸の狙いを1段階下げる
+      error<0（感じた量が狙いより少なかった）→ 次回の同軸の狙いを1段階上げる
+補正上限: 各軸 ±1 ステップ/回（発散防止）。基準点は直近の狙い（recent[0].targetTaste）
 ```
+
+「入力への差分」(`Partial<TasteProfile>`) を返すだけで、生成パイプライン(generate.ts)自体は変更しない。
+既存の湯温・EY・粒度の各係数（bitterness/acidity 等の taste 軸への感度、§5-(4)(5)）を
+そのまま経由して、結果的に湯温・EY・粒度が動く（例: 苦味の狙いを1段下げる
+→ `computeTemperatureC` で湯温-1.2°C、`computeTargetEy` で EY-0.5% ≈ 上記の「補正例」相当）。
+
+呼び出し側（apps/web の `/brew/result`）が、同じ `dripperId` かつ `tasteFeedback` が
+記録されている直近の brews を履歴として渡し、返ってきたパッチを次回生成直前の
+`input.taste` にマージする（マージ後の値が Recipe.input として保存されるため、
+次回の「狙い」の基準点も自動的に更新される）。器具を変えれば別の学習として扱う
+（同じ豆・グラインダーの組み合わせに絞る改善は将来課題）。
+
 これは将来 AI 最適化（v2.0）に置き換わる部分だが、**インターフェース（history in / patch out）は同一**にしておく。
 
 ## 9. 参照レシピブレンド（v1.0 以降の拡張フック）
