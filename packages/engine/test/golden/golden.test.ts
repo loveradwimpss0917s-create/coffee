@@ -118,6 +118,22 @@ describe('golden: AeroPress エスプレッソ風（少量濃縮）', () => {
   });
 });
 
+describe('golden: AeroPress（容量上限クランプ）', () => {
+  it('チャンバー容量(250ml)を超える指定は250mlへクランプされ warning が出る', () => {
+    const input = makeInput({
+      equipment: { dripperId: 'aeropress' },
+      targetVolumeMl: 600,
+    });
+    const recipe = generateRecipe(input);
+    expect(recipe.warnings.some((w) => w.includes('250'))).toBe(true);
+    // クランプ後の実際の仕上がり量(250ml)を基準に doseG/waterG が計算されているはず。
+    // 600ml のまま計算されていた場合、AeroPress の ratioRange[12,16] のもとでは
+    // doseG は 40g 近くになり、250ml 基準(15〜16g程度)とは明確に区別できる
+    expect(recipe.doseG).toBeLessThan(25);
+    expect(recipe).toMatchSnapshot();
+  });
+});
+
 describe('golden: ORIGAMI', () => {
   it('中煎り・バランス', () => {
     const input = makeInput({ equipment: { dripperId: 'origami' } });

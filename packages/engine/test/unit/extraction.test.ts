@@ -83,4 +83,19 @@ describe('computeRatio', () => {
     expect(ratio).toBeLessThan(unclamped.ratio);
     expect(ratio).toBeLessThanOrEqual(v60RatioRange[1] + 0.5);
   });
+
+  it('30ml のような極小量で 0.5g 刻みが ratioRange 幅より粗い場合、逸脱が最小になる側へ丸める', () => {
+    // Clever Dripper 相当: lrr=2.2, ratioRange=[15,17]（幅2、0.5g刻みでは区間に収まる値がない）
+    // dose 2.0g なら ratio 17.5(+0.5)、dose 2.5g なら ratio 14.0(-1.0) となり、
+    // ratio 空間での逸脱が小さい 2.0g 側が選ばれるべき
+    const { doseG, ratio } = computeRatio(30, 1.32, 20.0, 2.2, [15, 17]);
+    expect(doseG).toBeCloseTo(2.0, 5);
+    expect(ratio).toBeCloseTo(17.5, 5);
+  });
+
+  it('区間内に 0.5g 刻みの値が存在する場合は、範囲内に完全に収まる', () => {
+    const { ratio } = computeRatio(250, 1.32, 20.0, 2.0, [14, 17]);
+    expect(ratio).toBeGreaterThanOrEqual(14);
+    expect(ratio).toBeLessThanOrEqual(17);
+  });
 });

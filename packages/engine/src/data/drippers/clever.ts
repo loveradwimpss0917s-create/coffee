@@ -17,6 +17,7 @@ export const clever: DripperSpec = {
   flowModel: { drawdownBaseSec: 60, flowClass: 'medium' },
   ratioRange: [15, 17],
   features: ['valve'],
-  buildSteps: (params) => buildImmersionSteps(params, { steepBaseSec: 150, hasValve: true }),
+  buildSteps: (params) =>
+    buildImmersionSteps(params, { steepBaseSec: 150, hasValve: true, drawdownBaseSec: 60 }),
   notes: '浸漬式のため粒度に鈍感。均一で再現性が高い。',
 };

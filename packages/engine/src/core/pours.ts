@@ -107,17 +107,21 @@ export function buildPercolationSteps(
 
 /**
  * 一括注湯（浸漬型・加圧型で使う、複数投に分けない大きな注湯）を注ぎ切るまでの目安秒数。
- * 量が多いほど長くする（経験則: 目安 6g/秒の一定ペース、8〜60秒にclamp）。
+ * 量が多いほど長くする（経験則: 目安 6g/秒の一定ペース）。
+ * 上限は「実行不可能な速さになる」ことを防ぐための保険であって、大バッチ(最大1000ml相当)
+ * でも注湯自体は普通に成立する（時間が伸びるだけ）ため十分大きく取る。
  * 分割注湯する透過型（buildPercolationSteps）は POUR_INTERVAL_SEC で別途扱う。
  */
 export function computePourDurationSec(amountG: number): number {
-  return clamp(Math.round(amountG / 6), 8, 60);
+  return clamp(Math.round(amountG / 6), 8, 180);
 }
 
 export type ImmersionTuning = {
   /** 基準浸漬秒数（250ml時） */
   steepBaseSec: number;
   hasValve: boolean;
+  /** 基準ドローダウン秒数（250ml時。dripper.flowModel.drawdownBaseSec を渡す） */
+  drawdownBaseSec: number;
 };
 
 /**
@@ -166,7 +170,13 @@ export function buildImmersionSteps(
   if (tuning.hasValve) {
     steps.push({ kind: 'valve', atSec: steepEndSec, state: 'open' });
   }
-  steps.push({ kind: 'drawdown', atSec: steepEndSec, expectedEndSec: steepEndSec + 60 });
+  // 固定60秒だと大バッチで湯量に対して排出が速すぎる想定になるため、透過型と同様に湯量で比例させる
+  const drawdownDuration = Math.round(tuning.drawdownBaseSec * (waterG / 250));
+  steps.push({
+    kind: 'drawdown',
+    atSec: steepEndSec,
+    expectedEndSec: steepEndSec + drawdownDuration,
+  });
 
   return steps;
 }

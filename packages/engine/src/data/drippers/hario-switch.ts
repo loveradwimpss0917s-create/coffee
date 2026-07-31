@@ -32,6 +32,8 @@ function buildHybridSteps(params: BuildStepsParams): RecipeStep[] {
   const secondPourAtSec = closeAtSec + secondPourDurationSec;
   const steepSec = Math.round(40 * (waterG / 300));
   const steepEndSec = secondPourAtSec + 5 + steepSec;
+  // 固定秒数だと大バッチで排出が速すぎる想定になるため、湯量で比例させる（dripper.flowModel.drawdownBaseSec と同じ基準値）
+  const drawdownDuration = Math.round(150 * (waterG / 250));
 
   // 苦味を抑えたい好みほど温度を大きく下げる（docs/10 §6）
   const tempDropC = 10 - taste.bitterness * 3;
@@ -46,7 +48,7 @@ function buildHybridSteps(params: BuildStepsParams): RecipeStep[] {
     { kind: 'pour', atSec: secondPourAtSec, toWaterG: waterG, note: 'center' },
     { kind: 'wait', atSec: secondPourAtSec + 5, untilSec: steepEndSec },
     { kind: 'valve', atSec: steepEndSec, state: 'open' },
-    { kind: 'drawdown', atSec: steepEndSec, expectedEndSec: steepEndSec + 30 },
+    { kind: 'drawdown', atSec: steepEndSec, expectedEndSec: steepEndSec + drawdownDuration },
   ];
 }
 
@@ -69,7 +71,11 @@ export const harioSwitch: DripperSpec = {
       return [{ kind: 'valve', atSec: 0, state: 'open' }, ...steps];
     }
     if (taste.body >= taste.clarity + 1) {
-      return buildImmersionSteps(params, { steepBaseSec: 150, hasValve: true });
+      return buildImmersionSteps(params, {
+        steepBaseSec: 150,
+        hasValve: true,
+        drawdownBaseSec: 150,
+      });
     }
     return buildHybridSteps(params);
   },
