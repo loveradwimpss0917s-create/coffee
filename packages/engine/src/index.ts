@@ -8,6 +8,8 @@ import { recipeSchema } from './schemas/recipe';
 
 export { computeIcedWaterSplit } from './core/adjustments';
 export { computeRatio, computeTargetEy, computeTargetTds } from './core/extraction';
+export type { FeedbackEntry } from './core/feedback';
+export { adjustFromFeedback } from './core/feedback';
 export { generateRecipe } from './core/generate';
 export { buildGrindResult, convertMicronToSetting, micronToGeneralLabel } from './core/grind';
 export { computeTemperatureC } from './core/temperature';

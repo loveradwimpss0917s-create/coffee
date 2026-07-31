@@ -1,7 +1,8 @@
 'use client';
 
-import { DRIPPERS, generateRecipe } from '@coffee-lab/engine';
-import { AlertTriangle, ChevronLeft, Play } from 'lucide-react';
+import type { FeedbackEntry, TasteProfile } from '@coffee-lab/engine';
+import { adjustFromFeedback, DRIPPERS, generateRecipe } from '@coffee-lab/engine';
+import { AlertTriangle, ChevronLeft, Play, Sparkles } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
@@ -11,22 +12,53 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { useBrewTimerStore } from '@/features/brew/use-brew-timer';
 import { toBrewInput, useBrewWizardStore } from '@/features/brew/use-brew-wizard';
+import { useBrews } from '@/features/log/queries';
 import { useCreateSavedRecipe } from '@/features/recipes/queries';
-import { renderRationale, SERVE_STYLE_LABELS } from '@/i18n/ja';
+import { renderRationale, SERVE_STYLE_LABELS, TASTE_AXIS_LABELS } from '@/i18n/ja';
 
 export default function BrewResultPage() {
   const router = useRouter();
   const wizardInput = useBrewWizardStore((s) => s.input);
   const prepareTimer = useBrewTimerStore((s) => s.prepare);
   const createSavedRecipe = useCreateSavedRecipe();
+  const { data: brews } = useBrews();
   const [showRationale, setShowRationale] = useState(false);
 
-  const brewInput = useMemo(() => toBrewInput(wizardInput), [wizardInput]);
+  const rawInput = useMemo(() => toBrewInput(wizardInput), [wizardInput]);
+
+  // 同じドリッパーでの直近のフィードバック(感じた味 vs そのとき狙った味)から、
+  // 今回の taste 入力を補正する（docs/10 §8）。器具そのものを変えれば別の学習として扱う。
+  const feedbackPatch = useMemo((): Partial<TasteProfile> => {
+    if (!rawInput || !brews) return {};
+    const history: FeedbackEntry[] = brews
+      .filter(
+        (b) => b.input.equipment.dripperId === rawInput.equipment.dripperId && b.tasteFeedback,
+      )
+      .map((b) => ({ targetTaste: b.input.taste, feltTaste: b.tasteFeedback as TasteProfile }));
+    return adjustFromFeedback(history);
+  }, [rawInput, brews]);
+
+  const brewInput = useMemo(() => {
+    if (!rawInput) return undefined;
+    if (Object.keys(feedbackPatch).length === 0) return rawInput;
+    return { ...rawInput, taste: { ...rawInput.taste, ...feedbackPatch } };
+  }, [rawInput, feedbackPatch]);
+
   const recipe = useMemo(() => (brewInput ? generateRecipe(brewInput) : undefined), [brewInput]);
   const dripper = useMemo(
     () => DRIPPERS.find((d) => d.id === recipe?.dripperId),
     [recipe?.dripperId],
   );
+
+  const feedbackAdjustments = useMemo(() => {
+    if (!rawInput) return [];
+    return Object.entries(feedbackPatch)
+      .filter(([axis, value]) => value !== rawInput.taste[axis as keyof TasteProfile])
+      .map(([axis, value]) => ({
+        label: TASTE_AXIS_LABELS[axis as keyof TasteProfile],
+        value: value as number,
+      }));
+  }, [feedbackPatch, rawInput]);
 
   if (!brewInput || !recipe) {
     return (
@@ -74,6 +106,19 @@ export default function BrewResultPage() {
           保存
         </Button>
       </div>
+
+      {feedbackAdjustments.length > 0 && (
+        <Card className="border-primary/40 bg-surface-raised">
+          <CardContent className="flex flex-col gap-1">
+            <p className="flex items-start gap-2 text-callout">
+              <Sparkles size={16} aria-hidden="true" className="mt-0.5 shrink-0 text-primary" />
+              前回までのフィードバックをもとに、
+              {feedbackAdjustments.map((a) => a.label).join('・')}
+              の狙いを調整しました。
+            </p>
+          </CardContent>
+        </Card>
+      )}
 
       {recipe.warnings.length > 0 && (
         <Card className="border-primary/40 bg-surface-raised">
