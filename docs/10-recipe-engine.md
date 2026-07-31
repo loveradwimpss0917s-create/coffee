@@ -268,6 +268,20 @@ structure: 投数を1減らし早めに落とし切る（酸化と過冷却を�
 warnings: サーバーに氷を先に入れる指示ステップを挿入
 ```
 
+透過型（V60等）は数分かけて氷の上に少しずつ落ちるため自然と混ざり冷えるが、
+浸漬型・加圧型（Clever/French Press/AeroPress/HARIO Switch の浸漬・ハイブリッド）は
+プレス/開放の瞬間にまとめて氷へ触れるだけで混ざりが不十分になりやすい。
+
+この判定は `dripper.brewType` の静的な値ではなく、(6) structure で実際に生成された
+`steps` を見て行う（`generate.ts` の (7) validate 相当のタイミング）。HARIO Switch の
+ように同じ器具でも taste ベクトルにより実際のモード（透過主体/浸漬主体/ハイブリッド）が
+変わる器具があり、`brewType: 'hybrid'` という静的な値だけでは「今回のレシピが実際に
+弁を閉じて浸漬するか」を判定できないため:
+```
+hasImmersionContact = steps に (kind:'valve' かつ state:'closed') または kind:'press' が含まれる
+```
+`hasImmersionContact` が true の場合のみ「よくかき混ぜてから飲む」warning を追加する。
+
 ## 8. フィードバックループ（実装済み: `adjustFromFeedback`, `core/feedback.ts`）
 
 抽出後の「感じた5軸」(felt) と「目標5軸」(target = そのとき実際に使った input.taste) の差分から、

@@ -179,7 +179,56 @@ describe('golden: Iced', () => {
       equipment: { dripperId: 'hario-v60' },
       serveStyle: 'iced',
     });
-    expect(generateRecipe(input)).toMatchSnapshot();
+    const recipe = generateRecipe(input);
+    expect(recipe.warnings.some((w) => w.includes('かき混ぜ'))).toBe(false);
+    expect(recipe).toMatchSnapshot();
+  });
+
+  it('AeroPress・Iced・250ml（浸漬/加圧型は氷が混ざりにくいためwarningを追加）', () => {
+    const input = makeInput({
+      equipment: { dripperId: 'aeropress' },
+      serveStyle: 'iced',
+    });
+    const recipe = generateRecipe(input);
+    expect(recipe.warnings.some((w) => w.includes('かき混ぜ'))).toBe(true);
+    expect(recipe).toMatchSnapshot();
+  });
+
+  it('HARIO Switch・Iced・クリア感優位(透過主体モード)は実際のモードで判定しwarningを出さない', () => {
+    const input = makeInput({
+      equipment: { dripperId: 'hario-switch' },
+      taste: { acidity: 0, sweetness: 0, bitterness: 0, body: -1, clarity: 2 },
+      serveStyle: 'iced',
+    });
+    const recipe = generateRecipe(input);
+    // dripper.brewType は静的には 'hybrid' だが、taste ベクトルから実際に選ばれるのは
+    // 弁を閉じない透過主体モードのため、氷は継続的に混ざる → warning は不要
+    expect(recipe.steps.some((s) => s.kind === 'valve' && s.state === 'closed')).toBe(false);
+    expect(recipe.warnings.some((w) => w.includes('かき混ぜ'))).toBe(false);
+    expect(recipe).toMatchSnapshot();
+  });
+
+  it('HARIO Switch・Iced・ボディ優位(浸漬主体モード)は実際のモードで判定しwarningを出す', () => {
+    const input = makeInput({
+      equipment: { dripperId: 'hario-switch' },
+      taste: { acidity: 0, sweetness: 0, bitterness: 0, body: 2, clarity: -1 },
+      serveStyle: 'iced',
+    });
+    const recipe = generateRecipe(input);
+    expect(recipe.steps.some((s) => s.kind === 'valve' && s.state === 'closed')).toBe(true);
+    expect(recipe.warnings.some((w) => w.includes('かき混ぜ'))).toBe(true);
+    expect(recipe).toMatchSnapshot();
+  });
+
+  it('HARIO Switch・Iced・バランス(ハイブリッドモード)も弁を閉じる区間があるためwarningを出す', () => {
+    const input = makeInput({
+      equipment: { dripperId: 'hario-switch' },
+      serveStyle: 'iced',
+    });
+    const recipe = generateRecipe(input);
+    expect(recipe.steps.some((s) => s.kind === 'valve' && s.state === 'closed')).toBe(true);
+    expect(recipe.warnings.some((w) => w.includes('かき混ぜ'))).toBe(true);
+    expect(recipe).toMatchSnapshot();
   });
 });
 

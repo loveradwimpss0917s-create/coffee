@@ -94,6 +94,20 @@ export function generateRecipe(input: BrewInput, _options: GenerateOptions = {})
   });
 
   // (7) validate
+  if (isIced) {
+    // 透過型は数分かけて氷の上に少しずつ落ちるため自然と混ざるが、浸漬(弁を閉じる)/加圧型は
+    // 最後にまとめて氷に触れるだけで混ざりが不十分になりやすい。HARIO Switch のように
+    // 同じ器具でも taste ベクトルで実際のモードが変わる場合があるため、dripper.brewType の
+    // 静的な値ではなく、実際に生成された steps（浸漬区間の有無）で判定する
+    const hasImmersionContact = steps.some(
+      (step) => (step.kind === 'valve' && step.state === 'closed') || step.kind === 'press',
+    );
+    if (hasImmersionContact) {
+      warnings.push(
+        '抽出後、氷とよくかき混ぜてから飲んでください。混ざりが足りないとぬるく感じます。',
+      );
+    }
+  }
   const totalTimeSec = computeTotalTimeSec(steps);
 
   // (8) explain
@@ -126,6 +140,7 @@ function computeTotalTimeSec(steps: Recipe['steps']): number {
   for (const step of steps) {
     if (step.kind === 'drawdown') max = Math.max(max, step.expectedEndSec);
     else if (step.kind === 'wait') max = Math.max(max, step.untilSec);
+    else if (step.kind === 'press') max = Math.max(max, step.atSec + step.durationSec);
     else max = Math.max(max, step.atSec);
   }
   return max;
