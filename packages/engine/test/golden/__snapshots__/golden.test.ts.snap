@@ -273,7 +273,7 @@ exports[`golden: AeroPress（容量上限クランプ） > チャンバー容量
   "targetEy": 20,
   "targetTds": 1.32,
   "tempC": 88,
-  "totalTimeSec": 172,
+  "totalTimeSec": 197,
   "warnings": [
     "AeroPressは100〜250ml向けの器具のため、仕上がり量を250mlとして計算しました。",
   ],
@@ -718,7 +718,7 @@ exports[`golden: French Press（全浸漬） > 中煎り・コク深い好み 1`
   "targetEy": 21.6,
   "targetTds": 1.32,
   "tempC": 90,
-  "totalTimeSec": 291,
+  "totalTimeSec": 290,
   "warnings": [],
   "waterG": 290,
 }
@@ -1460,14 +1460,14 @@ exports[`golden: Iced > HARIO Switch・Iced・バランス(ハイブリッドモ
     },
     {
       "atSec": 144,
-      "expectedEndSec": 174,
+      "expectedEndSec": 257,
       "kind": "drawdown",
     },
   ],
   "targetEy": 20,
   "targetTds": 1.67,
   "tempC": 91,
-  "totalTimeSec": 174,
+  "totalTimeSec": 257,
   "warnings": [
     "サーバーにあらかじめ氷 102g を入れてください。",
     "抽出後、氷とよくかき混ぜてから飲んでください。混ざりが足りないとぬるく感じます。",
@@ -1594,14 +1594,14 @@ exports[`golden: Iced > HARIO Switch・Iced・ボディ優位(浸漬主体モー
     },
     {
       "atSec": 260,
-      "expectedEndSec": 320,
+      "expectedEndSec": 373,
       "kind": "drawdown",
     },
   ],
   "targetEy": 20.5,
   "targetTds": 1.67,
   "tempC": 92,
-  "totalTimeSec": 320,
+  "totalTimeSec": 373,
   "warnings": [
     "サーバーにあらかじめ氷 102g を入れてください。",
     "抽出後、氷とよくかき混ぜてから飲んでください。混ざりが足りないとぬるく感じます。",
