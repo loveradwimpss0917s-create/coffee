@@ -61,13 +61,6 @@ export function generateRecipe(input: BrewInput, _options: GenerateOptions = {})
     const split = computeIcedWaterSplit(totalWaterG);
     brewWaterG = split.brewWaterG;
     warnings.push(`サーバーにあらかじめ氷 ${split.iceG}g を入れてください。`);
-    // 透過型は数分かけて氷の上に少しずつ落ちるため自然と混ざるが、
-    // 浸漬/加圧型は最後にまとめて氷に触れるだけで混ざりが不十分になりやすい
-    if (dripper.brewType !== 'percolation') {
-      warnings.push(
-        '抽出後、氷とよくかき混ぜてから飲んでください。混ざりが足りないとぬるく感じます。',
-      );
-    }
   }
 
   // (4) temperature
@@ -101,6 +94,20 @@ export function generateRecipe(input: BrewInput, _options: GenerateOptions = {})
   });
 
   // (7) validate
+  if (isIced) {
+    // 透過型は数分かけて氷の上に少しずつ落ちるため自然と混ざるが、浸漬(弁を閉じる)/加圧型は
+    // 最後にまとめて氷に触れるだけで混ざりが不十分になりやすい。HARIO Switch のように
+    // 同じ器具でも taste ベクトルで実際のモードが変わる場合があるため、dripper.brewType の
+    // 静的な値ではなく、実際に生成された steps（浸漬区間の有無）で判定する
+    const hasImmersionContact = steps.some(
+      (step) => (step.kind === 'valve' && step.state === 'closed') || step.kind === 'press',
+    );
+    if (hasImmersionContact) {
+      warnings.push(
+        '抽出後、氷とよくかき混ぜてから飲んでください。混ざりが足りないとぬるく感じます。',
+      );
+    }
+  }
   const totalTimeSec = computeTotalTimeSec(steps);
 
   // (8) explain

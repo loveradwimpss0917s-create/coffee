@@ -1115,6 +1115,404 @@ exports[`golden: Iced > AeroPress・Iced・250ml（浸漬/加圧型は氷が混�
 }
 `;
 
+exports[`golden: Iced > HARIO Switch・Iced・クリア感優位(透過主体モード)は実際のモードで判定しwarningを出さない 1`] = `
+{
+  "doseG": 21,
+  "dripperId": "hario-switch",
+  "engineVersion": "0.1.0",
+  "grind": {
+    "generalLabel": "中挽き（約708μm）",
+    "micron": 707.5,
+  },
+  "input": {
+    "bean": {
+      "process": "washed",
+      "roastLevel": "medium",
+    },
+    "equipment": {
+      "dripperId": "hario-switch",
+    },
+    "serveStyle": "iced",
+    "strength": 0,
+    "targetVolumeMl": 250,
+    "taste": {
+      "acidity": 0,
+      "bitterness": 0,
+      "body": -1,
+      "clarity": 2,
+      "sweetness": 0,
+    },
+  },
+  "ratio": 14,
+  "rationale": [
+    {
+      "paramKey": "strength",
+      "params": {
+        "ey": 19.3,
+        "tds": 1.67,
+      },
+      "sourceRefs": [
+        "sca-brewing-control-chart",
+      ],
+      "templateId": "strength.target",
+    },
+    {
+      "paramKey": "temperature",
+      "params": {
+        "process": "washed",
+        "roastLevel": "medium",
+        "tempC": 89.5,
+      },
+      "sourceRefs": [],
+      "templateId": "temperature.byRoastProcess",
+    },
+    {
+      "paramKey": "temperature",
+      "params": {
+        "bitterness": 0,
+        "clarity": 2,
+      },
+      "sourceRefs": [],
+      "templateId": "temperature.tasteAdjust",
+    },
+    {
+      "paramKey": "pours",
+      "params": {
+        "acidity": 0,
+        "sweetness": 0,
+      },
+      "sourceRefs": [
+        "kasuya-4-6-method",
+      ],
+      "templateId": "pours.fourSixSummary",
+    },
+    {
+      "paramKey": "switchMode",
+      "params": {},
+      "sourceRefs": [],
+      "templateId": "switchMode.percolation",
+    },
+    {
+      "paramKey": "iced",
+      "params": {},
+      "sourceRefs": [],
+      "templateId": "iced.dilutionCompensation",
+    },
+  ],
+  "steps": [
+    {
+      "atSec": 0,
+      "kind": "valve",
+      "state": "open",
+    },
+    {
+      "atSec": 0,
+      "durationSec": 40,
+      "kind": "bloom",
+      "waterG": 57.599999999999994,
+    },
+    {
+      "atSec": 40,
+      "kind": "pour",
+      "note": "circular",
+      "toWaterG": 76.8,
+    },
+    {
+      "atSec": 75,
+      "kind": "pour",
+      "note": "center",
+      "toWaterG": 192,
+    },
+    {
+      "atSec": 110,
+      "expectedEndSec": 225,
+      "kind": "drawdown",
+    },
+  ],
+  "targetEy": 19.3,
+  "targetTds": 1.67,
+  "tempC": 89.5,
+  "totalTimeSec": 225,
+  "warnings": [
+    "サーバーにあらかじめ氷 103g を入れてください。",
+  ],
+  "waterG": 295,
+}
+`;
+
+exports[`golden: Iced > HARIO Switch・Iced・バランス(ハイブリッドモード)も弁を閉じる区間があるためwarningを出す 1`] = `
+{
+  "doseG": 20.5,
+  "dripperId": "hario-switch",
+  "engineVersion": "0.1.0",
+  "grind": {
+    "generalLabel": "中細挽き（約610μm）",
+    "micron": 610,
+  },
+  "input": {
+    "bean": {
+      "process": "washed",
+      "roastLevel": "medium",
+    },
+    "equipment": {
+      "dripperId": "hario-switch",
+    },
+    "serveStyle": "iced",
+    "strength": 0,
+    "targetVolumeMl": 250,
+    "taste": {
+      "acidity": 0,
+      "bitterness": 0,
+      "body": 0,
+      "clarity": 0,
+      "sweetness": 0,
+    },
+  },
+  "ratio": 14.1,
+  "rationale": [
+    {
+      "paramKey": "strength",
+      "params": {
+        "ey": 20,
+        "tds": 1.67,
+      },
+      "sourceRefs": [
+        "sca-brewing-control-chart",
+      ],
+      "templateId": "strength.target",
+    },
+    {
+      "paramKey": "temperature",
+      "params": {
+        "process": "washed",
+        "roastLevel": "medium",
+        "tempC": 91,
+      },
+      "sourceRefs": [],
+      "templateId": "temperature.byRoastProcess",
+    },
+    {
+      "paramKey": "pours",
+      "params": {
+        "acidity": 0,
+        "sweetness": 0,
+      },
+      "sourceRefs": [
+        "kasuya-4-6-method",
+      ],
+      "templateId": "pours.fourSixSummary",
+    },
+    {
+      "paramKey": "switchMode",
+      "params": {},
+      "sourceRefs": [
+        "kasuya-switch-hybrid-2025",
+      ],
+      "templateId": "switchMode.hybrid",
+    },
+    {
+      "paramKey": "iced",
+      "params": {},
+      "sourceRefs": [],
+      "templateId": "iced.dilutionCompensation",
+    },
+  ],
+  "steps": [
+    {
+      "atSec": 0,
+      "kind": "valve",
+      "state": "open",
+    },
+    {
+      "atSec": 0,
+      "durationSec": 40,
+      "kind": "bloom",
+      "waterG": 56.4,
+    },
+    {
+      "atSec": 40,
+      "kind": "pour",
+      "note": "circular",
+      "toWaterG": 75.2,
+    },
+    {
+      "atSec": 95,
+      "kind": "valve",
+      "state": "closed",
+    },
+    {
+      "atSec": 95,
+      "kind": "temperatureChange",
+      "toTempC": 81,
+    },
+    {
+      "atSec": 114,
+      "kind": "pour",
+      "note": "center",
+      "toWaterG": 188,
+    },
+    {
+      "atSec": 119,
+      "kind": "wait",
+      "untilSec": 144,
+    },
+    {
+      "atSec": 144,
+      "kind": "valve",
+      "state": "open",
+    },
+    {
+      "atSec": 144,
+      "expectedEndSec": 174,
+      "kind": "drawdown",
+    },
+  ],
+  "targetEy": 20,
+  "targetTds": 1.67,
+  "tempC": 91,
+  "totalTimeSec": 174,
+  "warnings": [
+    "サーバーにあらかじめ氷 102g を入れてください。",
+    "抽出後、氷とよくかき混ぜてから飲んでください。混ざりが足りないとぬるく感じます。",
+  ],
+  "waterG": 290,
+}
+`;
+
+exports[`golden: Iced > HARIO Switch・Iced・ボディ優位(浸漬主体モード)は実際のモードで判定しwarningを出す 1`] = `
+{
+  "doseG": 20.5,
+  "dripperId": "hario-switch",
+  "engineVersion": "0.1.0",
+  "grind": {
+    "generalLabel": "中細挽き（約528μm）",
+    "micron": 527.5,
+  },
+  "input": {
+    "bean": {
+      "process": "washed",
+      "roastLevel": "medium",
+    },
+    "equipment": {
+      "dripperId": "hario-switch",
+    },
+    "serveStyle": "iced",
+    "strength": 0,
+    "targetVolumeMl": 250,
+    "taste": {
+      "acidity": 0,
+      "bitterness": 0,
+      "body": 2,
+      "clarity": -1,
+      "sweetness": 0,
+    },
+  },
+  "ratio": 14.1,
+  "rationale": [
+    {
+      "paramKey": "strength",
+      "params": {
+        "ey": 20.5,
+        "tds": 1.67,
+      },
+      "sourceRefs": [
+        "sca-brewing-control-chart",
+      ],
+      "templateId": "strength.target",
+    },
+    {
+      "paramKey": "temperature",
+      "params": {
+        "process": "washed",
+        "roastLevel": "medium",
+        "tempC": 92,
+      },
+      "sourceRefs": [],
+      "templateId": "temperature.byRoastProcess",
+    },
+    {
+      "paramKey": "temperature",
+      "params": {
+        "bitterness": 0,
+        "clarity": -1,
+      },
+      "sourceRefs": [],
+      "templateId": "temperature.tasteAdjust",
+    },
+    {
+      "paramKey": "pours",
+      "params": {
+        "acidity": 0,
+        "sweetness": 0,
+      },
+      "sourceRefs": [
+        "kasuya-4-6-method",
+      ],
+      "templateId": "pours.fourSixSummary",
+    },
+    {
+      "paramKey": "switchMode",
+      "params": {},
+      "sourceRefs": [],
+      "templateId": "switchMode.immersion",
+    },
+    {
+      "paramKey": "iced",
+      "params": {},
+      "sourceRefs": [],
+      "templateId": "iced.dilutionCompensation",
+    },
+  ],
+  "steps": [
+    {
+      "atSec": 0,
+      "kind": "valve",
+      "state": "closed",
+    },
+    {
+      "atSec": 0,
+      "durationSec": 40,
+      "kind": "bloom",
+      "waterG": 56.4,
+    },
+    {
+      "atSec": 40,
+      "kind": "pour",
+      "toWaterG": 188,
+    },
+    {
+      "atSec": 62,
+      "kind": "stir",
+      "method": "spoon",
+    },
+    {
+      "atSec": 67,
+      "kind": "wait",
+      "untilSec": 260,
+    },
+    {
+      "atSec": 260,
+      "kind": "valve",
+      "state": "open",
+    },
+    {
+      "atSec": 260,
+      "expectedEndSec": 320,
+      "kind": "drawdown",
+    },
+  ],
+  "targetEy": 20.5,
+  "targetTds": 1.67,
+  "tempC": 92,
+  "totalTimeSec": 320,
+  "warnings": [
+    "サーバーにあらかじめ氷 102g を入れてください。",
+    "抽出後、氷とよくかき混ぜてから飲んでください。混ざりが足りないとぬるく感じます。",
+  ],
+  "waterG": 290,
+}
+`;
+
 exports[`golden: Iced > 浅煎り・Iced・250ml 1`] = `
 {
   "doseG": 20.5,
