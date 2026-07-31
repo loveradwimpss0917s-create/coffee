@@ -19,6 +19,10 @@ const dripperSpecSchema = z.object({
   flowModel: z.object({ drawdownBaseSec: z.number(), flowClass: z.enum(['fast','medium','slow']) }),
   ratioRange: z.tuple([z.number(), z.number()]), // 推奨比率の下限上限
   features: z.array(z.enum(['valve', 'press', 'inverted-capable'])).default([]),
+  volumeRangeMl: z.tuple([z.number(), z.number()]).optional(), // 器具そのものの容量上限。
+    // 未指定ならスキーマ全体の範囲(30-1000ml)を許容する。AeroPress系のようにチャンバー容量に
+    // 物理的な上限がある器具にのみ指定する。generate.ts が範囲外の targetVolumeMl をこの範囲へ
+    // clamp し、実際に計算に使った値が異なる場合は warnings に記録する。
   template: /* (params) => RecipeStep[] を返す関数への参照 */,
   notes: z.string().optional(),      // UI 表示用の器具解説
 });
@@ -37,8 +41,8 @@ const dripperSpecSchema = z.object({
 | `april` | April Brewer | percolation/flat | 680μm | medium | 低温・粗め・少投数の公式プロファイル反映 |
 | `orea` | Orea Brewer | percolation/flat | 690μm | fast | フラット高速系 |
 | `clever` | Clever Dripper | **immersion**/cone | 780μm | — | 閉→steep→載せて開放。`features:['valve']` |
-| `aeropress` | AeroPress | **pressure**/cylinder | 500μm | — | 正/逆位置、press ステップ。`features:['press','inverted-capable']` |
-| `aeropress-espresso` | AeroPress（エスプレッソ風） | **pressure**/cylinder | 350μm | fast | 少量(40〜90ml)濃縮ショット。蒸らし無し、`ratioRange:[2,3]`。§2.1 参照 |
+| `aeropress` | AeroPress | **pressure**/cylinder | 500μm | — | 正/逆位置、press ステップ。`features:['press','inverted-capable']`。`volumeRangeMl:[100,250]`（標準チャンバーの容量上限） |
+| `aeropress-espresso` | AeroPress（エスプレッソ風） | **pressure**/cylinder | 350μm | fast | 少量(40〜90ml)濃縮ショット。蒸らし無し、`ratioRange:[2,3]`、`volumeRangeMl:[30,100]`。§2.1 参照 |
 | `french-press` | French Press | immersion/cylinder | 850μm | — | 4:00 steep 基準、プランジ弱く（微粉攪拌回避） |
 | `iwaki-mizudashi` | iwaki ウォータードリップサーバー K-8644-CL | **coldDrip**/cylinder | 1250μm | slow | 点滴式水出し。滴下速度は目分量前提で指定しない（オーナー実機） |
 | `hario-mizudashi` | HARIO 水出しコーヒーサーバー（点滴式） | **coldDrip**/cylinder | 1250μm | slow | iwaki と同じ点滴式。共通の `buildColdDripSteps` を使用 |
@@ -72,7 +76,7 @@ const grinderSpecSchema = z.object({
   adjustment: z.discriminatedUnion('type', [
     z.object({ type: z.literal('clicks'),  micronPerStep: z.number(), zeroOffsetMicron: z.number(), maxSteps: z.number() }),
     z.object({ type: z.literal('numbered'),micronPerStep: z.number(), zeroOffsetMicron: z.number(), minSetting: z.number(), maxSetting: z.number(), stepSize: z.number() }), // 目盛式（0.5刻み等）
-    z.object({ type: z.literal('rotations'), micronPerRotation: z.number(), clicksPerRotation: z.number(), zeroOffsetMicron: z.number() }), // 1Zpresso 系「1周+5」表記
+    z.object({ type: z.literal('rotations'), micronPerRotation: z.number(), clicksPerRotation: z.number(), zeroOffsetMicron: z.number(), maxTotalClicks: z.number() }), // 1Zpresso 系「1周+5」表記。maxTotalClicksは外部ダイヤルの物理的な総クリック数上限（目安）で、変換結果のクランプに使う
   ]),
   confidence: z.enum(['measured', 'community', 'estimated']), // 変換の信頼度（UI表示）
   filterRangeHint: z.tuple([z.number(), z.number()]).optional(), // メーカー推奨フィルター域

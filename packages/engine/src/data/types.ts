@@ -36,6 +36,11 @@ export type DripperSpec = {
   flowModel: { drawdownBaseSec: number; flowClass: FlowClass };
   ratioRange: [number, number];
   features: DripperFeature[];
+  /**
+   * 対応できる仕上がり量(ml)。未指定ならスキーマ全体の範囲(30-1000ml)を許容する。
+   * AeroPress 系のように器具そのものの容量に上限がある場合に指定する（docs/11）。
+   */
+  volumeRangeMl?: [number, number];
   buildSteps: (params: BuildStepsParams) => RecipeStep[];
   notes?: string;
 };
@@ -55,6 +60,8 @@ export type GrinderAdjustment =
       micronPerRotation: number;
       clicksPerRotation: number;
       zeroOffsetMicron: number;
+      /** 外部ダイヤルの物理的な総クリック数上限（目安）。クランプに使う */
+      maxTotalClicks: number;
     };
 
 export type GrinderConfidence = 'measured' | 'community' | 'estimated';

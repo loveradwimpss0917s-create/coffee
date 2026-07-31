@@ -16,6 +16,8 @@ export const aeropress: DripperSpec = {
   flowModel: { drawdownBaseSec: 0, flowClass: 'fast' },
   ratioRange: [12, 16],
   features: ['press', 'inverted-capable'],
+  // チャンバー容量の上限（標準サイズ、約250mlのラインまで）を超える量は淹れられない
+  volumeRangeMl: [100, 250],
   buildSteps: (params) => buildPressSteps(params, { steepBaseSec: 90 }),
-  notes: '加圧式で短時間抽出。正立/倒立どちらの淹れ方にも同じ手順を適用。',
+  notes: '加圧式で短時間抽出。正立/倒立どちらの淹れ方にも同じ手順を適用。1杯あたり250mlまで。',
 };

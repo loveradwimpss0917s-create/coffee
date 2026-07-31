@@ -123,13 +123,23 @@ ey      = clamp(baseEy + Σ(味軸ごとの ΔEY), 17.5, 22.5)
 ### (3) ratio — 質量計算（LRR モデル）
 
 ```
-beverageG = targetVolumeMl（hot; icedは §7）
+beverageG = targetVolumeMl（hot; icedは §7）。ただしドリッパーに volumeRangeMl（§11）が
+            設定されている場合は、その範囲内へ clamp した値を使う（範囲外なら warnings に記録）
 doseG     = beverageG * tds / ey                 // EY = beverage×TDS / dose の逆算
 waterG    = beverageG + doseG * LRR              // LRR(液体保持率) ≈ 2.0 g/g（透過）, 2.2（浸漬+粉残し）
 ratio     = waterG / doseG                       // 表示用（例 1:16.4）
 doseG は 0.5g 刻み、waterG は 5g 刻みに丸め、丸め後に ratio を再計算
 ```
 検算例: 250ml, TDS1.32, EY20 → dose 16.5g, water 283g ≈ 1:17.2 → strength+1 なら 1:15.9。実勢レシピ（1:14–1:17）と整合。
+
+丸め後の ratio がドリッパーの `ratioRange` を外れた場合は、waterG を保ったまま doseG を
+range 内へ補正する。このとき「range に収まる方向」に丸める（境界超過を防ぐため単純な
+四捨五入は使わない: 濃すぎる側は切り捨て、薄すぎる側は切り上げ）。ただし 30ml 前後の
+極小バッチでは 0.5g 刻みの粒度が `ratioRange` の幅そのものより粗く、range 内に収まる
+doseG が存在しないことがある。その場合は doseG の近さではなく実際の `ratio` の逸脱量
+（`waterG/doseG` は doseG に対して非線形なため両者は一致しない）が最小になる側の
+doseG を選ぶ。実データ（初期登録ドリッパー全種・30〜1000ml）で確認した最大逸脱幅は
+`ratioRange` の境界 ±0.5 程度。
 
 ### (4) temperature — 湯温モデル
 
@@ -180,11 +190,16 @@ expectedEndSec = dripper.baseDrawdown + f(粒度, 湯量)
 ```
 
 浸漬型（Clever / French Press）: `steepTimeSec = base + body*30 - clarity*20`、攪拌有無を taste から決定。
+drawdown（開放後の抜け時間）は透過型と同様に湯量に比例させる:
+`round(dripper.flowModel.drawdownBaseSec * waterG/250)`。固定秒数にすると大バッチで
+湯量に対して排出が速すぎる想定になってしまうため。
 
 一括注湯（浸漬型・加圧型で、複数投に分けず一度に全量へ到達させる pour）は、次の pour/stir/press
 までの間隔を固定秒数にせず、注ぐ量に応じて確保する（`computePourDurationSec`, `core/pours.ts`）:
-`clamp(round(注ぐ量g / 6), 8, 60)` 秒。透過型のように複数投に分ける場合は
-`POUR_INTERVAL_SEC`（flowClassごとの固定値）を使うため対象外。
+`clamp(round(注ぐ量g / 6), 8, 180)` 秒。上限は「実行不可能な速さになる」ことを防ぐための
+保険であり、大バッチ(最大1000ml相当)でも注湯自体は普通に成立する（時間が伸びるだけ）ため
+十分大きく取る。透過型のように複数投に分ける場合は `POUR_INTERVAL_SEC`（flowClassごとの
+固定値）を使うため対象外。
 
 ハイブリッド（**HARIO Switch 360**）: §6 参照。
 coldDrip（点滴式水出し。iwaki/HARIO の水出しタワー）: §6.1 参照。

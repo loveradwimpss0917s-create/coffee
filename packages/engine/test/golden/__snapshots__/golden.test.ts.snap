@@ -2,7 +2,7 @@
 
 exports[`golden: AeroPress エスプレッソ風（少量濃縮） > 60ml・中煎り・バランス 1`] = `
 {
-  "doseG": 21.5,
+  "doseG": 22,
   "dripperId": "aeropress-espresso",
   "engineVersion": "0.1.0",
   "grind": {
@@ -180,6 +180,103 @@ exports[`golden: AeroPress（加圧） > 中煎り・バランス 1`] = `
   "tempC": 88,
   "totalTimeSec": 172,
   "warnings": [],
+  "waterG": 270,
+}
+`;
+
+exports[`golden: AeroPress（容量上限クランプ） > チャンバー容量(250ml)を超える指定は250mlへクランプされ warning が出る 1`] = `
+{
+  "doseG": 17,
+  "dripperId": "aeropress",
+  "engineVersion": "0.1.0",
+  "grind": {
+    "generalLabel": "細挽き（約500μm）",
+    "micron": 500,
+  },
+  "input": {
+    "bean": {
+      "process": "washed",
+      "roastLevel": "medium",
+    },
+    "equipment": {
+      "dripperId": "aeropress",
+    },
+    "serveStyle": "hot",
+    "strength": 0,
+    "targetVolumeMl": 600,
+    "taste": {
+      "acidity": 0,
+      "bitterness": 0,
+      "body": 0,
+      "clarity": 0,
+      "sweetness": 0,
+    },
+  },
+  "ratio": 15.9,
+  "rationale": [
+    {
+      "paramKey": "strength",
+      "params": {
+        "ey": 20,
+        "tds": 1.32,
+      },
+      "sourceRefs": [
+        "sca-brewing-control-chart",
+      ],
+      "templateId": "strength.target",
+    },
+    {
+      "paramKey": "temperature",
+      "params": {
+        "process": "washed",
+        "roastLevel": "medium",
+        "tempC": 88,
+      },
+      "sourceRefs": [],
+      "templateId": "temperature.byRoastProcess",
+    },
+    {
+      "paramKey": "pours",
+      "params": {
+        "acidity": 0,
+        "sweetness": 0,
+      },
+      "sourceRefs": [
+        "kasuya-4-6-method",
+      ],
+      "templateId": "pours.fourSixSummary",
+    },
+  ],
+  "steps": [
+    {
+      "atSec": 0,
+      "durationSec": 40,
+      "kind": "bloom",
+      "waterG": 46.8,
+    },
+    {
+      "atSec": 40,
+      "kind": "pour",
+      "toWaterG": 270,
+    },
+    {
+      "atSec": 77,
+      "kind": "stir",
+      "method": "spoon",
+    },
+    {
+      "atSec": 172,
+      "durationSec": 25,
+      "kind": "press",
+    },
+  ],
+  "targetEy": 20,
+  "targetTds": 1.32,
+  "tempC": 88,
+  "totalTimeSec": 172,
+  "warnings": [
+    "AeroPressは100〜250ml向けの器具のため、仕上がり量を250mlとして計算しました。",
+  ],
   "waterG": 270,
 }
 `;
@@ -510,14 +607,14 @@ exports[`golden: Clever Dripper（浸漬） > 中煎り・バランス 1`] = `
     },
     {
       "atSec": 256,
-      "expectedEndSec": 316,
+      "expectedEndSec": 324,
       "kind": "drawdown",
     },
   ],
   "targetEy": 20,
   "targetTds": 1.32,
   "tempC": 90,
-  "totalTimeSec": 316,
+  "totalTimeSec": 324,
   "warnings": [],
   "waterG": 285,
 }
@@ -525,7 +622,7 @@ exports[`golden: Clever Dripper（浸漬） > 中煎り・バランス 1`] = `
 
 exports[`golden: French Press（全浸漬） > 中煎り・コク深い好み 1`] = `
 {
-  "doseG": 17,
+  "doseG": 17.5,
   "dripperId": "french-press",
   "engineVersion": "0.1.0",
   "grind": {
@@ -551,7 +648,7 @@ exports[`golden: French Press（全浸漬） > 中煎り・コク深い好み 1`
       "sweetness": 1,
     },
   },
-  "ratio": 17.1,
+  "ratio": 16.6,
   "rationale": [
     {
       "paramKey": "strength",
@@ -600,7 +697,7 @@ exports[`golden: French Press（全浸漬） > 中煎り・コク深い好み 1`
       "atSec": 0,
       "durationSec": 40,
       "kind": "bloom",
-      "waterG": 46.8,
+      "waterG": 48.1,
     },
     {
       "atSec": 40,
@@ -608,12 +705,12 @@ exports[`golden: French Press（全浸漬） > 中煎り・コク深い好み 1`
       "toWaterG": 290,
     },
     {
-      "atSec": 81,
+      "atSec": 80,
       "kind": "stir",
       "method": "spoon",
     },
     {
-      "atSec": 266,
+      "atSec": 265,
       "durationSec": 25,
       "kind": "press",
     },
@@ -621,7 +718,7 @@ exports[`golden: French Press（全浸漬） > 中煎り・コク深い好み 1`
   "targetEy": 21.6,
   "targetTds": 1.32,
   "tempC": 90,
-  "totalTimeSec": 266,
+  "totalTimeSec": 265,
   "warnings": [],
   "waterG": 290,
 }
@@ -873,14 +970,14 @@ exports[`golden: HARIO Switch 360（3モード） > バランス -> ハイブリ
     },
     {
       "atSec": 167,
-      "expectedEndSec": 197,
+      "expectedEndSec": 338,
       "kind": "drawdown",
     },
   ],
   "targetEy": 20,
   "targetTds": 1.32,
   "tempC": 90,
-  "totalTimeSec": 197,
+  "totalTimeSec": 338,
   "warnings": [],
   "waterG": 285,
 }
@@ -998,14 +1095,14 @@ exports[`golden: HARIO Switch 360（3モード） > ボディ優位 -> 浸漬主
     },
     {
       "atSec": 332,
-      "expectedEndSec": 392,
+      "expectedEndSec": 500,
       "kind": "drawdown",
     },
   ],
   "targetEy": 20.5,
   "targetTds": 1.32,
   "tempC": 91,
-  "totalTimeSec": 392,
+  "totalTimeSec": 500,
   "warnings": [],
   "waterG": 280,
 }

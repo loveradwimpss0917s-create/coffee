@@ -65,7 +65,7 @@ export function convertMicronToSetting(
   const micronPerClick = adjustment.micronPerRotation / adjustment.clicksPerRotation;
   const totalClicks =
     Math.round((micron - adjustment.zeroOffsetMicron) / micronPerClick) + calibrationOffset;
-  const clampedClicks = Math.max(0, totalClicks);
+  const clampedClicks = clamp(totalClicks, 0, adjustment.maxTotalClicks);
   const rotations = Math.floor(clampedClicks / adjustment.clicksPerRotation);
   const remainder = clampedClicks % adjustment.clicksPerRotation;
   return rotations > 0 ? `${rotations}周 + ${remainder}クリック` : `${remainder}クリック`;

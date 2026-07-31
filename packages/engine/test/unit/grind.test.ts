@@ -76,6 +76,21 @@ describe('convertMicronToSetting', () => {
     const withOffset = convertMicronToSetting(620, comandanteC40, 5);
     expect(withOffset).not.toBe(withoutOffset);
   });
+
+  it('rotations 式は極端な μm / calibrationOffset でも maxTotalClicks を超えない', () => {
+    const adjustment = zpressoKUltra.adjustment;
+    if (adjustment.type !== 'rotations') throw new Error('K-Ultra should be rotations type');
+    const maxRotations = Math.floor(adjustment.maxTotalClicks / adjustment.clicksPerRotation);
+
+    // 極端に粗い設定 + 大きな正のオフセットで上限に張り付くケース
+    const coarse = convertMicronToSetting(100000, zpressoKUltra, 50);
+    const coarseRotations = Number(coarse.match(/^(\d+)周/)?.[1] ?? '0');
+    expect(coarseRotations).toBeLessThanOrEqual(maxRotations);
+
+    // 極端に細かい設定 + 大きな負のオフセットで下限(0)に張り付くケース
+    const fine = convertMicronToSetting(1, zpressoKUltra, -50);
+    expect(fine).toBe('0クリック');
+  });
 });
 
 describe('buildGrindResult', () => {

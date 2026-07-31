@@ -44,6 +44,18 @@ export function generateRecipe(input: BrewInput, _options: GenerateOptions = {})
     );
   }
 
+  // 器具そのものの容量を超える仕上がり量は、実際に淹れられる範囲へ寄せる（例: AeroPress は最大250ml）
+  let targetVolumeMl = input.targetVolumeMl;
+  if (dripper.volumeRangeMl) {
+    const [minMl, maxMl] = dripper.volumeRangeMl;
+    targetVolumeMl = clampToRange(input.targetVolumeMl, dripper.volumeRangeMl);
+    if (targetVolumeMl !== input.targetVolumeMl) {
+      warnings.push(
+        `${dripper.name}は${minMl}〜${maxMl}ml向けの器具のため、仕上がり量を${targetVolumeMl}mlとして計算しました。`,
+      );
+    }
+  }
+
   // (2) targets
   let targetTds = computeTargetTds(input.strength);
   const targetEy = computeTargetEy(input.taste, input.bean.roastLevel, input.bean.process);
@@ -54,7 +66,7 @@ export function generateRecipe(input: BrewInput, _options: GenerateOptions = {})
     doseG,
     waterG: totalWaterG,
     ratio,
-  } = computeRatio(input.targetVolumeMl, targetTds, targetEy, dripper.lrr, dripper.ratioRange);
+  } = computeRatio(targetVolumeMl, targetTds, targetEy, dripper.lrr, dripper.ratioRange);
 
   let brewWaterG = totalWaterG;
   if (isIced) {
@@ -76,7 +88,7 @@ export function generateRecipe(input: BrewInput, _options: GenerateOptions = {})
   if (isIced) tempC = applyIcedTempAdjustment(tempC);
 
   // (5) grind
-  let grindMicron = computeTargetGrindMicron(dripper, input.targetVolumeMl, targetEy, input.taste);
+  let grindMicron = computeTargetGrindMicron(dripper, targetVolumeMl, targetEy, input.taste);
   if (isIced) grindMicron = applyIcedGrindAdjustment(grindMicron);
   grindMicron = clampToRange(grindMicron, dripper.grindRangeMicron);
   const grind = buildGrindResult(grindMicron, grinder, input.equipment.calibration?.offset);

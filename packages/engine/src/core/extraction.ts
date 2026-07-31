@@ -46,6 +46,8 @@ export type RatioResult = {
   ratio: number;
 };
 
+const DOSE_STEP_G = 0.5;
+
 /**
  * LRR(液体保持率)モデルによる質量計算（docs/10 §5-(3)）。
  * EY = beverageG * TDS / doseG の逆算で doseG を求め、
@@ -53,7 +55,10 @@ export type RatioResult = {
  *
  * 算出後の比率がドリッパーの実用域(ratioRange)を外れる場合（極端な仕上がり量や
  * strength での丸め誤差）は、waterG(仕上がり量ベース)を保ったまま doseG を
- * ratioRange の境界に合わせて補正する。
+ * ratioRange の境界に収まる範囲へ補正する。
+ * ただし少量バッチでは 0.5g 刻みの粒度が ratioRange の幅より粗く、範囲内に収まる
+ * doseG が存在しないことがある。その場合は「境界の外側に押し出す」のではなく、
+ * 範囲外への逸脱量が最小になる側の doseG を選ぶ（docs/10 §5-(3)）。
  */
 export function computeRatio(
   targetVolumeMl: number,
@@ -64,18 +69,40 @@ export function computeRatio(
 ): RatioResult {
   const beverageG = targetVolumeMl;
   const rawDoseG = (beverageG * (targetTds / 100)) / (targetEy / 100);
-  const doseG = Math.round(rawDoseG * 2) / 2; // 0.5g 刻み
+  const doseG = Math.round(rawDoseG / DOSE_STEP_G) * DOSE_STEP_G; // 0.5g 刻み
   const rawWaterG = beverageG + doseG * lrr;
   const waterG = Math.round(rawWaterG / 5) * 5; // 5g 刻み
   const ratio = round1(waterG / doseG);
 
-  if (ratio < ratioRange[0]) {
-    const adjustedDoseG = Math.round((waterG / ratioRange[0]) * 2) / 2;
-    return { doseG: adjustedDoseG, waterG, ratio: round1(waterG / adjustedDoseG) };
+  if (ratio >= ratioRange[0] && ratio <= ratioRange[1]) {
+    return { doseG, waterG, ratio };
   }
-  if (ratio > ratioRange[1]) {
-    const adjustedDoseG = Math.round((waterG / ratioRange[1]) * 2) / 2;
-    return { doseG: adjustedDoseG, waterG, ratio: round1(waterG / adjustedDoseG) };
+
+  // ratio が ratioRange[0]..ratioRange[1] に入る連続的な doseG の区間
+  const validMinDoseG = waterG / ratioRange[1];
+  const validMaxDoseG = waterG / ratioRange[0];
+
+  // その区間に入る 0.5g 刻みの候補のうち、区間の下端・上端に最も近いもの
+  const quantizedLow = Math.ceil(validMinDoseG / DOSE_STEP_G) * DOSE_STEP_G;
+  const quantizedHigh = Math.floor(validMaxDoseG / DOSE_STEP_G) * DOSE_STEP_G;
+
+  let adjustedDoseG: number;
+  if (quantizedLow <= quantizedHigh) {
+    // 区間内に収まる 0.5g 刻みの値が存在する。rawDoseG に最も近いものを選ぶ
+    adjustedDoseG = clamp(
+      Math.round(rawDoseG / DOSE_STEP_G) * DOSE_STEP_G,
+      quantizedLow,
+      quantizedHigh,
+    );
+  } else {
+    // 0.5g 刻みでは区間に収まる値が存在しない（区間が 0.5g 幅より狭い）。
+    // doseG 側ではなく実際に制約したい ratio 側の逸脱量で比較する
+    // （ratio = waterG/doseG は非線形なので、dose の近さと ratio の近さは一致しない）
+    const violationAtHigh = waterG / quantizedHigh - ratioRange[1];
+    const violationAtLow = ratioRange[0] - waterG / quantizedLow;
+    adjustedDoseG = violationAtHigh <= violationAtLow ? quantizedHigh : quantizedLow;
   }
-  return { doseG, waterG, ratio };
+  adjustedDoseG = Math.max(DOSE_STEP_G, adjustedDoseG);
+
+  return { doseG: adjustedDoseG, waterG, ratio: round1(waterG / adjustedDoseG) };
 }
