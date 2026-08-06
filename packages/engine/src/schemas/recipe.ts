@@ -69,7 +69,16 @@ export type RecipeStep = z.infer<typeof recipeStepSchema>;
 
 /** 生成根拠。text はテンプレートID+パラメータで保持し表示時に文章化する（docs/10 §5-(8), i18n対応） */
 export const rationaleSchema = z.object({
-  paramKey: z.enum(['strength', 'temperature', 'grind', 'pours', 'switchMode', 'iced', 'general']),
+  paramKey: z.enum([
+    'strength',
+    'temperature',
+    'grind',
+    'pours',
+    'switchMode',
+    'iced',
+    'origin',
+    'general',
+  ]),
   templateId: z.string(),
   params: z.record(z.string(), z.union([z.string(), z.number()])).default({}),
   sourceRefs: z.array(z.string()).default([]),

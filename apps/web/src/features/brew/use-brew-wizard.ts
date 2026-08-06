@@ -20,7 +20,7 @@ export type WizardInput = {
 
 const INITIAL_INPUT: WizardInput = {
   beanId: undefined,
-  bean: { roastLevel: 'medium', process: 'washed' },
+  bean: { roastLevel: 'medium', process: 'washed', origins: [] },
   equipment: {},
   taste: BALANCED_TASTE_PROFILE,
   strength: 0,

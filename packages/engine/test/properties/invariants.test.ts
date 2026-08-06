@@ -2,7 +2,7 @@ import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 import { generateRecipe } from '../../src/core/generate';
 import { convertMicronToSetting } from '../../src/core/grind';
-import { DRIPPERS, GRINDERS, getDripper, getGrinder } from '../../src/data';
+import { DRIPPERS, GRINDERS, getDripper, getGrinder, ORIGIN_PROFILES } from '../../src/data';
 import type { GrinderAdjustment } from '../../src/data/types';
 import type { BrewInput } from '../../src/schemas/input';
 
@@ -36,12 +36,21 @@ const calibrationArb = fc.option(fc.record({ offset: fc.integer({ min: -20, max:
 
 const tasteAxisArb = fc.integer({ min: -2, max: 2 });
 
+// 既知の産地名・未知の自由入力・空(未指定)のどれもファジング対象に含める
+const originsArb = fc.array(
+  fc.oneof(
+    fc.constantFrom(...ORIGIN_PROFILES.map((o) => o.name)),
+    fc.constantFrom('謎の産地', 'Unknown Farm'),
+  ),
+  { maxLength: 3 },
+);
+
 const brewInputArb: fc.Arbitrary<BrewInput> = fc.record({
   bean: fc.record({
     roastLevel: roastLevelArb,
     process: processArb,
     daysOffRoast: fc.option(fc.integer({ min: 0, max: 365 }), { nil: undefined }),
-    origin: fc.constant(undefined),
+    origins: originsArb,
   }),
   equipment: fc.record({
     dripperId: dripperIdArb,

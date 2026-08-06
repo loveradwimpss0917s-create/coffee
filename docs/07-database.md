@@ -69,7 +69,7 @@ MVP/β では単一グラインダーの補正値のみ `user_settings.grinder_c
 | user_id | TEXT FK CASCADE, INDEX | |
 | name | TEXT NOT NULL | 表示名 |
 | roaster | TEXT | ロースター名 |
-| origin | TEXT | 産地（自由入力 + サジェスト） |
+| origins | TEXT(JSON) NOT NULL DEFAULT '[]' | 産地の配列（自由入力 + サジェスト）。ブレンドは複数産地を持てる。既知の産地は目標EY/湯温へ小さな補正がかかる（docs/10 §5-(2), §5-(4)） |
 | variety | TEXT | 品種 |
 | process | TEXT NOT NULL | `washed/natural/honey/anaerobic/decaf/other` |
 | roast_level | TEXT NOT NULL | `light/medium-light/medium/medium-dark/dark` |

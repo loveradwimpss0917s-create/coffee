@@ -39,7 +39,7 @@ export default function BeanDetailPage() {
     loadFrom({
       ...currentInput,
       beanId: bean.id,
-      bean: { roastLevel: bean.roastLevel, process: bean.process },
+      bean: { roastLevel: bean.roastLevel, process: bean.process, origins: bean.origins },
     });
     router.push('/brew');
   }

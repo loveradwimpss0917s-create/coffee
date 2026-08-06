@@ -11,6 +11,7 @@ exports[`golden: AeroPress エスプレッソ風（少量濃縮） > 60ml・中�
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "medium",
     },
@@ -100,6 +101,7 @@ exports[`golden: AeroPress（加圧） > 中煎り・バランス 1`] = `
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "medium",
     },
@@ -195,6 +197,7 @@ exports[`golden: AeroPress（容量上限クランプ） > チャンバー容量
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "medium",
     },
@@ -292,6 +295,7 @@ exports[`golden: April Brewer > 浅煎り・バランス 1`] = `
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "light",
     },
@@ -401,6 +405,7 @@ exports[`golden: CAFEC フラワー > 浅煎り・明るく華やかな好み 1`
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "light",
     },
@@ -513,6 +518,7 @@ exports[`golden: Clever Dripper（浸漬） > 中煎り・バランス 1`] = `
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "medium",
     },
@@ -631,6 +637,7 @@ exports[`golden: French Press（全浸漬） > 中煎り・コク深い好み 1`
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "medium",
     },
@@ -735,6 +742,7 @@ exports[`golden: HARIO Switch 360（3モード） > クリア感優位 -> 透過
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "medium",
     },
@@ -864,6 +872,7 @@ exports[`golden: HARIO Switch 360（3モード） > バランス -> ハイブリ
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "medium",
     },
@@ -994,6 +1003,7 @@ exports[`golden: HARIO Switch 360（3モード） > ボディ優位 -> 浸漬主
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "medium",
     },
@@ -1119,6 +1129,7 @@ exports[`golden: Iced > AeroPress・Iced・250ml（浸漬/加圧型は氷が混�
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "medium",
     },
@@ -1223,6 +1234,7 @@ exports[`golden: Iced > HARIO Switch・Iced・クリア感優位(透過主体モ
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "medium",
     },
@@ -1348,6 +1360,7 @@ exports[`golden: Iced > HARIO Switch・Iced・バランス(ハイブリッドモ
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "medium",
     },
@@ -1487,6 +1500,7 @@ exports[`golden: Iced > HARIO Switch・Iced・ボディ優位(浸漬主体モー
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "medium",
     },
@@ -1621,6 +1635,7 @@ exports[`golden: Iced > 浅煎り・Iced・250ml 1`] = `
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "light",
     },
@@ -1726,6 +1741,7 @@ exports[`golden: KONO 名門 > 中煎り・バランス 1`] = `
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "medium",
     },
@@ -1835,6 +1851,7 @@ exports[`golden: Kalita Wave > 中煎り・honey・バランス 1`] = `
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "honey",
       "roastLevel": "medium",
     },
@@ -1944,6 +1961,7 @@ exports[`golden: ORIGAMI > 中煎り・バランス 1`] = `
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "medium",
     },
@@ -2053,6 +2071,7 @@ exports[`golden: Orea Brewer > 中煎り・バランス 1`] = `
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "medium",
     },
@@ -2162,6 +2181,7 @@ exports[`golden: V60 > 明るく華やかな好み 1`] = `
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "light",
     },
@@ -2274,6 +2294,7 @@ exports[`golden: V60 > 浅煎り・washed・バランス 1`] = `
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "light",
     },
@@ -2383,6 +2404,7 @@ exports[`golden: V60 > 深煎り・ナチュラル・コク深い好み 1`] = `
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "natural",
       "roastLevel": "dark",
     },
@@ -2501,6 +2523,7 @@ exports[`golden: coldDrip（点滴式水出し） > hario-mizudashi・アイス�
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "medium",
     },
@@ -2574,6 +2597,7 @@ exports[`golden: coldDrip（点滴式水出し） > iwaki-mizudashi・バラン�
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "medium",
     },
@@ -2647,6 +2671,7 @@ exports[`golden: グラインダー併記 > 1zpresso-jx-pro 指定時に目盛�
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "medium",
     },
@@ -2759,6 +2784,7 @@ exports[`golden: グラインダー併記 > 1zpresso-zp6 指定時に目盛が�
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "medium",
     },
@@ -2871,6 +2897,7 @@ exports[`golden: グラインダー併記 > Comandante C40 指定時に目盛が
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "medium",
     },
@@ -2983,6 +3010,7 @@ exports[`golden: グラインダー併記 > De'Longhi KG521J-M 指定時は conf
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "medium",
     },
@@ -3095,6 +3123,7 @@ exports[`golden: グラインダー併記 > baratza-encore 指定時に目盛が
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "medium",
     },
@@ -3207,6 +3236,7 @@ exports[`golden: グラインダー併記 > df64 指定時に目盛が併記さ�
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "medium",
     },
@@ -3319,6 +3349,7 @@ exports[`golden: グラインダー併記 > fellow-ode2 指定時に目盛が併
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "medium",
     },
@@ -3431,6 +3462,7 @@ exports[`golden: グラインダー併記 > mahlkonig-ek43 指定時に目盛が
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "medium",
     },
@@ -3543,6 +3575,7 @@ exports[`golden: グラインダー併記 > niche-zero 指定時に目盛が併�
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "medium",
     },
@@ -3655,6 +3688,7 @@ exports[`golden: グラインダー併記 > wilfa-svart 指定時に目盛が併
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "medium",
     },
@@ -3765,6 +3799,7 @@ exports[`golden: 極端値・大量抽出 > 1000ml・強い好み全部盛り 1`
   },
   "input": {
     "bean": {
+      "origins": [],
       "process": "washed",
       "roastLevel": "medium",
     },
@@ -3875,5 +3910,125 @@ exports[`golden: 極端値・大量抽出 > 1000ml・強い好み全部盛り 1`
   "totalTimeSec": 1097,
   "warnings": [],
   "waterG": 1155,
+}
+`;
+
+exports[`golden: 産地補正 > エチオピア(単一産地)は補正なしより低EY・やや高温になり、Rationaleに産地が出る 1`] = `
+{
+  "doseG": 17,
+  "dripperId": "hario-v60",
+  "engineVersion": "0.1.0",
+  "grind": {
+    "generalLabel": "中細挽き（約628μm）",
+    "micron": 627.5,
+  },
+  "input": {
+    "bean": {
+      "origins": [
+        "エチオピア",
+      ],
+      "process": "washed",
+      "roastLevel": "medium",
+    },
+    "equipment": {
+      "dripperId": "hario-v60",
+    },
+    "serveStyle": "hot",
+    "strength": 0,
+    "targetVolumeMl": 250,
+    "taste": {
+      "acidity": 0,
+      "bitterness": 0,
+      "body": 0,
+      "clarity": 0,
+      "sweetness": 0,
+    },
+  },
+  "ratio": 16.8,
+  "rationale": [
+    {
+      "paramKey": "strength",
+      "params": {
+        "ey": 19.7,
+        "tds": 1.32,
+      },
+      "sourceRefs": [
+        "sca-brewing-control-chart",
+      ],
+      "templateId": "strength.target",
+    },
+    {
+      "paramKey": "origin",
+      "params": {
+        "originNames": "エチオピア",
+      },
+      "sourceRefs": [],
+      "templateId": "origin.profileAdjust",
+    },
+    {
+      "paramKey": "temperature",
+      "params": {
+        "process": "washed",
+        "roastLevel": "medium",
+        "tempC": 90.5,
+      },
+      "sourceRefs": [],
+      "templateId": "temperature.byRoastProcess",
+    },
+    {
+      "paramKey": "pours",
+      "params": {
+        "acidity": 0,
+        "sweetness": 0,
+      },
+      "sourceRefs": [
+        "kasuya-4-6-method",
+      ],
+      "templateId": "pours.fourSixSummary",
+    },
+  ],
+  "steps": [
+    {
+      "atSec": 0,
+      "durationSec": 40,
+      "kind": "bloom",
+      "waterG": 46.8,
+    },
+    {
+      "atSec": 40,
+      "kind": "pour",
+      "note": "circular",
+      "toWaterG": 80.4,
+    },
+    {
+      "atSec": 75,
+      "kind": "pour",
+      "note": "circular",
+      "toWaterG": 114,
+    },
+    {
+      "atSec": 110,
+      "kind": "pour",
+      "note": "center",
+      "toWaterG": 199.5,
+    },
+    {
+      "atSec": 145,
+      "kind": "pour",
+      "note": "center",
+      "toWaterG": 285,
+    },
+    {
+      "atSec": 180,
+      "expectedEndSec": 351,
+      "kind": "drawdown",
+    },
+  ],
+  "targetEy": 19.7,
+  "targetTds": 1.32,
+  "tempC": 90.5,
+  "totalTimeSec": 351,
+  "warnings": [],
+  "waterG": 285,
 }
 `;

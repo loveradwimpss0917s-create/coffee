@@ -10,7 +10,12 @@ export function BeanCard({ bean }: { bean: Bean }) {
     >
       <span className="font-semibold text-callout">{bean.name}</span>
       <span className="text-caption text-muted-foreground">
-        {[bean.roaster, ROAST_LEVEL_LABELS[bean.roastLevel], PROCESS_LABELS[bean.process]]
+        {[
+          bean.roaster,
+          bean.origins.length > 0 ? bean.origins.join('・') : undefined,
+          ROAST_LEVEL_LABELS[bean.roastLevel],
+          PROCESS_LABELS[bean.process],
+        ]
           .filter(Boolean)
           .join(' · ')}
       </span>

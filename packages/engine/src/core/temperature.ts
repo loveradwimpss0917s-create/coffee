@@ -35,6 +35,8 @@ export function computeTemperatureC(
   taste: TasteProfile,
   dripperTempOffsetC: number,
   daysOffRoast: number | undefined,
+  /** 産地プロファイルによる補正(°C)。computeOriginAdjustment の結果（docs/10 §5-(4)） */
+  originTempOffsetC = 0,
 ): number {
   let tempC = BASE_TEMP_BY_ROAST[roastLevel];
   tempC += PROCESS_OFFSET[process] ?? 0;
@@ -43,6 +45,7 @@ export function computeTemperatureC(
     tempC += taste.acidity * 0.6;
   }
   tempC += dripperTempOffsetC;
+  tempC += originTempOffsetC;
 
   if (daysOffRoast !== undefined) {
     if (daysOffRoast < 5) tempC -= 1;

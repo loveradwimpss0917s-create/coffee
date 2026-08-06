@@ -16,7 +16,13 @@ export const beanSchema = z.object({
   id: z.string(),
   name: z.string().min(1).max(80),
   roaster: z.string().max(80).optional(),
-  origin: z.string().max(120).optional(),
+  /**
+   * 産地（自由入力 + サジェスト）。ブレンドは複数選択できる（docs/07 §3.4）。
+   * 旧形式(単一の origin 文字列)の localStorage データは、この欄が無いだけなので
+   * デフォルト値([])で吸収する（産地情報は失われるが、ゲスト専用データのため許容する。
+   * サーバー同期済みのデータは DB マイグレーションで origins へ引き継がれる）。
+   */
+  origins: z.array(z.string().max(60)).max(5).default([]),
   variety: z.string().max(80).optional(),
   process: processSchema,
   roastLevel: roastLevelSchema,
