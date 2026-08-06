@@ -1,6 +1,7 @@
 'use client';
 
 import { DRIPPERS, GRINDERS } from '@coffee-lab/engine';
+import { useEffect } from 'react';
 import { Label } from '@/components/ui/label';
 import {
   Select,
@@ -27,6 +28,15 @@ export function WizardStepEquipment({
     const bOwned = ownedIds.includes(b.id) ? 0 : 1;
     return aOwned - bOwned;
   });
+
+  // グラインダー未選択時、設定のデフォルト機種をプルダウンの見た目だけでなく実際の
+  // 入力値にも反映する（見た目は選択済みなのに実際は未設定のまま生成される不具合の修正）
+  // biome-ignore lint/correctness/useExhaustiveDependencies: input.equipment.grinderId/onChange を含めると無限ループになるため意図的に除外
+  useEffect(() => {
+    if (!input.equipment.grinderId && settings?.defaultGrinderId) {
+      onChange({ equipment: { ...input.equipment, grinderId: settings.defaultGrinderId } });
+    }
+  }, [settings?.defaultGrinderId]);
 
   return (
     <div className="flex flex-col gap-6">
