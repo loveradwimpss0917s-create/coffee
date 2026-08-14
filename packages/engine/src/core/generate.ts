@@ -12,6 +12,7 @@ import {
 import { buildRationale } from './explain';
 import { computeRatio, computeTargetEy, computeTargetTds } from './extraction';
 import { buildGrindResult, computeTargetGrindMicron } from './grind';
+import { computeOriginAdjustment } from './origin';
 import { COLD_DRIP_TEMP_C, computeTemperatureC } from './temperature';
 
 /**
@@ -56,9 +57,22 @@ export function generateRecipe(input: BrewInput, _options: GenerateOptions = {})
     }
   }
 
+  // 産地(複数可・ブレンド対応)による目標EY/湯温への小さな補正（docs/10 §5-(2), §5-(4)）
+  const originAdjustment = computeOriginAdjustment(input.bean.origins);
+  if (originAdjustment.unmatchedRaw.length > 0) {
+    warnings.push(
+      `産地「${originAdjustment.unmatchedRaw.join('・')}」は認識できなかったため、産地に応じた補正は反映されていません。`,
+    );
+  }
+
   // (2) targets
   let targetTds = computeTargetTds(input.strength);
-  const targetEy = computeTargetEy(input.taste, input.bean.roastLevel, input.bean.process);
+  const targetEy = computeTargetEy(
+    input.taste,
+    input.bean.roastLevel,
+    input.bean.process,
+    originAdjustment.deltaEy,
+  );
   if (isIced) targetTds = applyIcedTdsAdjustment(targetTds);
 
   // (3) ratio
@@ -84,6 +98,7 @@ export function generateRecipe(input: BrewInput, _options: GenerateOptions = {})
         input.taste,
         dripper.tempOffsetC,
         input.bean.daysOffRoast,
+        originAdjustment.tempOffsetC,
       );
   if (isIced) tempC = applyIcedTempAdjustment(tempC);
 
@@ -123,7 +138,15 @@ export function generateRecipe(input: BrewInput, _options: GenerateOptions = {})
   const totalTimeSec = computeTotalTimeSec(steps);
 
   // (8) explain
-  const rationale = buildRationale({ input, dripper, targetTds, targetEy, tempC, isIced });
+  const rationale = buildRationale({
+    input,
+    dripper,
+    targetTds,
+    targetEy,
+    tempC,
+    isIced,
+    originMatchedNames: originAdjustment.matchedNames,
+  });
 
   return {
     engineVersion: ENGINE_VERSION,

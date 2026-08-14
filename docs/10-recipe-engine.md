@@ -24,6 +24,7 @@
 | 浸漬 vs 透過 | 浸漬→均一・ボディ寄り・粒度鈍感 / 透過→クリア・レイヤー感・粒度敏感 |
 | 焙煎度 | 深いほど多孔質で溶けやすい→低温・粗め方向へ補正 |
 | 精製 | ナチュラル/嫌気性は香味が強く出る→やや低温・低EYで整える |
+| 産地 | 既知の産地（複数可・ブレンド対応）に一致した場合、目標EY/湯温へ小さな補正（§5-(2), §5-(4)） |
 
 ### 1.3 参照した公開レシピ（`data/references/` に出典つきで収録する）
 - Tetsu Kasuya 4:6 メソッド（World Brewers Cup 2016 優勝）: 20g/300g・粗挽き・前半40%で味、後半60%で濃度
@@ -54,7 +55,7 @@ const brewInputSchema = z.object({
     roastLevel: z.enum(['light', 'medium-light', 'medium', 'medium-dark', 'dark']),
     process: z.enum(['washed', 'natural', 'honey', 'anaerobic', 'decaf', 'other']).default('washed'),
     daysOffRoast: z.number().int().min(0).max(365).optional(), // 焙煎からの日数
-    origin: z.string().optional(),   // v1: 表示用。将来: 産地別補正
+    origins: z.array(z.string().max(60)).max(5).default([]), // 産地（自由入力+サジェスト、ブレンドは複数）
   }),
   equipment: z.object({
     dripperId: z.string(),           // engine data の ID
@@ -118,6 +119,7 @@ ey      = clamp(baseEy + Σ(味軸ごとの ΔEY), 17.5, 22.5)
        clarity: -0.3%/step, body: +0.1%/step
   焙煎補正: dark: -0.8%, medium-dark: -0.4%（深煎りは低EYでも十分な溶出があるため）
   精製補正: natural/anaerobic: -0.5%（発酵由来フレーバーの過抽出を回避）
+  産地補正: computeOriginAdjustment(bean.origins).deltaEy（下記参照）
 ```
 
 ### (3) ratio — 質量計算（LRR モデル）
@@ -149,8 +151,26 @@ base(roast): light 94 / medium-light 92 / medium 90 / medium-dark 87 / dark 84 (
 + taste: bitterness*1.2 - clarity*0.8 + (roastが light系なら acidity*0.6)
 + dripper.tempOffset（例: 金属フィルタ系 +1）
 + daysOffRoast < 5 → -1（ガス多く暴れるため）/ > 30 → +1
++ 産地補正: computeOriginAdjustment(bean.origins).tempOffsetC（下記参照。coldDripは加熱しないため対象外）
 clamp(78, 97)、0.5°C 刻み
 ```
+
+#### 産地補正（core/origin.ts）
+
+`bean.origins`（産地、自由入力+サジェスト、ブレンドは複数指定可）を `data/origins.ts` の
+`ORIGIN_PROFILES`（国・代表的な産地単位のエイリアス一覧）と部分一致(大小文字無視)でゆるく
+同定し、一致した産地の `deltaEy` / `tempOffsetC` を目標EY・湯温へ加算する:
+
+```
+matched = origins のうち ORIGIN_PROFILES いずれかのエイリアスに部分一致したもの
+deltaEy, tempOffsetC = matched の単純平均（ブレンドは等重み。配合比はスキーマ上持たない）
+```
+
+一致しなかった入力は補正に使わず、`warnings` に「産地「〇〇」は認識できなかったため…」を出す。
+補正値は焙煎度/精製方法による既存の補正（例: natural: -1.5°C）と同程度の小さな値に留め、
+「エチオピアは酸が明るい」のような断定を避けるため §1 の免責の設計に沿って控えめに調整する
+（スペシャルティコーヒー業界で広く共有される慣用的な地域傾向の反映であり、個別ロットの
+保証ではない）。
 
 ### (5) grind — 粒度モデル
 

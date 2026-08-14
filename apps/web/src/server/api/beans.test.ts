@@ -67,6 +67,39 @@ describe('beansApp', () => {
     expect(afterDelete.status).toBe(404);
   });
 
+  it('複数の産地(ブレンド)を保存・取得できる', async () => {
+    const app = mountWithUser(beansApp, db, makeTestUser());
+
+    const createRes = await app.request('/', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        name: 'ブレンド',
+        origins: ['エチオピア', 'ブラジル'],
+        process: 'washed',
+        roastLevel: 'medium',
+      }),
+    });
+    expect(createRes.status).toBe(201);
+    const created = await readJson<Bean>(createRes);
+    expect(created.origins).toEqual(['エチオピア', 'ブラジル']);
+
+    const getRes = await app.request(`/${created.id}`);
+    const fetched = await readJson<Bean>(getRes);
+    expect(fetched.origins).toEqual(['エチオピア', 'ブラジル']);
+  });
+
+  it('産地を指定しない場合は空配列になる', async () => {
+    const app = mountWithUser(beansApp, db, makeTestUser());
+    const createRes = await app.request('/', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ name: '豆', process: 'washed', roastLevel: 'light' }),
+    });
+    const created = await readJson<Bean>(createRes);
+    expect(created.origins).toEqual([]);
+  });
+
   it('不正な入力は400 validation_errorを返す', async () => {
     const app = mountWithUser(beansApp, db, makeTestUser());
     const res = await app.request('/', {

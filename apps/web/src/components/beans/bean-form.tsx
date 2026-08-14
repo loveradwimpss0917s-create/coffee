@@ -4,6 +4,7 @@ import { processSchema, roastLevelSchema } from '@coffee-lab/engine';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { OriginsInput } from '@/components/shared/origins-input';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -21,7 +22,7 @@ import type { Bean } from '@/lib/schemas';
 const formSchema = z.object({
   name: z.string().min(1, '豆の名前を入力してください').max(80),
   roaster: z.string().max(80).optional(),
-  origin: z.string().max(120).optional(),
+  origins: z.array(z.string().max(60)).max(5),
   process: processSchema,
   roastLevel: roastLevelSchema,
   notes: z.string().max(1000).optional(),
@@ -48,7 +49,7 @@ export function BeanForm({
     defaultValues: {
       name: defaultValues?.name ?? '',
       roaster: defaultValues?.roaster ?? '',
-      origin: defaultValues?.origin ?? '',
+      origins: defaultValues?.origins ?? [],
       process: defaultValues?.process ?? 'washed',
       roastLevel: defaultValues?.roastLevel ?? 'medium',
       notes: defaultValues?.notes ?? '',
@@ -72,10 +73,7 @@ export function BeanForm({
         <Input id="roaster" placeholder="任意" {...register('roaster')} />
       </div>
 
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="origin">産地</Label>
-        <Input id="origin" placeholder="任意" {...register('origin')} />
-      </div>
+      <OriginsInput value={watch('origins')} onChange={(origins) => setValue('origins', origins)} />
 
       <div className="flex flex-col gap-2">
         <Label htmlFor="roastLevel">焙煎度</Label>

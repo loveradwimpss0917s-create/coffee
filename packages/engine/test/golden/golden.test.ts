@@ -12,14 +12,18 @@ import { BALANCED_TASTE_PROFILE, TASTE_PRESETS } from '../../src/schemas/taste';
  * 30ケースへの拡充はロードマップ M1タスク1-6で継続する。
  */
 
-function makeInput(overrides: Partial<BrewInput> & Pick<BrewInput, 'equipment'>): BrewInput {
+function makeInput(
+  overrides: Partial<Omit<BrewInput, 'bean'>> &
+    Pick<BrewInput, 'equipment'> & { bean?: Partial<BrewInput['bean']> },
+): BrewInput {
+  const { bean, ...rest } = overrides;
   return {
-    bean: { roastLevel: 'medium', process: 'washed' },
+    bean: { roastLevel: 'medium', process: 'washed', origins: [], ...bean },
     taste: BALANCED_TASTE_PROFILE,
     strength: 0,
     targetVolumeMl: 250,
     serveStyle: 'hot',
-    ...overrides,
+    ...rest,
   };
 }
 
@@ -173,6 +177,45 @@ describe('golden: Orea Brewer', () => {
   it('中煎り・バランス', () => {
     const input = makeInput({ equipment: { dripperId: 'orea' } });
     expect(generateRecipe(input)).toMatchSnapshot();
+  });
+});
+
+describe('golden: 産地補正', () => {
+  it('エチオピア(単一産地)は補正なしより低EY・やや高温になり、Rationaleに産地が出る', () => {
+    const withoutOrigin = generateRecipe(
+      makeInput({ equipment: { dripperId: 'hario-v60' }, bean: { origins: [] } }),
+    );
+    const withOrigin = generateRecipe(
+      makeInput({ equipment: { dripperId: 'hario-v60' }, bean: { origins: ['エチオピア'] } }),
+    );
+    expect(withOrigin.targetEy).toBeLessThan(withoutOrigin.targetEy);
+    expect(withOrigin.tempC).toBeGreaterThan(withoutOrigin.tempC);
+    expect(
+      withOrigin.rationale.some(
+        (r) => r.templateId === 'origin.profileAdjust' && r.params.originNames === 'エチオピア',
+      ),
+    ).toBe(true);
+    expect(withOrigin).toMatchSnapshot();
+  });
+
+  it('ブレンド(複数産地)は Rationale に両方の名前が表示される', () => {
+    const input = makeInput({
+      equipment: { dripperId: 'hario-v60' },
+      bean: { origins: ['エチオピア', 'ブラジル'] },
+    });
+    const recipe = generateRecipe(input);
+    const rationale = recipe.rationale.find((r) => r.templateId === 'origin.profileAdjust');
+    expect(rationale?.params.originNames).toBe('エチオピア・ブラジル');
+  });
+
+  it('未知の産地表記は補正されず、認識できなかった旨の warning が出る', () => {
+    const input = makeInput({
+      equipment: { dripperId: 'hario-v60' },
+      bean: { origins: ['謎の農園X'] },
+    });
+    const recipe = generateRecipe(input);
+    expect(recipe.warnings.some((w) => w.includes('謎の農園X') && w.includes('認識'))).toBe(true);
+    expect(recipe.rationale.some((r) => r.templateId === 'origin.profileAdjust')).toBe(false);
   });
 });
 

@@ -15,7 +15,11 @@ export const beanInputSchema = z.object({
   process: processSchema.default('washed'),
   /** 焙煎からの経過日数。ガス抜け具合の補正に使う（docs/10 §5-(4)） */
   daysOffRoast: z.number().int().min(0).max(365).optional(),
-  origin: z.string().max(120).optional(),
+  /**
+   * 産地（自由入力 + サジェスト）。ブレンドは複数産地を並べて表現する（docs/10 §5-(2), §5-(4)）。
+   * 既知の産地に一致した場合のみ目標EY/湯温へ小さな補正がかかる（core/origin.ts）。
+   */
+  origins: z.array(z.string().max(60)).max(5).default([]),
 });
 export type BeanInput = z.infer<typeof beanInputSchema>;
 

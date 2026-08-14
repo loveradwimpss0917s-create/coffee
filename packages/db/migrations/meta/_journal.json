@@ -15,6 +15,13 @@
       "when": 1783670086581,
       "tag": "0001_square_red_wolf",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1785578400000,
+      "tag": "0002_add_bean_origins_array",
+      "breakpoints": true
     }
   ]
 }

@@ -45,6 +45,8 @@ export function renderRationale(r: Rationale): string {
   switch (r.templateId) {
     case 'strength.target':
       return '濃さの好みに合わせて、粉と湯の量を決めました。';
+    case 'origin.profileAdjust':
+      return `${r.params.originNames}の一般的な傾向に合わせて、抽出収率と湯温を微調整しています。`;
     case 'temperature.byRoastProcess': {
       const roast = ROAST_LEVEL_LABELS[r.params.roastLevel as RoastLevel] ?? r.params.roastLevel;
       const process = PROCESS_LABELS[r.params.process as Process] ?? r.params.process;

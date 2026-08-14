@@ -63,7 +63,7 @@ export const syncApp = new Hono<AppEnv>().post(
           userId: user.id,
           name: bean.name,
           roaster: bean.roaster,
-          origin: bean.origin,
+          origins: bean.origins,
           variety: bean.variety,
           process: bean.process,
           roastLevel: bean.roastLevel,

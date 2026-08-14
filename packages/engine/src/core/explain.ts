@@ -14,8 +14,10 @@ export function buildRationale(params: {
   targetEy: number;
   tempC: number;
   isIced: boolean;
+  /** 産地補正がマッチした産地の表示名（0件なら Rationale に出さない） */
+  originMatchedNames: string[];
 }): Rationale[] {
-  const { input, dripper, targetTds, targetEy, tempC, isIced } = params;
+  const { input, dripper, targetTds, targetEy, tempC, isIced, originMatchedNames } = params;
   const rationale: Rationale[] = [];
 
   rationale.push({
@@ -24,6 +26,15 @@ export function buildRationale(params: {
     params: { tds: targetTds, ey: targetEy },
     sourceRefs: ['sca-brewing-control-chart'],
   });
+
+  if (originMatchedNames.length > 0) {
+    rationale.push({
+      paramKey: 'origin',
+      templateId: 'origin.profileAdjust',
+      params: { originNames: originMatchedNames.join('・') },
+      sourceRefs: [],
+    });
+  }
 
   if (dripper.brewType === 'coldDrip') {
     rationale.push({

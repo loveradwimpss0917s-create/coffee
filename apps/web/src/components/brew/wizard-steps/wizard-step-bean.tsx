@@ -1,6 +1,7 @@
 'use client';
 
 import { processSchema, roastLevelSchema } from '@coffee-lab/engine';
+import { OriginsInput } from '@/components/shared/origins-input';
 import { Label } from '@/components/ui/label';
 import {
   Select,
@@ -38,7 +39,11 @@ export function WizardStepBean({
                   onClick={() =>
                     onChange({
                       beanId: bean.id,
-                      bean: { roastLevel: bean.roastLevel, process: bean.process },
+                      bean: {
+                        roastLevel: bean.roastLevel,
+                        process: bean.process,
+                        origins: bean.origins,
+                      },
                     })
                   }
                   className={cn(
@@ -48,7 +53,13 @@ export function WizardStepBean({
                 >
                   <p className="font-medium text-callout">{bean.name}</p>
                   <p className="text-caption text-muted-foreground">
-                    {ROAST_LEVEL_LABELS[bean.roastLevel]} · {PROCESS_LABELS[bean.process]}
+                    {[
+                      bean.origins.length > 0 ? bean.origins.join('・') : undefined,
+                      ROAST_LEVEL_LABELS[bean.roastLevel],
+                      PROCESS_LABELS[bean.process],
+                    ]
+                      .filter(Boolean)
+                      .join(' · ')}
                   </p>
                 </button>
               );
@@ -56,6 +67,11 @@ export function WizardStepBean({
           </div>
         </div>
       )}
+
+      <OriginsInput
+        value={input.bean.origins}
+        onChange={(origins) => onChange({ beanId: undefined, bean: { ...input.bean, origins } })}
+      />
 
       <div className="flex flex-col gap-2">
         <Label htmlFor="roastLevel">焙煎度</Label>

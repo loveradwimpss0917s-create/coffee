@@ -11,7 +11,8 @@ export const beans = sqliteTable(
       .references(() => user.id, { onDelete: 'cascade' }),
     name: text('name').notNull(),
     roaster: text('roaster'),
-    origin: text('origin'),
+    /** 産地（自由入力 + サジェスト）の配列。ブレンドは複数産地を持てる（docs/07 §3.4） */
+    origins: text('origins', { mode: 'json' }).notNull().default('[]').$type<string[]>(),
     variety: text('variety'),
     // 値は packages/engine の processSchema/roastLevelSchema と一致させる（型推論のみ、DB上はTEXT）
     process: text('process', {

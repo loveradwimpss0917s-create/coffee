@@ -7,7 +7,7 @@ import { syncApp } from './sync';
 import { createTestDb, makeTestUser, mountWithUser, readJson, seedUser } from './test-helpers';
 
 const sampleInput: BrewInput = {
-  bean: { roastLevel: 'light', process: 'washed' },
+  bean: { roastLevel: 'light', process: 'washed', origins: [] },
   equipment: { dripperId: 'hario-v60' },
   taste: { acidity: 0, sweetness: 0, bitterness: 0, body: 0, clarity: 0 },
   strength: 0,
@@ -19,6 +19,7 @@ const sampleOutput = generateRecipe(sampleInput);
 const localBean: Bean = {
   id: 'ben_local1',
   name: 'ローカルの豆',
+  origins: [],
   process: 'washed',
   roastLevel: 'light',
   createdAt: 1000,

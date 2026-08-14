@@ -4,7 +4,7 @@ import { getElapsedSec, useBrewTimerStore } from './use-brew-timer';
 
 // HARIO Switch + バランス寄りの好みで「ハイブリッド」モード（valveステップ含む）を生成する
 const recipe = generateRecipe({
-  bean: { roastLevel: 'medium', process: 'washed' },
+  bean: { roastLevel: 'medium', process: 'washed', origins: [] },
   equipment: { dripperId: 'hario-switch' },
   taste: { acidity: 0, sweetness: 0, bitterness: 0, body: 0, clarity: 0 },
   strength: 0,

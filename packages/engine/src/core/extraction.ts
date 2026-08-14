@@ -24,6 +24,8 @@ export function computeTargetEy(
   taste: TasteProfile,
   roastLevel: RoastLevel,
   process: Process,
+  /** 産地プロファイルによる補正(%)。computeOriginAdjustment の結果（docs/10 §5-(2)） */
+  originDeltaEy = 0,
 ): number {
   let deltaEy = 0;
   deltaEy += taste.acidity * -0.4;
@@ -36,6 +38,8 @@ export function computeTargetEy(
   else if (roastLevel === 'medium-dark') deltaEy -= 0.4;
 
   if (process === 'natural' || process === 'anaerobic') deltaEy -= 0.5;
+
+  deltaEy += originDeltaEy;
 
   return clamp(round1(BASE_EY_PERCENT + deltaEy), 17.5, 22.5);
 }
