@@ -122,6 +122,44 @@ describe('golden: AeroPress エスプレッソ風（少量濃縮）', () => {
   });
 });
 
+describe('golden: カフェラテ（ミルクドリンク）', () => {
+  it('Hot・60mlショット・中煎り・バランス', () => {
+    const input = makeInput({
+      equipment: { dripperId: 'cafe-latte' },
+      targetVolumeMl: 60,
+    });
+    const recipe = generateRecipe(input);
+    expect(recipe.steps.map((s) => s.kind)).toEqual(['pour', 'stir', 'press', 'addMilk']);
+    const milkStep = recipe.steps.find((s) => s.kind === 'addMilk');
+    expect(milkStep?.kind === 'addMilk' && milkStep.temperature).toBe('steamed');
+    expect(milkStep?.kind === 'addMilk' && milkStep.milkG).toBe(240); // 60ml * 4
+    expect(recipe.warnings).toEqual([]);
+    expect(recipe).toMatchSnapshot();
+  });
+
+  it('Iced・60mlショット・中煎り・バランス（氷でコーヒー自体は薄めない）', () => {
+    const input = makeInput({
+      equipment: { dripperId: 'cafe-latte' },
+      targetVolumeMl: 60,
+      serveStyle: 'iced',
+    });
+    const hotInput = makeInput({ equipment: { dripperId: 'cafe-latte' }, targetVolumeMl: 60 });
+    const iced = generateRecipe(input);
+    const hot = generateRecipe(hotInput);
+
+    const milkStep = iced.steps.find((s) => s.kind === 'addMilk');
+    expect(milkStep?.kind === 'addMilk' && milkStep.temperature).toBe('cold');
+    expect(milkStep?.kind === 'addMilk' && milkStep.milkG).toBe(210); // 60ml * 3.5
+
+    // 氷はミルク/グラス側であり、ショット自体の抽出条件(湯量・湯温)は Hot と変わらない
+    expect(iced.waterG).toBe(hot.waterG);
+    expect(iced.tempC).toBe(hot.tempC);
+    expect(iced.warnings.some((w) => w.includes('氷'))).toBe(true);
+    expect(iced.warnings.some((w) => w.includes('かき混ぜ'))).toBe(false);
+    expect(iced).toMatchSnapshot();
+  });
+});
+
 describe('golden: AeroPress（容量上限クランプ）', () => {
   it('チャンバー容量(250ml)を超える指定は250mlへクランプされ warning が出る', () => {
     const input = makeInput({

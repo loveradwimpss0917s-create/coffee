@@ -33,9 +33,17 @@ export function generateRecipe(input: BrewInput, _options: GenerateOptions = {})
   }
 
   const isColdDrip = dripper.brewType === 'coldDrip';
-  const isIced = input.serveStyle === 'iced' && !isColdDrip;
+  // カフェラテ等のミルクドリンクは「氷でコーヒー自体を薄める」既存の仕組みとは別物
+  // （氷が入るのはミルク/グラス側で、コーヒーの抽出には影響しない）ため、
+  // 通常の isIced 補正(希釈計算・warnings)からは除外し、Hot/Iced の違いは
+  // dripper.buildSteps 側でミルクの温度(スチーム/冷たい)としてのみ扱う
+  const isMilkDrink = dripper.brewType === 'milkDrink';
+  const isIced = input.serveStyle === 'iced' && !isColdDrip && !isMilkDrink;
   if (input.serveStyle === 'iced' && isColdDrip) {
     warnings.push('水出しはもともと冷たいため、アイスの設定は反映されません。');
+  }
+  if (input.serveStyle === 'iced' && isMilkDrink) {
+    warnings.push('あらかじめ氷を入れたグラスを用意してください。');
   }
 
   const grinder = input.equipment.grinderId ? getGrinder(input.equipment.grinderId) : undefined;
@@ -118,6 +126,7 @@ export function generateRecipe(input: BrewInput, _options: GenerateOptions = {})
     targetEy,
     daysOffRoast: input.bean.daysOffRoast,
     serveStyle: input.serveStyle,
+    targetVolumeMl,
   });
 
   // (7) validate

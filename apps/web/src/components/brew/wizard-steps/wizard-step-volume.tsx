@@ -16,6 +16,9 @@ export function WizardStepVolume({
 }) {
   const dripper = DRIPPERS.find((d) => d.id === input.equipment.dripperId);
   const [minMl, maxMl] = dripper?.volumeRangeMl ?? [30, 1000];
+  // カフェラテ等はここでの量が「ショット量」であり、ミルクを加えた仕上がり全体量ではないため
+  // ラベルで区別する（ミルク量の目安は dripper.notes に表示、docs/11 §2.2）
+  const volumeLabel = dripper?.brewType === 'milkDrink' ? 'エスプレッソショット量' : '仕上がり量';
 
   // 器具を切り替えて対応レンジ外になった場合は、範囲内へ寄せる
   // biome-ignore lint/correctness/useExhaustiveDependencies: input.targetVolumeMl/onChange を含めると無限ループになるため意図的に除外
@@ -28,7 +31,7 @@ export function WizardStepVolume({
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
-          <Label htmlFor="volume">仕上がり量</Label>
+          <Label htmlFor="volume">{volumeLabel}</Label>
           <span className="font-numeric text-callout">{input.targetVolumeMl}ml</span>
         </div>
         <Slider

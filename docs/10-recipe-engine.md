@@ -197,7 +197,8 @@ type RecipeStep =
   | { kind: 'valve';  atSec: number; state: 'open' | 'closed' }           // Switch / Clever
   | { kind: 'press';  atSec: number; durationSec: number }                // AeroPress / FrenchPress
   | { kind: 'temperatureChange'; atSec: number; toTempC: number }         // Kasuya Hybrid 型
-  | { kind: 'drawdown'; atSec: number; expectedEndSec: number };
+  | { kind: 'drawdown'; atSec: number; expectedEndSec: number }
+  | { kind: 'addMilk'; atSec: number; milkG: number; temperature: 'steamed' | 'cold' }; // カフェラテ系
 ```
 
 透過型テンプレートの共通ロジック（V60 系）:
@@ -291,6 +292,36 @@ steepSec = clamp(40 + body*10 - clarity*8, 20, 75)
 → 残り湯量を注ぐ → steep（2:05–2:45 相当をスケール）→ valve open → drawdown
 ```
 弁操作はすべて `valve` ステップとして明示し、タイマー画面で 🔓/🔒 表示（docs/06 S04）。
+
+## 6.3 カフェラテ（ミルクドリンク）の特別対応
+
+`aeropress-espresso` と同じショット抽出条件をそのまま流用し、`buildEspressoSteps` の直後に
+新設の `addMilk` ステップを1つ追加するだけの構成にする（ショットのロジックは再実装しない）:
+
+```
+steps = [
+  ...buildEspressoSteps(...),               // §6.2 と同じショット
+  { kind: 'addMilk', atSec: pressEndSec + 5, milkG, temperature },
+]
+milkG       = round(targetVolumeMl * (isIced ? 3.5 : 4))  // ショット:ミルク の目安比率
+temperature = isIced ? 'cold' : 'steamed'
+```
+
+`brewType: 'milkDrink'` を新設し、`generate.ts` の `isIced` 補正（`computeIcedWaterSplit` 等、
+「氷でコーヒー自体を希釈する」仕組み）から明示的に除外する。カフェラテの氷・冷たさは
+ミルク/グラス側の話であり、ショットの抽出条件（湯温・湯量・比率）には影響しないため:
+
+```
+isIced = input.serveStyle === 'iced' && !isColdDrip && !isMilkDrink
+```
+
+Hot/Iced の切り替えは `buildSteps` 内で `params.serveStyle` を見てミルクの温度・比率を
+変えるだけにとどめる。Iced 選択時は `warnings` に「あらかじめ氷を入れたグラスを用意してください」
+を出す（coldDrip の warnings パターンを踏襲、§6.1）。
+
+ミルクの目安比率（ショット:ミルク、Hot ≈ 1:4 / Iced ≈ 1:3.5）は家庭向けの一般的なカフェラテ
+レシピを参考にした簡便な値であり、スチームミルクの温度・フォームの厚さ等、専用の抽出器具
+（スチームワンド等）を要する詳細な手順までは扱わない（§1 免責の設計、docs/11 §2.2）。
 
 ## 7. Iced（急冷式）
 

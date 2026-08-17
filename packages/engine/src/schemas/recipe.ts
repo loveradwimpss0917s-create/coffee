@@ -55,6 +55,14 @@ export const drawdownStepSchema = z.object({
   expectedEndSec: z.number().min(0),
 });
 
+export const addMilkStepSchema = z.object({
+  kind: z.literal('addMilk'),
+  atSec: z.number().min(0),
+  milkG: z.number().min(0),
+  /** steamed: 温めた/フォームドミルク（Hot）, cold: 冷たい牛乳（Iced） */
+  temperature: z.enum(['steamed', 'cold']),
+});
+
 export const recipeStepSchema = z.discriminatedUnion('kind', [
   pourStepSchema,
   bloomStepSchema,
@@ -64,6 +72,7 @@ export const recipeStepSchema = z.discriminatedUnion('kind', [
   pressStepSchema,
   temperatureChangeStepSchema,
   drawdownStepSchema,
+  addMilkStepSchema,
 ]);
 export type RecipeStep = z.infer<typeof recipeStepSchema>;
 

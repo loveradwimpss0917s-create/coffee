@@ -2,6 +2,7 @@ import type { DripperSpec } from '../types';
 import { aeropress } from './aeropress';
 import { aeropressEspresso } from './aeropress-espresso';
 import { april } from './april';
+import { cafeLatte } from './cafe-latte';
 import { cafecFlower } from './cafec-flower';
 import { clever } from './clever';
 import { frenchPress } from './french-press';
@@ -29,6 +30,7 @@ export const DRIPPERS: readonly DripperSpec[] = [
   clever,
   aeropress,
   aeropressEspresso,
+  cafeLatte,
   frenchPress,
   iwakiMizudashi,
   harioMizudashi,
@@ -45,6 +47,7 @@ export {
   aeropressEspresso,
   april,
   cafecFlower,
+  cafeLatte,
   clever,
   frenchPress,
   harioMizudashi,
