@@ -9,7 +9,7 @@
 const dripperSpecSchema = z.object({
   id: z.string(),                    // 'hario-v60'
   name: z.string(),                  // 'HARIO V60'
-  brewType: z.enum(['percolation', 'immersion', 'hybrid', 'pressure', 'coldDrip']),
+  brewType: z.enum(['percolation', 'immersion', 'hybrid', 'pressure', 'coldDrip', 'milkDrink']),
   geometry: z.enum(['cone', 'flat', 'basket', 'cylinder']),
   sizes: z.array(z.object({ id: z.string(), maxDoseG: z.number() })), // 01/02 等
   baseGrindMicron: z.number(),       // 基準粒度（250ml時）
@@ -28,7 +28,7 @@ const dripperSpecSchema = z.object({
 });
 ```
 
-## 2. 初期対応ドリッパー 11 種と特性値（初期値。官能QAで調整）
+## 2. 初期対応ドリッパー 15 種と特性値（初期値。官能QAで調整）
 
 | id | name | type/geometry | 基準粒度 | flow | 特記 |
 |---|---|---|---|---|---|
@@ -43,6 +43,7 @@ const dripperSpecSchema = z.object({
 | `clever` | Clever Dripper | **immersion**/cone | 780μm | — | 閉→steep→載せて開放。`features:['valve']` |
 | `aeropress` | AeroPress | **pressure**/cylinder | 500μm | — | 正/逆位置、press ステップ。`features:['press','inverted-capable']`。`volumeRangeMl:[100,250]`（標準チャンバーの容量上限） |
 | `aeropress-espresso` | AeroPress（エスプレッソ風） | **pressure**/cylinder | 350μm | fast | 少量(40〜90ml)濃縮ショット。蒸らし無し、`ratioRange:[2,3]`、`volumeRangeMl:[30,100]`。§2.1 参照 |
+| `cafe-latte` | カフェラテ | **milkDrink**/cylinder | 350μm | fast | aeropress-espresso と同じショットにミルクを追加。Hot/Icedはミルクの温度のみに反映。§2.2 参照 |
 | `french-press` | French Press | immersion/cylinder | 850μm | — | 4:00 steep 基準、プランジ弱く（微粉攪拌回避） |
 | `iwaki-mizudashi` | iwaki ウォータードリップサーバー K-8644-CL | **coldDrip**/cylinder | 1250μm | slow | 点滴式水出し。滴下速度は目分量前提で指定しない（オーナー実機） |
 | `hario-mizudashi` | HARIO 水出しコーヒーサーバー（点滴式） | **coldDrip**/cylinder | 1250μm | slow | iwaki と同じ点滴式。共通の `buildColdDripSteps` を使用 |
@@ -56,6 +57,24 @@ const dripperSpecSchema = z.object({
   （coldDrip と異なり湯温モデルの分岐は不要）。
 - 少量ショット(40〜90ml)に対応するため `brewInputSchema.targetVolumeMl` の下限を100mlから30mlに緩和した（後方互換、既存の挙動に影響なし）。
 - `buildEspressoSteps`（`core/pours.ts`）は蒸らしステップを持たず、全量を一度に注いでから短時間浸漬 → プレスする。
+
+### 2.2 cafe-latte（カフェラテ）の特殊性
+
+- `aeropress-espresso` と全く同じショット抽出条件（`baseGrindMicron`, `ratioRange`, `lrr`, `volumeRangeMl` 等）を流用し、
+  `buildEspressoSteps` の直後に `addMilk` ステップ（新設、docs/10 §5-(6)）を追加するだけの構成にする。
+  ショット部分のロジックを再実装しない（DRY）。
+- `brewType: 'milkDrink'` を新設し、`generate.ts` の `isIced` 判定から明示的に除外する。既存の Iced 器具は
+  「氷でコーヒー自体を希釈する」仕組み（`computeIcedWaterSplit` 等）だが、カフェラテの氷/冷たさはミルク・グラス側の話であり、
+  ショットの抽出条件（湯温・湯量・比率）には影響しない。Hot/Iced の切り替えは `buildSteps` 内で
+  `params.serveStyle` を見てミルクの温度（`steamed`/`cold`）と量の比率を変えるだけにとどめる
+  （coldDrip の「静的な brewType で isIced 計算から除外する」パターンを踏襲）。
+- ミルク量は仕上がり量（=ショット量、`targetVolumeMl`）に比例させる。家庭向けの一般的なカフェラテレシピを参考にした
+  目安比率（ショット:ミルク）: Hot ≈ 1:4、Iced ≈ 1:3.5（グラスの氷が体積を占める分、やや控えめ）。
+  スチームミルクの温度・フォームの厚さなど、専用の抽出器具（スチームワンド等）を要する詳細な手順までは扱わない
+  （温めた/冷たい牛乳を注ぐ、というレベルの簡便な指示に留める。docs/04 の「保守性・可読性」優先の方針に沿う）。
+- 「淹れる」ウィザードの器具一覧に他のドリッパーと同列で並ぶ（`docs/06 S02`）。Hot/Iced はウィザードの
+  既存トグルをそのまま使う（V60等の他器具と同じUX。Iced選択時は「あらかじめ氷を入れたグラスを用意してください」と
+  `warnings` に表示する）。
 
 ### coldDrip（点滴式水出し）の特殊性
 

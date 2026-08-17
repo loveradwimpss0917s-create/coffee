@@ -6,7 +6,13 @@ import type { TasteProfile } from '../schemas/taste';
  * 器具マスタの型。外部入力ではなくコード内データ（docs/11 §1）のため
  * Zod ではなく TS 型で定義する（template 関数を持つため）。
  */
-export type BrewType = 'percolation' | 'immersion' | 'hybrid' | 'pressure' | 'coldDrip';
+export type BrewType =
+  | 'percolation'
+  | 'immersion'
+  | 'hybrid'
+  | 'pressure'
+  | 'coldDrip'
+  | 'milkDrink';
 export type Geometry = 'cone' | 'flat' | 'basket' | 'cylinder';
 export type FlowClass = 'fast' | 'medium' | 'slow';
 export type DripperFeature = 'valve' | 'press' | 'inverted-capable';
@@ -20,6 +26,8 @@ export type BuildStepsParams = {
   targetEy: number;
   daysOffRoast: number | undefined;
   serveStyle: ServeStyle;
+  /** クランプ後の仕上がり量(ml)。カフェラテ等、ミルク量を仕上がり量から比例算出する場合に使う */
+  targetVolumeMl: number;
 };
 
 export type DripperSpec = {

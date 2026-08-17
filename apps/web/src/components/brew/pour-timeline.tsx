@@ -1,6 +1,6 @@
 import type { Recipe, RecipeStep } from '@coffee-lab/engine';
 import type { LucideIcon } from 'lucide-react';
-import { Droplet, Flame, Lock, Timer, Unlock, Waves } from 'lucide-react';
+import { Droplet, Flame, Lock, Milk, Timer, Unlock, Waves } from 'lucide-react';
 import { formatTime } from './format-time';
 
 export { formatTime } from './format-time';
@@ -66,6 +66,13 @@ export function buildTimelineRows(steps: RecipeStep[]): TimelineRow[] {
           icon: Timer,
           label: '落としきり',
           detail: `${formatTime(step.expectedEndSec)} 頃まで`,
+          atSec: step.atSec,
+        };
+      case 'addMilk':
+        return {
+          icon: Milk,
+          label: step.temperature === 'steamed' ? 'スチームミルクを注ぐ' : '冷たい牛乳を注ぐ',
+          detail: `${step.milkG}g`,
           atSec: step.atSec,
         };
       default:
