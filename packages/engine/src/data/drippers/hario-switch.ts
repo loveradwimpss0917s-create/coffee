@@ -32,8 +32,11 @@ function buildHybridSteps(params: BuildStepsParams): RecipeStep[] {
   const secondPourAtSec = closeAtSec + secondPourDurationSec;
   const steepSec = Math.round(40 * (waterG / 300));
   const steepEndSec = secondPourAtSec + 5 + steepSec;
-  // 固定秒数だと大バッチで排出が速すぎる想定になるため、湯量で比例させる（dripper.flowModel.drawdownBaseSec と同じ基準値）
-  const drawdownDuration = Math.round(150 * (waterG / 250));
+  // 弁を開いた瞬間に浸漬済みの液体を排出するだけの動作であり、継続的に注ぎ続ける
+  // 透過型のdrawdownとは物理的に別物（Clever Dripperと同じ動作、docs/10 §6.3）。
+  // 固定秒数だと大バッチで排出が速すぎる想定になるため湯量で比例させるが、基準値は
+  // 透過型のdrawdownBaseSec(150)ではなくCleverと同じ60を使う。
+  const drawdownDuration = Math.round(60 * (waterG / 250));
 
   // 苦味を抑えたい好みほど温度を大きく下げる（docs/10 §6）
   const tempDropC = 10 - taste.bitterness * 3;
@@ -71,10 +74,12 @@ export const harioSwitch: DripperSpec = {
       return [{ kind: 'valve', atSec: 0, state: 'open' }, ...steps];
     }
     if (taste.body >= taste.clarity + 1) {
+      // 弁を開いた瞬間の排出はClever Dripperと同じ動作のため、drawdownBaseSecも
+      // Cleverと同じ60(透過型のdrawdownBaseSec: 150とは物理的に別物、docs/10 §6.3)
       return buildImmersionSteps(params, {
         steepBaseSec: 150,
         hasValve: true,
-        drawdownBaseSec: 150,
+        drawdownBaseSec: 60,
       });
     }
     return buildHybridSteps(params);
